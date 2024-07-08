@@ -98,7 +98,7 @@ public class AdminController {
 	}
 	@PostMapping("/updateCustomer")
     public String updateCustomer(@ModelAttribute Customer customer, Model model) {
-		customerService.updateCustomerDtls(customer);
+		customerService.updateCustomer(customer);
         return "redirect:/admin/customer_list"; // redirect to the list page after updating
     }
 	@GetMapping("/customerDelete/{id}")

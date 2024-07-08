@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll();
     }
     @Override
-    public Customer updateCustomerDtls(Customer customer) {
+    public Customer updateCustomer(Customer customer) {
     	return customerRepository.save(customer);
     }
 
