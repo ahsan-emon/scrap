@@ -8,4 +8,5 @@ public interface CustomerService {
 	public Customer createCustomer(Customer cust);
     public boolean checkUsername(String username);
     public List<Customer> getCustomers();
+    public Customer updateCustomerDtls(Customer customer);
 }

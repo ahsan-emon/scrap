@@ -41,4 +41,8 @@ public class UserServiceImpl implements UserService {
     public UserDtls findUserById(Long id) {
     	return userRepository.findById(id).orElse(null);
     }
+    @Override
+    public UserDtls updateUserDtls(UserDtls user) {
+    	return userRepository.save(user);
+    }
 }

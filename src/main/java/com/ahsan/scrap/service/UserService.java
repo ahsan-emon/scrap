@@ -11,4 +11,5 @@ public interface UserService {
     public boolean checkUsername(String username);
     public List<UserDtls> getUserDtls();
     public UserDtls findUserById(Long id);
+    public UserDtls updateUserDtls(UserDtls user);
 }

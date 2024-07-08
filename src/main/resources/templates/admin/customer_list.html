@@ -15,6 +15,7 @@
                     <th>Phone 1</th>
                     <th>Phone 2</th>
                     <th>Role</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +28,10 @@
                     <td th:text="${customer.phone1}"></td>
                     <td th:text="${customer.phone2}"></td>
                     <td th:text="${customer.role}"></td>
+                    <td>
+                    	<a th:href="@{/admin/customerEdit/{id}(id=${customer.id})}" class="btn btn-small btn-primary">Edit</a>
+        				<a th:href="@{/admin/customerDelete/{id}(id=${customer.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+                    </td>
                 </tr>
             </tbody>
         </table>

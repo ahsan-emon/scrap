@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ahsan.scrap.model.Customer;
 import com.ahsan.scrap.model.UserDtls;
+import com.ahsan.scrap.repository.CustomerRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.service.CustomerService;
 import com.ahsan.scrap.service.UserService;
@@ -25,6 +26,8 @@ import jakarta.servlet.http.HttpSession;
 public class AdminController {
 	@Autowired
     private UserRepository userRepository;
+	@Autowired
+    private CustomerRepository customerRepository;
 	@Autowired
     private CustomerService customerService;
 	@Autowired
@@ -87,6 +90,23 @@ public class AdminController {
         return "redirect:/admin/add_customer";
     }
 	
+	@GetMapping("/customerEdit/{id}")
+	public String editCustomer(@PathVariable("id") Long id, Model model) {
+		Customer customer = customerRepository.findById(id).orElse(null);
+        model.addAttribute("customer", customer);
+        return "admin/editCustomer";
+	}
+	@PostMapping("/updateCustomer")
+    public String updateCustomer(@ModelAttribute Customer customer, Model model) {
+		customerService.updateCustomerDtls(customer);
+        return "redirect:/admin/customer_list"; // redirect to the list page after updating
+    }
+	@GetMapping("/customerDelete/{id}")
+	public String deleteCustomer(@PathVariable("id") Long id) {
+		customerRepository.deleteById(id);
+        return "redirect:/admin/customer_list";
+	}
+	
 	@GetMapping("/add_user")
     public String addUser(HttpSession session, Model model) {
         String msg = (String) session.getAttribute("msg");
@@ -112,9 +132,21 @@ public class AdminController {
         session.setAttribute("msg", msg);
         return "redirect:/admin/add_user";
     }
-	@GetMapping("/user/{id}")
-	public UserDtls findEmployeeById(@PathVariable("id") Long id) {
-		return userService.findUserById(id);
+	@GetMapping("/userEdit/{id}")
+	public String editUser(@PathVariable("id") Long id, Model model) {
+        UserDtls user = userService.findUserById(id);
+        model.addAttribute("user", user);
+        return "admin/editUser";
+	}
+	@PostMapping("/updateUser")
+    public String updateUser(@ModelAttribute UserDtls user, Model model) {
+        userService.updateUserDtls(user);
+        return "redirect:/admin/user_list"; // redirect to the list page after updating
+    }
+	@GetMapping("/userDelete/{id}")
+	public String deleteUser(@PathVariable("id") Long id) {
+		userRepository.deleteById(id);
+        return "redirect:/admin/user_list";
 	}
 	
 }
