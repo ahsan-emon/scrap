@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+<body>
+<section>
+    <div class="container">
+        <div class="row align-item-center">
+            <div class="col-md-8">
+                <h2>Add Product</h2>
+                <div class="card p-3">
+                    <th:block th:if="${msg}">
+                        <p class="text-center alert alert-primary">[[${msg}]]</p>
+                    </th:block>
+                    <form th:action="@{/admin/createVehicle}" method="post">
+                        <div class="mb-3">
+                            <label for="exampleInputModel" class="form-label">Model</label>
+                            <input type="text" name="model" class="form-control" id="exampleInputModel" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputNumberPlate" class="form-label">Number Plate</label>
+                            <input type="text" name="numberPlate" class="form-control" id="exampleInputNumberPlate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputVehicleExpDate" class="form-label">Vehicle Expire Date</label>
+                            <input type="date" name="vehicleExpDate" class="form-control" id="exampleInputVehicleExpDate">
+                        </div>
+                        <button type="submit" class="btn btn-primary col-md-12">Register</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

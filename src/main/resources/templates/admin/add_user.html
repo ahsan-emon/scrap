@@ -8,12 +8,12 @@
                 <h2>Add User</h2>
                 <div class="card p-3">
                     <th:block th:if="${msg}">
-                        <p class="text-center">[[${msg}]]</p>
+                        <p class="text-center alert alert-primary">[[${msg}]]</p>
                     </th:block>
-                    <form action="createUser" method="post">
+                    <form th:action="@{/admin/createUser}" method="post">
                         <div class="mb-3">
                             <label for="exampleInputName" class="form-label">Full Name</label>
-                            <input type="text" name="fullName" class="form-control" id="exampleInputName">
+                            <input type="text" name="fullName" class="form-control" id="exampleInputName" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputEmail" class="form-label">Email address</label>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputUsername" class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" id="exampleInputUsername">
+                            <input type="text" name="username" class="form-control" id="exampleInputUsername" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputAddress" class="form-label">Address</label>
@@ -33,15 +33,15 @@
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputIqama" class="form-label">Iqama</label>
-                            <input type="text" name="iqama" class="form-control" id="exampleInputIqama">
+                            <input type="text" name="iqama" class="form-control" id="exampleInputIqama" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPassport" class="form-label">Passport</label>
-                            <input type="text" name="passport" class="form-control" id="exampleInputPassport">
+                            <input type="text" name="passport" class="form-control" id="exampleInputPassport" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputRole" class="form-label">Role Type</label>
-			                <select name="role" class="form-control" id="exampleInputRole">
+			                <select name="role" class="form-control" id="exampleInputRole" required>
 			                    <option value="ROLE_ADMIN">Admin</option>
 			                    <option value="ROLE_EMPLOYEE">Employee</option>
 			                    <option value="ROLE_USER">User</option>
@@ -49,11 +49,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPassword" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="exampleInputPassword">
+                            <input type="password" name="password" class="form-control" id="exampleInputPassword" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputVisaExp" class="form-label">Visa Expire Date</label>
-                            <input type="date" name="visaExpDate" class="form-control" id="exampleInputVisaExp">
+                            <input type="date" name="visaExpDate" class="form-control" id="exampleInputVisaExp" required>
                         </div>
                         <button type="submit" class="btn btn-primary col-md-12">Register</button>
                     </form>

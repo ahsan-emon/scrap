@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+<body>
+<section>
+    <div class="container">
+        <div class="row align-item-center">
+            <div class="col-md-8">
+                <h2>Add Product</h2>
+                <div class="card p-3">
+                    <th:block th:if="${msg}">
+                        <p class="text-center alert alert-primary">[[${msg}]]</p>
+                    </th:block>
+                    <form th:action="@{/admin/createProduct}" method="post">
+                        <div class="mb-3">
+                            <label for="exampleInputName" class="form-label">Name</label>
+                            <input type="text" name="name" class="form-control" id="exampleInputName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputShortName" class="form-label">Short Name</label>
+                            <input type="text" name="shortName" class="form-control" id="exampleInputShortName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputQuantity" class="form-label">Quantity</label>
+                            <input type="number" name="quantity" class="form-control" id="exampleInputQuantity">
+                        </div>
+                        <button type="submit" class="btn btn-primary col-md-12">Register</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

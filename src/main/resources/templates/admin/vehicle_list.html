@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+<body>
+<section>
+	<a class="btn btn-primary" href="add_vehicle">Add vehicle</a>
+    <h1>Vehicle List</h1>
+    <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Model</th>
+                    <th>Number Plate</th>
+                    <th>Vehicle Expire Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="vehicle : ${vehicles}">
+                    <td th:text="${vehicle.id}"></td>
+                    <td th:text="${vehicle.model}"></td>
+                    <td th:text="${vehicle.numberPlate}"></td>
+                    <td th:text="${vehicle.vehicleExpDate}"></td>
+                    <td>
+                    	<a th:href="@{/admin/vehicleEdit/{id}(id=${vehicle.id})}" class="btn btn-small btn-primary">Edit</a>
+        				<a th:href="@{/admin/vehicleDelete/{id}(id=${vehicle.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+</body>
+</html>

@@ -13,11 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ahsan.scrap.model.Customer;
+import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.UserDtls;
+import com.ahsan.scrap.model.Vehicle;
 import com.ahsan.scrap.repository.CustomerRepository;
+import com.ahsan.scrap.repository.ProductRepository;
 import com.ahsan.scrap.repository.UserRepository;
+import com.ahsan.scrap.repository.VehicleRepository;
 import com.ahsan.scrap.service.CustomerService;
+import com.ahsan.scrap.service.ProductService;
 import com.ahsan.scrap.service.UserService;
+import com.ahsan.scrap.service.VehicleService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -29,9 +35,17 @@ public class AdminController {
 	@Autowired
     private CustomerRepository customerRepository;
 	@Autowired
+	private ProductRepository productRepository;
+	@Autowired
+	private VehicleRepository vehicleRepository;
+	@Autowired
     private CustomerService customerService;
 	@Autowired
     private UserService userService;
+	@Autowired
+    private ProductService productService;
+	@Autowired
+    private VehicleService vehicleService;
 
     @ModelAttribute
     private void userDetails(Model model, Principal principal){
@@ -63,6 +77,22 @@ public class AdminController {
 		model.addAttribute("users",users);
 		return "admin/user_list";
 	}
+	@GetMapping("/product_list")
+	public String productList(Model model) {
+		List<Product> products = productRepository.findAll();
+		model.addAttribute("products",products);
+		return "admin/product_list";
+	}
+	
+	@GetMapping("/vehicle_list")
+	public String vehicleList(Model model) {
+		List<Vehicle> vehicles = vehicleRepository.findAll();
+		model.addAttribute("vehicles",vehicles);
+		return "admin/vehicle_list";
+	}
+	
+	//customer
+	
 	@GetMapping("/add_customer")
     public String addCustomer(HttpSession session, Model model) {
         String msg = (String) session.getAttribute("msg");
@@ -74,10 +104,13 @@ public class AdminController {
     }
 	
 	@PostMapping("/createCustomer")
-    public String createUser(@ModelAttribute Customer cust, HttpSession session){
+	public String createCustomer(@ModelAttribute Customer customer, HttpSession session){
         String msg = null;
-        if (!customerService.checkUsername(cust.getUsername())) {
-        	Customer custDetails = customerService.createCustomer(cust);
+//        if(result.hasErrors()) {
+//        	return "admin/add_customer";
+//        }
+        if (!customerService.checkUsername(customer.getUsername())) {
+        	Customer custDetails = customerService.createCustomer(customer);
             if (custDetails != null) {
                 msg = "Customer added Successfully!";
             } else {
@@ -94,7 +127,7 @@ public class AdminController {
 	public String editCustomer(@PathVariable("id") Long id, Model model) {
 		Customer customer = customerRepository.findById(id).orElse(null);
         model.addAttribute("customer", customer);
-        return "admin/editCustomer";
+        return "admin/edit_customer";
 	}
 	@PostMapping("/updateCustomer")
     public String updateCustomer(@ModelAttribute Customer customer, Model model) {
@@ -106,6 +139,8 @@ public class AdminController {
 		customerRepository.deleteById(id);
         return "redirect:/admin/customer_list";
 	}
+	
+	//user
 	
 	@GetMapping("/add_user")
     public String addUser(HttpSession session, Model model) {
@@ -136,7 +171,7 @@ public class AdminController {
 	public String editUser(@PathVariable("id") Long id, Model model) {
         UserDtls user = userService.findUserById(id);
         model.addAttribute("user", user);
-        return "admin/editUser";
+        return "admin/edit_user";
 	}
 	@PostMapping("/updateUser")
     public String updateUser(@ModelAttribute UserDtls user, Model model) {
@@ -147,6 +182,92 @@ public class AdminController {
 	public String deleteUser(@PathVariable("id") Long id) {
 		userRepository.deleteById(id);
         return "redirect:/admin/user_list";
+	}
+	
+	//product
+	@GetMapping("/add_product")
+    public String addProduct(HttpSession session, Model model) {
+        String msg = (String) session.getAttribute("msg");
+        if (msg != null) {
+            model.addAttribute("msg", msg);
+            session.removeAttribute("msg");
+        }
+        return "admin/add_product";
+    }
+    @PostMapping("/createProduct")
+    public String createProduct(@ModelAttribute Product product, HttpSession session){
+        String msg = null;
+        if (!productService.checkShortName(product.getShortName())) {
+        	Product productDetails = productRepository.save(product);
+            if (productDetails != null) {
+                msg = "Register Successfully!";
+            } else {
+                msg = "Something went wrong on the server!";
+            }
+        } else {
+            msg = "Short Name already exists!";
+        }
+        session.setAttribute("msg", msg);
+        return "redirect:/admin/add_product";
+    }
+	@GetMapping("/productEdit/{id}")
+	public String editProduct(@PathVariable("id") Long id, Model model) {
+		Product product = productRepository.findById(id).orElse(null);
+        model.addAttribute("product", product);
+        return "admin/edit_product";
+	}
+	@PostMapping("/updateProduct")
+    public String updateProduct(@ModelAttribute Product product, Model model) {
+		productRepository.save(product);
+        return "redirect:/admin/product_list"; // redirect to the list page after updating
+    }
+	@GetMapping("/productDelete/{id}")
+	public String deleteProduct(@PathVariable("id") Long id) {
+		productRepository.deleteById(id);
+        return "redirect:/admin/product_list";
+	}
+	
+	//vehicle
+	@GetMapping("/add_vehicle")
+    public String addVehicle(HttpSession session, Model model) {
+        String msg = (String) session.getAttribute("msg");
+        if (msg != null) {
+            model.addAttribute("msg", msg);
+            session.removeAttribute("msg");
+        }
+        return "admin/add_vehicle";
+    }
+    @PostMapping("/createVehicle")
+    public String createVehicle(@ModelAttribute Vehicle vehicle, HttpSession session){
+        String msg = null;
+        if (!vehicleService.existsByNumberPlate(vehicle.getNumberPlate())) {
+        	Vehicle vehicleDetails = vehicleRepository.save(vehicle);
+            if (vehicleDetails != null) {
+                msg = "Register Successfully!";
+            } else {
+                msg = "Something went wrong on the server!";
+            }
+        } else {
+            msg = "Number Plate already exists!";
+        }
+        session.setAttribute("msg", msg);
+        return "redirect:/admin/add_vehicle";
+    }
+	@GetMapping("/vehicleEdit/{id}")
+	public String editVehicle(@PathVariable("id") Long id, Model model) {
+		Vehicle vehicle = vehicleRepository.findById(id).orElse(null);
+        model.addAttribute("vehicle", vehicle);
+        return "admin/edit_vehicle";
+	}
+	@PostMapping("/updateVehicle")
+    public String updateVehicle(@ModelAttribute Vehicle vehicle, Model model) {
+		vehicleRepository.save(vehicle);
+        return "redirect:/admin/vehicle_list"; // redirect to the list page after updating
+    }
+	@GetMapping("/vehicleDelete/{id}")
+	public String deleteVehicle(@PathVariable("id") Long id) {
+		vehicleRepository.deleteById(id);
+        return "redirect:/admin/vehicle_list";
 	}
 	
 }

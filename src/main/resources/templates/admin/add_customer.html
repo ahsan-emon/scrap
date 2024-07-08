@@ -10,10 +10,10 @@
                     <th:block th:if="${msg}">
                         <p class="text-center">[[${msg}]]</p>
                     </th:block>
-                    <form action="createCustomer" method="post">
+                    <form th:action="@{/admin/createCustomer}" method="post">
                         <div class="mb-3">
                             <label for="exampleInputName" class="form-label">Full Name</label>
-                            <input type="text" name="fullName" class="form-control" id="exampleInputName">
+                            <input type="text" name="fullName" class="form-control" id="exampleInputName" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputEmail" class="form-label">Email address</label>
@@ -21,15 +21,15 @@
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputUsername" class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" id="exampleInputUsername">
+                            <input type="text" name="username" class="form-control" id="exampleInputUsername" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputAddress" class="form-label">Address</label>
-                            <input type="text" name="address" class="form-control" id="exampleInputAddress">
+                            <input type="text" name="address" class="form-control" id="exampleInputAddress" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPhone1" class="form-label">Phone1</label>
-                            <input type="text" name="phone1" class="form-control" id="exampleInputPhone1">
+                            <input type="text" name="phone1" class="form-control" id="exampleInputPhone1" required>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPhone2" class="form-label">Phone2</label>
@@ -37,7 +37,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPassword" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="exampleInputPassword">
+                            <input type="password" name="password" class="form-control" id="exampleInputPassword" required>
                         </div>
                         <button type="submit" class="btn btn-primary col-md-12">Register</button>
                     </form>
