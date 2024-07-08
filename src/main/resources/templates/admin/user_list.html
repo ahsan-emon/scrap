@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+<body>
+<section>
+	<a class="btn btn-primary" href="add_user">Add User</a>
+    <h1>User List</h1>
+    <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Iqama</th>
+                    <th>Role</th>
+                    <th>Passport</th>
+                    <th>Visa Expire Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.fullName}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.address}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.phone}"></td>
+                    <td th:text="${user.iqama}"></td>
+                    <td th:text="${user.role}"></td>
+                    <td th:text="${user.passport}"></td>
+                    <td th:text="${user.visaExpDate}"></td>
+                    <td>
+                    	<a href="/user_edit" class="btn btn-small btn-primary">Edit</a>
+                    	<a href="/user_delete" class="btn btn-small btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+</body>
+</html>

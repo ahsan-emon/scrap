@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+<body>
+<section>
+	<a class="btn btn-primary" href="add_customer">Add Customer</a>
+    <h1>Customer List</h1>
+    <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone 1</th>
+                    <th>Phone 2</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="customer : ${customers}">
+                    <td th:text="${customer.id}"></td>
+                    <td th:text="${customer.fullName}"></td>
+                    <td th:text="${customer.username}"></td>
+                    <td th:text="${customer.address}"></td>
+                    <td th:text="${customer.email}"></td>
+                    <td th:text="${customer.phone1}"></td>
+                    <td th:text="${customer.phone2}"></td>
+                    <td th:text="${customer.role}"></td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+</body>
+</html>
