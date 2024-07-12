@@ -1,5 +1,6 @@
-package com.ahsan.scrap.config;
+package com.ahsan.scrap.service.impl;
 
+import com.ahsan.scrap.config.CustomUserDetails;
 import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -17,10 +18,11 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
+@Table(name = "user_dtls")
 public class UserDtls {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @NotEmpty(message = "Name is required")
     @Column(name = "full_name")
     private String fullName;
