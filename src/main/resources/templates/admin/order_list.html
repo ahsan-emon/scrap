@@ -11,19 +11,21 @@
                     <th>Customer Name</th>
                     <th>Employee Name</th>
                     <th>Order Date</th>
+                    <th>Number Of Items</th>
                     <th>Order Amount</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="order : ${orders}">
-                    <td th:text="${order.id}"></td>
+                <tr th:each="order, iterStat : ${orders}" th:with="orderIndex=${iterStat.index + 1}">
+                    <td th:text="${orderIndex}"></td>
                     <td th:text="${order.customer.username}"></td>
                     <td th:text="${order.userDtls.username}"></td>
-                    <!-- <td th:text="${order.orderDate}"></td> -->
                     <td th:text="${@dateUtils.formatDate(order.orderDate)}"></td>
+                    <td th:text="${order.numberOfItems}"></td>
                     <td th:text="${order.orderAmount}"></td>
                     <td>
+                    	<a th:href="@{/admin/orderView/{id}(id=${order.id})}" class="btn btn-small btn-primary">View</a>
                     	<a th:href="@{/admin/orderEdit/{id}(id=${order.id})}" class="btn btn-small btn-primary">Edit</a>
         				<a th:href="@{/admin/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
                     </td>

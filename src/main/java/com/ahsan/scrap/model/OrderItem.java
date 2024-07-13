@@ -1,6 +1,5 @@
 package com.ahsan.scrap.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,12 +22,10 @@ public class OrderItem {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	@Column(name="number_of_items")
-	private int numberOfItems;
 
-    private double quantity;
+    private Float quantity;
 
-    private double unitPrice;
+    private Float unitPrice;
 
     private int amount = 0;
     

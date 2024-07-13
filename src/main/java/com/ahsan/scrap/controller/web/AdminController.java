@@ -358,8 +358,16 @@ public class AdminController {
     @PostMapping("/saveOrder")
     public String saveOrder(@ModelAttribute Order order, @RequestParam("customerId") Long customerId) {
         orderService.saveOrder(order, customerId);
-        return "redirect:/admin/orderForm";
+        return "redirect:/admin/order_list";
     }
+    @GetMapping("/orderView/{id}")
+   	public String viewOrder(@PathVariable("id") Long id, Model model) {
+   		Order order = orderRepository.findById(id).orElse(null);
+   		List<OrderItem> orderItems = order.getOrderItems();
+           model.addAttribute("order", order);
+           model.addAttribute("orderItems", orderItems);
+           return "admin/view_order";
+   	}
     @GetMapping("/orderEdit/{id}")
 	public String editOrder(@PathVariable("id") Long id, Model model) {
 		Order order = orderRepository.findById(id).orElse(null);
@@ -369,7 +377,7 @@ public class AdminController {
 	@PostMapping("/updateOrder")
     public String updateOrder(@ModelAttribute Order order, Model model) {
 		orderRepository.save(order);
-        return "redirect:/admin/order_list"; // redirect to the list page after updating
+        return "redirect:/admin/order_list";
     }
 	@GetMapping("/orderDelete/{id}")
 	public String deleteOrder(@PathVariable("id") Long id) {

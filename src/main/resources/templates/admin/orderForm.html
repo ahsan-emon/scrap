@@ -23,42 +23,25 @@
 							    </select>
 							</div>
 					        <div id="products" class="mb-3">
-					            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">
-					                <label>Product</label>
-					                <select th:field="*{orderItems[__${iterStat.index}__].product.id}" class="form-control" required>
-					                    <option value="" selected>Select Product</option>
-					                    <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
-					                </select>
-					
-					                <label>Quantity</label>
-					                <input type="number" th:field="*{orderItems[__${iterStat.index}__].quantity}" class="form-control" step="0.01" min="0" required />
-					
-					                <label>Unit Price</label>
-					                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" required />
-					
-					                <!-- <button type="button" onclick="removeProduct(this)" class="btn btn-danger">Remove</button> -->
-					            </div>
-					        </div>
+	                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">
+	                                <label>Product</label>
+	                                <select th:field="*{orderItems[__${iterStat.index}__].product.id}" class="form-control" required>
+	                                    <option value="" selected>Select Product</option>
+	                                    <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+	                                </select>
+	                
+	                                <label>Quantity</label>
+	                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].quantity}" class="form-control" step="0.01" min="0" required />
+	                
+	                                <label>Unit Price</label>
+	                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" required />
+	                
+	                                <button type="button" onclick="removeProduct(this)" class="btn btn-danger">Remove</button>
+	                            </div>
+	                        </div>
 					        <button type="button" class="btn btn-primary btn-small" onclick="addProduct()">Add Product</button>
 					        <button type="submit" class="btn btn-primary col-md-12">Submit Order</button>
 					    </form>
-					    
-					    <!-- Template for new product rows -->
-					    <div class="product-template product" style="display:none;">
-					        <label>Product</label>
-					        <select name="orderItems[__index__].product.id" class="form-control" required>
-					            <option value="" selected>Select Product</option>
-					            <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
-					        </select>
-					
-					        <label>Quantity</label>
-					        <input type="number" name="orderItems[__index__].quantity" class="form-control" step="0.01" min="0" required />
-					
-					        <label>Unit Price</label>
-					        <input type="number" name="orderItems[__index__].unitPrice" class="form-control" step="0.01" min="0" required />
-					
-					        <button type="button" onclick="removeProduct(this)" class="btn btn-danger">Remove</button>
-					    </div>
 	
 	                </div>
 	            </div>

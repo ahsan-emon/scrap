@@ -8,7 +8,7 @@
                 <h2>Add Customer</h2>
                 <div class="card p-3">
                     <th:block th:if="${msg}">
-                        <p class="text-center">[[${msg}]]</p>
+                        <p class="text-center alert alert-primary">[[${msg}]]</p>
                     </th:block>
                     <form th:action="@{/admin/createCustomer}" method="post">
                         <div class="mb-3">

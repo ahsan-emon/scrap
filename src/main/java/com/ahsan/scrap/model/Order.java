@@ -29,6 +29,8 @@ public class Order {
     private Long id;
 	@Column(name = "order_date")
 	private LocalDateTime orderDate;
+	@Column(name="number_of_items")
+	private int numberOfItems;
 	@Column(name = "order_amount")
 	private int orderAmount = 0;
 	

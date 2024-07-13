@@ -33,15 +33,10 @@ public class OrderServiceImpl implements OrderService {
     
     @Autowired
     private UserRepository userRepository;
-
-//    public Order saveOrder(Order order) {
-//        // Calculate total order amount
-////        order.getOrderItems().forEach(item -> item.calculateAmount());
-//        return orderRepository.save(order);
-//    }
     @Transactional
     public Order saveOrder(Order order, Long customerId) {
     	int totalAmount = 0;
+    	int numberOfItems = 0;
     	// Calculate total order amount
         order.getOrderItems().forEach(item -> item.calculateAmount());
         
@@ -50,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
         
         // Link orderItems to order
         if (savedOrder.getOrderItems() != null) {
+        	numberOfItems = savedOrder.getOrderItems().size();
             for (OrderItem item : savedOrder.getOrderItems()) {
                 item.setOrder(savedOrder);
                 totalAmount = item.getAmount() + totalAmount;
@@ -63,6 +59,7 @@ public class OrderServiceImpl implements OrderService {
             order.setUserDtls(userDtls);
             order.setCustomer(customer);
         }
+        order.setNumberOfItems(numberOfItems);
         order.setOrderAmount(totalAmount);
 
         // Save order with its items
