@@ -14,7 +14,7 @@
 	                        <p class="text-center alert alert-primary">[[${msg}]]</p>
 	                    </th:block>
 	                    
-	                    <form th:action="@{/admin/saveOrder}" th:object="${order}" method="post">
+	                    <form th:action="@{/order/saveOrder}" th:object="${order}" method="post">
 					        <div class="mb-3">
 							    <label for="customer" class="form-label">Customer:</label>
 							    <select id="customer" class="form-control" name="customerId" required>

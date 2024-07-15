@@ -57,7 +57,8 @@
 					        </div>
 					        <div class="mb-3">
 					            <label for="exampleInputVisaExp" class="form-label">Visa Expire Date</label>
-					            <input type="date" th:field="*{visaExpDate}" class="form-control" id="exampleInputVisaExp">
+					            <!-- <input type="datetime" th:field="*{orderDate}" class="form-control" id="exampleInputName" readOnly required> -->
+					            <input type="datetime" th:field="*{visaExpDate}" class="form-control" id="exampleInputVisaExp" required>
 					        </div>
 					        <button type="submit" class="btn btn-primary col-md-12">Update</button>
 					    </form>

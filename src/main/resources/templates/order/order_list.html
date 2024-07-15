@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+
 <body>
 <section>
 	<a class="btn btn-primary" href="orderForm">Add Order</a>
@@ -12,7 +13,7 @@
                     <th>Employee Name</th>
                     <th>Order Date</th>
                     <th>Number Of Items</th>
-                    <th>Order Amount</th>
+                    <th>Order Amount (SAR)</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -25,9 +26,9 @@
                     <td th:text="${order.numberOfItems}"></td>
                     <td th:text="${order.orderAmount}"></td>
                     <td>
-                    	<a th:href="@{/admin/orderView/{id}(id=${order.id})}" class="btn btn-small btn-primary">View</a>
-                    	<a th:href="@{/admin/orderEdit/{id}(id=${order.id})}" class="btn btn-small btn-primary">Edit</a>
-        				<a th:href="@{/admin/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+                    	<a th:href="@{/order/orderView/{id}(id=${order.id})}" class="btn btn-small btn-primary">View</a>
+                    	<a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-small btn-primary">Edit</a>
+        				<a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/order/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
                     </td>
                 </tr>
             </tbody>

@@ -20,17 +20,19 @@
                             <input type="text" name="shortName" class="form-control" id="exampleInputShortName" required>
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputQuantity" class="form-label">Quantity</label>
-                            <input type="number" name="quantity" class="form-control" id="exampleInputQuantity">
+                            <label for="exampleInputUnitPrice" class="form-label">Unit Price</label>
+                            <input type="number" name="unitPrice" class="form-control" id="exampleInputUnitPrice" step="0.01" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputQuantity" class="form-label">Quantity in Store</label>
+                            <input type="number" name="quantity" class="form-control" id="exampleInputQuantity" step="0.01" min="0" required>
                         </div>
                         <button type="submit" class="btn btn-primary col-md-12">Register</button>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 </body>
 </html>

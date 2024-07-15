@@ -13,8 +13,8 @@ import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.repository.UserRepository;
 
 @Controller
-@RequestMapping("/customer")
-public class CustomerController {
+@RequestMapping("/employee")
+public class EmployeeController {
 	@Autowired
     private UserRepository userRepository;
 
@@ -28,6 +28,11 @@ public class CustomerController {
 
 	@GetMapping("/")
 	public String home() {
-		return "customer/home";
+		return "employee/home";
+	}
+	
+	@GetMapping("/profile")
+	public String prfile() {
+		return "employee/profile";
 	}
 }

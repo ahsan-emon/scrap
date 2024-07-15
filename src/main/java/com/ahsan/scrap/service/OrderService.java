@@ -5,6 +5,7 @@ import java.util.List;
 import com.ahsan.scrap.model.Customer;
 import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.Product;
+import com.ahsan.scrap.model.UserDtls;
 
 public interface OrderService {
     public Order saveOrder(Order order, Long customerId);
@@ -12,4 +13,6 @@ public interface OrderService {
     public List<Product> getAllProducts();
     public List<Order> getOrders();
     public List<Order> getOrdersByOrderDateDesc();
+    public Order updateOrder(Order order);
+    public List<Order> findByUserDtls(UserDtls userDtls);
 }

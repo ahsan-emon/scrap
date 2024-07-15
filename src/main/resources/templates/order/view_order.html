@@ -3,7 +3,7 @@
 <body>
 <section>
     <div class="container mt-3">
-    <a class="btn btn-primary" href="/admin/order_list">Order List</a>
+    <a class="btn btn-primary" href="/order/order_list">Order List</a>
     <h1>Order View</h1>
     <div class="row">
         <div class="col-12">
@@ -23,7 +23,7 @@
                         <li class="list-group-item">
                             <strong>Number Of Items:</strong> <span th:text="${order.numberOfItems}"></span>
                         </li>
-                        <li class="list-group-item" th:each="orderItem, iterStat : ${orderItems}" th:with="orderIndex=${iterStat.index + 1}">
+                        <li class="list-group-item" th:each="orderItem, iterStat : ${order.orderItems}" th:with="orderIndex=${iterStat.index + 1}">
                         	<ul class="list-group list-group-flush">
    		                        <li class="list-group-item ps-0">
    		                        	<strong>[[${orderIndex}]]</strong>
@@ -46,8 +46,8 @@
                             <strong>Total Amount:</strong> <strong class="text-success" th:text="${order.orderAmount}+'/= SAR'"></strong>
                         </li>
                         <li class="list-group-item">
-                            <a th:href="@{/admin/orderEdit/{id}(id=${order.id})}" class="btn btn-primary btn-sm">Edit</a>
-                            <a th:href="@{/admin/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</a>
+                            <a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-primary btn-sm">Edit</a>
+                            <a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/order/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</a>
                         </li>
                     </ul>
                 </div>

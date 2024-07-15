@@ -1,8 +1,6 @@
 package com.ahsan.scrap.controller.web;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,21 +11,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ahsan.scrap.model.Customer;
-import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.OrderItem;
 import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.model.Vehicle;
 import com.ahsan.scrap.repository.CustomerRepository;
-import com.ahsan.scrap.repository.OrderRepository;
+import com.ahsan.scrap.repository.OrderItemRepository;
 import com.ahsan.scrap.repository.ProductRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.repository.VehicleRepository;
 import com.ahsan.scrap.service.CustomerService;
-import com.ahsan.scrap.service.OrderService;
 import com.ahsan.scrap.service.ProductService;
 import com.ahsan.scrap.service.UserService;
 import com.ahsan.scrap.service.VehicleService;
@@ -46,7 +41,7 @@ public class AdminController {
 	@Autowired
 	private VehicleRepository vehicleRepository;
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrderItemRepository orderItemRepository ;
 	@Autowired
     private CustomerService customerService;
 	@Autowired
@@ -55,14 +50,13 @@ public class AdminController {
     private ProductService productService;
 	@Autowired
     private VehicleService vehicleService;
-	@Autowired
-    private OrderService orderService;
 
     @ModelAttribute
     private void userDetails(Model model, Principal principal){
         String username = principal.getName();
         UserDtls user = userRepository.findByUsername(username);
         model.addAttribute("user",user);
+		model.addAttribute("userRole",user.getRole());
     }
 
 	@GetMapping("/")
@@ -91,6 +85,13 @@ public class AdminController {
 	@GetMapping("/product_list")
 	public String productList(Model model) {
 		List<Product> products = productRepository.findAll();
+		for(Product product : products) {
+			List<OrderItem> orderItems = orderItemRepository.findByProduct(product);
+			float totalQuantity = (float) orderItems.stream()
+                    .mapToDouble(OrderItem::getQuantity)
+                    .sum();
+			product.setQuantity(product.getQuantity() + totalQuantity);
+		}
 		model.addAttribute("products",products);
 		return "admin/product_list";
 	}
@@ -117,9 +118,6 @@ public class AdminController {
 	@PostMapping("/createCustomer")
 	public String createCustomer(@ModelAttribute Customer customer, HttpSession session){
         String msg = null;
-//        if(result.hasErrors()) {
-//        	return "admin/add_customer";
-//        }
         if (!customerService.checkUsername(customer.getUsername())) {
         	Customer custDetails = customerService.createCustomer(customer);
             if (custDetails != null) {
@@ -280,109 +278,4 @@ public class AdminController {
 		vehicleRepository.deleteById(id);
         return "redirect:/admin/vehicle_list";
 	}
-	
-	//oder 
-	
-
-//	@GetMapping("/new")
-//	public String showOrderForm(Model model, Principal principal) {
-//	    Order order = new Order();
-//	    order.setOrderDate(LocalDate.now());
-//	    order.setOrderItems(new ArrayList<>());
-//
-//	    // Assuming UserDtls can be fetched from the principal
-//	    // Object principalObject = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//	    // if (principalObject instanceof UserDtls) {
-//	    //     UserDtls userDtls = (UserDtls) principalObject;
-//	    //     order.setUserDtls(userDtls);
-//	    // }
-//	    List<UserDtls> userDtls = userRepository.findAll();
-//	    if (userDtls.isEmpty()) {
-//	        System.out.println("userDtls list is empty");
-//	    } else {
-//	        System.out.println("userDtls list size: " + userDtls);
-//	    }
-////	    order.setUserDtls(userDtls);
-//	    List<Customer> customers = orderService.getAllCustomers();
-//	    if (customers.isEmpty()) {
-//	        System.out.println("Customer list is empty");
-//	    } else {
-//	        System.out.println("Customer list size: " + customers);
-//	    }
-//
-//	    model.addAttribute("order", order);
-//	    model.addAttribute("userDtls", userDtls);
-//	    model.addAttribute("customers", customers);
-//	    model.addAttribute("products", orderService.getAllProducts());
-//
-//	    return "admin/orderForm";
-//	}
-//
-//    @PostMapping("/saveOrder")
-//    public String saveOrder(@ModelAttribute Order order, @RequestParam("customerId") Long customerId,
-//            @RequestParam("userDtlsId") Long userDtlsId) {
-//    	// Fetch and set the Customer object
-//        Customer customer = customerRepository.findById(customerId).orElse(null);
-//        order.setCustomer(customer);
-//
-//        // Fetch and set the UserDtls object
-//        UserDtls userDtls = userRepository.findById(userDtlsId).orElse(null);
-//        order.setUserDtls(userDtls);
-//    	System.out.println("customerId====>>>"+customerId);
-//    	System.out.println("userDtlsId====>>>"+userDtlsId);
-//    	System.out.println("order====>>>"+order);
-//        orderService.saveOrder(order);
-//        return "redirect:/admin/orderForm";
-//    }
-	
-	@GetMapping("/order_list")
-	public String orderList(Model model) {
-		List<Order> orders = orderService.getOrdersByOrderDateDesc();
-		model.addAttribute("orders",orders);
-		return "admin/order_list";
-	}
-	
-	@GetMapping("/orderForm")
-    public String showOrderForm(Model model, Principal principal) {
-        Order order = new Order();
-        order.setOrderItems(new ArrayList<>(Collections.singletonList(new OrderItem()))); // Initialize with one item
-        List<Customer> customers = customerRepository.findAll();
-
-        model.addAttribute("order", order);
-        model.addAttribute("customers", customers);
-        model.addAttribute("products", orderService.getAllProducts());
-
-        return "admin/orderForm";
-    }
-
-    @PostMapping("/saveOrder")
-    public String saveOrder(@ModelAttribute Order order, @RequestParam("customerId") Long customerId) {
-        orderService.saveOrder(order, customerId);
-        return "redirect:/admin/order_list";
-    }
-    @GetMapping("/orderView/{id}")
-   	public String viewOrder(@PathVariable("id") Long id, Model model) {
-   		Order order = orderRepository.findById(id).orElse(null);
-   		List<OrderItem> orderItems = order.getOrderItems();
-           model.addAttribute("order", order);
-           model.addAttribute("orderItems", orderItems);
-           return "admin/view_order";
-   	}
-    @GetMapping("/orderEdit/{id}")
-	public String editOrder(@PathVariable("id") Long id, Model model) {
-		Order order = orderRepository.findById(id).orElse(null);
-        model.addAttribute("order", order);
-        return "admin/edit_order";
-	}
-	@PostMapping("/updateOrder")
-    public String updateOrder(@ModelAttribute Order order, Model model) {
-		orderRepository.save(order);
-        return "redirect:/admin/order_list";
-    }
-	@GetMapping("/orderDelete/{id}")
-	public String deleteOrder(@PathVariable("id") Long id) {
-		orderRepository.deleteById(id);
-        return "redirect:/admin/order_list";
-	}
-	
 }

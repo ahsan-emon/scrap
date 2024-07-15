@@ -10,7 +10,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Short Name</th>
-                    <th>Quantity</th>
+                    <th>Unit Price (SAR)</th>
+                    <th>Quantity in Store (KG)</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -19,6 +20,7 @@
                     <td th:text="${product.id}"></td>
                     <td th:text="${product.name}"></td>
                     <td th:text="${product.shortName}"></td>
+                    <td th:text="${product.unitPrice}"></td>
                     <td th:text="${product.quantity}"></td>
                     <td>
                     	<a th:href="@{/admin/productEdit/{id}(id=${product.id})}" class="btn btn-small btn-primary">Edit</a>

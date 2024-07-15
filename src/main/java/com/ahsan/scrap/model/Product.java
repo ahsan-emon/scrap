@@ -23,6 +23,6 @@ public class Product {
     @Column(name = "short_name")
 	private String shortName;
     @Column(name = "unit_price")
-    private double unitPrice;
-	private long quantity;
+    private Float unitPrice;
+	private Float quantity;
 }

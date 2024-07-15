@@ -33,7 +33,9 @@ public class OrderServiceImpl implements OrderService {
     
     @Autowired
     private UserRepository userRepository;
+    
     @Transactional
+    @Override
     public Order saveOrder(Order order, Long customerId) {
     	int totalAmount = 0;
     	int numberOfItems = 0;
@@ -61,10 +63,35 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setNumberOfItems(numberOfItems);
         order.setOrderAmount(totalAmount);
-
-        // Save order with its items
-        return savedOrder;
+        return orderRepository.save(order);
     }
+    
+    @Override
+    public Order updateOrder(Order order) {
+    	int totalAmount = 0;
+    	int numberOfItems = 0;
+    	// Calculate total order amount
+        Order currentOrder = orderRepository.findById(order.getId()).orElse(null);
+        if(currentOrder != null) {
+            order.getOrderItems().forEach(item -> item.calculateAmount());
+        	order.setOrderDate(currentOrder.getOrderDate());
+        	order.setCustomer(currentOrder.getCustomer());
+        	order.setUserDtls(currentOrder.getUserDtls());
+        	// Link orderItems to order
+            if (order.getOrderItems() != null) {
+            	numberOfItems = order.getOrderItems().size();
+                for (OrderItem item : order.getOrderItems()) {
+                    item.setOrder(order);
+                    totalAmount = item.getAmount() + totalAmount;
+                }
+            }
+            order.setNumberOfItems(numberOfItems);
+            order.setOrderAmount(totalAmount);
+            return orderRepository.save(order);
+        }
+        return null;
+    }
+    
     @Override
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
@@ -81,5 +108,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getOrdersByOrderDateDesc() {
         return orderRepository.findAllByOrderByOrderDateDesc();
+    }
+    @Override
+    public 	List<Order> findByUserDtls(UserDtls userDtls){
+    	return orderRepository.findByUserDtls(userDtls);
     }
 }

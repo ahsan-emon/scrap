@@ -34,7 +34,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
     @Override
     public Customer updateCustomer(Customer customer) {
-    	return customerRepository.save(customer);
+    	Customer cust = customerRepository.findById(customer.getId()).orElse(null);
+    	if(cust != null) {
+    		customer.setPassword(cust.getPassword());
+        	customer.setRole("ROLE_CUSTOMER");
+        	return customerRepository.save(customer);
+    	}
+    	return null;
     }
 
 }
