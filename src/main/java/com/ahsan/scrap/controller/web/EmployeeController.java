@@ -30,9 +30,4 @@ public class EmployeeController {
 	public String home() {
 		return "employee/home";
 	}
-	
-	@GetMapping("/profile")
-	public String prfile() {
-		return "employee/profile";
-	}
 }

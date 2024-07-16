@@ -29,4 +29,8 @@ public class UserController {
     public String home(){
         return "user/home";
     }
+    @GetMapping("/profile")
+    public String prfile() {
+    	return "user/profile";
+    }
 }

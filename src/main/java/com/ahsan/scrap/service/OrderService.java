@@ -15,4 +15,5 @@ public interface OrderService {
     public List<Order> getOrdersByOrderDateDesc();
     public Order updateOrder(Order order);
     public List<Order> findByUserDtls(UserDtls userDtls);
+    public List<Order> getOrdersByCurrentDate();
 }

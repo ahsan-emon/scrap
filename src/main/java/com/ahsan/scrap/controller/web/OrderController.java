@@ -54,7 +54,6 @@ public class OrderController {
 		public String orderList(Model model, Principal principal) {
 	        String username = principal.getName();
 	        UserDtls userDtls = userRepository.findByUsername(username);
-	        System.out.println("userDtls.getRole()=1=>>"+userDtls.getRole());
 	        if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
 				List<Order> orders = orderService.getOrdersByOrderDateDesc();
 				model.addAttribute("orders",orders);

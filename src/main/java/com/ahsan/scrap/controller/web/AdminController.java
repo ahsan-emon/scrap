@@ -13,16 +13,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ahsan.scrap.model.Customer;
+import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.OrderItem;
 import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.model.Vehicle;
 import com.ahsan.scrap.repository.CustomerRepository;
 import com.ahsan.scrap.repository.OrderItemRepository;
+import com.ahsan.scrap.repository.OrderRepository;
 import com.ahsan.scrap.repository.ProductRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.repository.VehicleRepository;
 import com.ahsan.scrap.service.CustomerService;
+import com.ahsan.scrap.service.OrderService;
 import com.ahsan.scrap.service.ProductService;
 import com.ahsan.scrap.service.UserService;
 import com.ahsan.scrap.service.VehicleService;
@@ -41,6 +44,8 @@ public class AdminController {
 	@Autowired
 	private VehicleRepository vehicleRepository;
 	@Autowired
+	private OrderRepository orderRepository ;
+	@Autowired
 	private OrderItemRepository orderItemRepository ;
 	@Autowired
     private CustomerService customerService;
@@ -50,6 +55,8 @@ public class AdminController {
     private ProductService productService;
 	@Autowired
     private VehicleService vehicleService;
+	@Autowired
+    private OrderService orderService;
 
     @ModelAttribute
     private void userDetails(Model model, Principal principal){
@@ -60,13 +67,35 @@ public class AdminController {
     }
 
 	@GetMapping("/")
-	public String home() {
-		return "admin/home";
-	}
-	
-	@GetMapping("/profile")
-	public String prfile() {
-		return "admin/profile";
+	public String home(Model model) {
+		List<UserDtls> users = userService.getUserDtls();
+		List<Product> products = productRepository.findAll();
+		List<Order> orders = orderRepository.findAll();
+		List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+		List<OrderItem> orderItems = orderItemRepository.findAll();
+		List<Customer> customers = customerRepository.findAll();
+		int todayOrderAmount = todayOrders.stream()
+		        .mapToInt(Order::getOrderAmount)
+		        .sum();
+		int totalOrderAmount = orders.stream()
+				.mapToInt(Order::getOrderAmount)
+				.sum();
+		float orderProductQuantity = (float) orderItems.stream()
+                .mapToDouble(OrderItem::getQuantity)
+                .sum();
+		float storeProductQuantity = (float) products.stream()
+                .mapToDouble(Product::getQuantity)
+                .sum();
+		float totalProductQuantity = orderProductQuantity + storeProductQuantity;
+		model.addAttribute("todayOrders",todayOrders.size());
+		model.addAttribute("numOfUsers",users.size());
+		model.addAttribute("numOfOrders",orders.size());
+		model.addAttribute("numOfProducts",products.size());
+		model.addAttribute("numOfCustomers",customers.size());
+		model.addAttribute("todayOrderAmount",todayOrderAmount);
+		model.addAttribute("totalOrderAmount",totalOrderAmount);
+		model.addAttribute("totalProductQuantity",totalProductQuantity);
+		return "admin/dashboard";
 	}
 	
 	@GetMapping("/customer_list")

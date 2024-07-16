@@ -1,5 +1,6 @@
 package com.ahsan.scrap.service.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -112,5 +113,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public 	List<Order> findByUserDtls(UserDtls userDtls){
     	return orderRepository.findByUserDtls(userDtls);
+    }
+    @Override
+    public List<Order> getOrdersByCurrentDate() {
+        LocalDate today = LocalDate.now();
+        return orderRepository.findByOrderDate(today);
     }
 }

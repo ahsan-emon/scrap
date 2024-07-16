@@ -1,34 +1,40 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
 <body>
 <section>
-	<a class="btn btn-primary" href="add_product">Add product</a>
-    <h1>Product List</h1>
-    <table class="table table-striped mt-3">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Short Name</th>
-                    <th>Unit Price (SAR)</th>
-                    <th>Quantity in Store (KG)</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="product : ${products}">
-                    <td th:text="${product.id}"></td>
-                    <td th:text="${product.name}"></td>
-                    <td th:text="${product.shortName}"></td>
-                    <td th:text="${product.unitPrice}"></td>
-                    <td th:text="${product.quantity}"></td>
-                    <td>
-                    	<a th:href="@{/admin/productEdit/{id}(id=${product.id})}" class="btn btn-small btn-primary">Edit</a>
-        				<a th:href="@{/admin/productDelete/{id}(id=${product.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <div class="content-header">
+	      <div class="container-fluid">
+		    <h1>Product List</h1>
+		    <table class="table table-striped mt-3">
+		            <thead>
+		                <tr>
+		                    <th>ID</th>
+		                    <th>Name</th>
+		                    <th>Short Name</th>
+		                    <th>Unit Price (SAR)</th>
+		                    <th>Quantity in Store (KG)</th>
+		                    <th>Action</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr th:each="product, iterStat : ${products}" th:with="orderIndex=${iterStat.index + 1}">
+		                    <td th:text="${orderIndex}"></td>
+		                    <td th:text="${product.name}"></td>
+		                    <td th:text="${product.shortName}"></td>
+		                    <td th:text="${product.unitPrice}"></td>
+		                    <td th:text="${product.quantity}"></td>
+		                    <td>
+		                    	<a th:href="@{/admin/productEdit/{id}(id=${product.id})}" class="btn btn-small btn-primary">Edit</a>
+		        				<a th:href="@{/admin/productDelete/{id}(id=${product.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+	        </div>
+	    </div>
+	  </div>
 </section>
 </body>
 </html>
