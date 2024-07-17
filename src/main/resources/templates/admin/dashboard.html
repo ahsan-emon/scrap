@@ -24,7 +24,7 @@
 	    <div class="content">
 	      <div class="container-fluid">
 	        <div class="row">
-	          <div class="col-lg-3 col-6">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-info">
 	              <div class="inner">
 	                <h3>[[${todayOrders}]]</h3>
@@ -36,8 +36,8 @@
 	              <a th:href="@{/order/today_order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
-	          <div class="col-lg-3 col-6">
-	            <div class="small-box bg-success">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-info">
 	              <div class="inner">
 	                <h3>[[${todayOrderAmount}]] <span>SAR</span></h3>
 	                <p>Today Order Amount</p>
@@ -48,44 +48,32 @@
 	              <a th:href="@{/order/today_order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
-	          <div class="col-lg-3 col-6">
-	            <div class="small-box bg-warning">
-	              <div class="inner">
-	                <h3>[[${numOfUsers}]]</h3>
-	                <p>Number of Employees</p>
-	              </div>
-	              <div class="icon">
-	                <i class="ion ion-person-add"></i>
-	              </div>
-	              <a th:href="@{/admin/user_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-	            </div>
-	          </div>
-	          <div class="col-lg-3 col-6">
-	            <div class="small-box bg-info">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-success">
 	              <div class="inner">
 	                <h3>[[${numOfOrders}]]</h3>
 	                <p>Total Order</p>
 	              </div>
 	              <div class="icon">
-	                <i class="ion ion-pie-graph"></i>
+	              	<i class="ion ion-bag"></i>
 	              </div>
 	              <a th:href="@{/order/order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
-	          <div class="col-lg-3 col-6">
-	            <div class="small-box bg-secondary">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-success">
 	              <div class="inner">
 	                <h3>[[${totalOrderAmount}]] <span>SAR</span></h3>
 	                <p>Total Order Amount</p>
 	              </div>
 	              <div class="icon">
-	                <i class="ion ion-pie-graph"></i>
+	              	<i class="ion ion-stats-bars"></i>
 	              </div>
 	              <a th:href="@{/order/order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
-	          <div class="col-lg-3 col-6">
-	            <div class="small-box bg-primary">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-secondary">
 	              <div class="inner">
 	                <h3>[[${numOfProducts}]]</h3>
 	                <p>Number of Products</p>
@@ -96,20 +84,32 @@
 	              <a th:href="@{/admin/product_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
-	          <div class="col-lg-3 col-6">
-	            <div class="small-box bg-success">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-secondary">
 	              <div class="inner">
 	                <h3>[[${totalProductQuantity}]] <span>KG</span></h3>
 	                <p>Total Product Quantity in Store</p>
 	              </div>
 	              <div class="icon">
-	                <i class="ion ion-pie-graph"></i>
+	                <i class="ion ion-stats-bars"></i>
 	              </div>
 	              <a th:href="@{/admin/product_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
-	          <div class="col-lg-3 col-6">
-	            <div class="small-box bg-warning">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-info">
+	              <div class="inner">
+	                <h3>[[${numOfUsers}]]</h3>
+	                <p>Number of Employees</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-pie-graph"></i>
+	              </div>
+	              <a th:href="@{/admin/user_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-primary">
 	              <div class="inner">
 	                <h3>[[${numOfCustomers}]]</h3>
 	                <p>Number of Customers</p>
