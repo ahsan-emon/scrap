@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		    <h1>Order View</h1>
+		    <div class="row">
+		        <div class="col-12">
+		            <div th:object="${orders}" class="card mb-3">
+		                <div class="card-body">
+		                    <h5 class="card-title">Order ID: <span th:text="${order.id}"></span></h5>
+		                    <ul class="list-group list-group-flush">
+		                        <li class="list-group-item">
+		                            <strong>Customer Name:</strong> <span th:text="${order.customer.username}"></span>
+		                        </li>
+		                        <li class="list-group-item">
+		                            <strong>Employee Name:</strong> <span th:text="${order.userDtls.username}"></span>
+		                        </li>
+		                        <li class="list-group-item">
+		                            <strong>Order Date:</strong> <span th:text="${@dateUtils.formatDate(order.orderDate)}"></span>
+		                        </li>
+		                        <li class="list-group-item">
+		                            <strong>Number Of Items:</strong> <span th:text="${order.numberOfItems}"></span>
+		                        </li>
+		                        <li class="list-group-item" th:each="orderItem, iterStat : ${order.orderItems}" th:with="orderIndex=${iterStat.index + 1}">
+		                        	<ul class="list-group list-group-flush">
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>[[${orderIndex}]]</strong>
+		   		                        </li>
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>Product Name:</strong> <span th:text="${orderItem.product.name}"></span>
+		   		                        </li>
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>Quantity:</strong> <span th:text="${orderItem.quantity}"></span><span> KG</span>
+		   		                        </li>
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>Unit Price:</strong> <span th:text="${orderItem.unitPrice}"></span><span> SAR</span>
+		   		                        </li>
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>Order Amount:</strong> <span th:text="${orderItem.amount}"></span><span> SAR</span>
+		   		                        </li>
+		                        	</ul>
+		                        </li>
+		                        <li class="list-group-item">
+		                            <strong>Total Amount:</strong> <strong class="text-success" th:text="${order.orderAmount}+'/= SAR'"></strong>
+		                        </li>
+		                        <li class="list-group-item">
+		                            <a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-primary btn-sm">Edit</a>
+		                            <a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/order/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</a>
+		                        </li>
+		                    </ul>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+  </div>
+</section>
+</body>
+</html>

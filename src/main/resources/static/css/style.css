@@ -1,0 +1,16 @@
+/* Add your custom styles here */
+body {
+  padding-top: 20px;
+}
+.sidebar {
+  background-color: #343a40;
+  color: #fff;
+  height: 100vh;
+}
+.main-content {
+  padding: 20px;
+}
+.background {
+	background-color: #0080c0;
+	color: #fff;
+}

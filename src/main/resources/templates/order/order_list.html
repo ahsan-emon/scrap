@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base::Layout(~{::section})">
+
+<body>
+<section>
+<!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <div class="content-header">
+	      <div class="container-fluid">
+		    <h1>Order List</h1>
+		    <table class="table table-striped mt-3">
+		            <thead>
+		                <tr>
+		                    <th>ID</th>
+		                    <th>Customer Name</th>
+		                    <th>Employee Name</th>
+		                    <th>Order Date</th>
+		                    <th>Number Of Items</th>
+		                    <th>Order Amount (SAR)</th>
+		                    <th>Action</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr th:each="order, iterStat : ${orders}" th:with="orderIndex=${iterStat.index + 1}">
+		                    <td th:text="${orderIndex}"></td>
+		                    <td th:text="${order.customer.username}"></td>
+		                    <td th:text="${order.userDtls.username}"></td>
+		                    <td th:text="${@dateUtils.formatDate(order.orderDate)}"></td>
+		                    <td th:text="${order.numberOfItems}"></td>
+		                    <td th:text="${order.orderAmount}"></td>
+		                    <td>
+		                    	<a th:href="@{/order/orderView/{id}(id=${order.id})}" class="btn btn-small btn-primary">View</a>
+		                    	<a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-small btn-primary">Edit</a>
+		        				<a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/order/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+	        </div>
+	    </div>
+	  </div>
+</section>
+</body>
+</html>

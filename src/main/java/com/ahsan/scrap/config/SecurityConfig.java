@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import com.ahsan.scrap.constraint.CommonConstraint;
 import com.ahsan.scrap.service.impl.UserDetailsServiceImpl;
 
 @Configuration
@@ -42,9 +43,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/user/**").hasRole("USER")
-                                .requestMatchers("/customer/**").hasAuthority("ROLE_CUSTOMER")
+                                .requestMatchers("/admin/**").hasAuthority(CommonConstraint.ROLE_ADMIN)
+                                .requestMatchers("/order/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN,CommonConstraint.ROLE_EMPLOYEE)
+                                .requestMatchers("/user/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN,CommonConstraint.ROLE_EMPLOYEE,CommonConstraint.ROLE_USER)
+                                .requestMatchers("/customer/**").hasAuthority(CommonConstraint.ROLE_CUSTOMER)
                                 .requestMatchers("/**").permitAll()
                 )
                 .formLogin(formLogin ->

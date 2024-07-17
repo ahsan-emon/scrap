@@ -22,10 +22,15 @@ public class UserController {
         String username = principal.getName();
         UserDtls user = userRepository.findByUsername(username);
         model.addAttribute("user",user);
+        model.addAttribute("userRole",user.getRole());
     }
 
     @GetMapping("/")
     public String home(){
         return "user/home";
+    }
+    @GetMapping("/profile")
+    public String prfile() {
+    	return "user/profile";
     }
 }

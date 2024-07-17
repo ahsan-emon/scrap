@@ -1,51 +1,55 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="admin/adminBase::Layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
 <body>
 <section>
-    <div class="container">
-        <div class="row align-item-center">
-            <div class="col-md-8">
-                <h2>Add Customer</h2>
-                <div class="card p-3">
-                    <th:block th:if="${msg}">
-                        <p class="text-center alert alert-primary">[[${msg}]]</p>
-                    </th:block>
-                    <form th:action="@{/admin/createCustomer}" method="post">
-                        <div class="mb-3">
-                            <label for="exampleInputName" class="form-label">Full Name</label>
-                            <input type="text" name="fullName" class="form-control" id="exampleInputName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail" class="form-label">Email address</label>
-                            <input type="email" name="email" class="form-control" id="exampleInputEmail">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputUsername" class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" id="exampleInputUsername" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputAddress" class="form-label">Address</label>
-                            <input type="text" name="address" class="form-control" id="exampleInputAddress" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputPhone1" class="form-label">Phone1</label>
-                            <input type="text" name="phone1" class="form-control" id="exampleInputPhone1" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputPhone2" class="form-label">Phone2</label>
-                            <input type="text" name="phone2" class="form-control" id="exampleInputPhone2">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputPassword" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="exampleInputPassword" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary col-md-12">Register</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		        <div class="row align-item-center">
+		            <div class="col-md-8">
+		                <h2>Add Customer</h2>
+		                <div class="card p-3">
+		                    <th:block th:if="${msg}">
+		                        <p class="text-center alert alert-primary">[[${msg}]]</p>
+		                    </th:block>
+		                    <form th:action="@{/admin/createCustomer}" method="post">
+		                        <div class="mb-3">
+		                            <label for="exampleInputName" class="form-label">Full Name</label>
+		                            <input type="text" name="fullName" class="form-control" id="exampleInputName" required>
+		                        </div>
+		                        <div class="mb-3">
+		                            <label for="exampleInputEmail" class="form-label">Email address</label>
+		                            <input type="email" name="email" class="form-control" id="exampleInputEmail">
+		                        </div>
+		                        <div class="mb-3">
+		                            <label for="exampleInputUsername" class="form-label">Username</label>
+		                            <input type="text" name="username" class="form-control" id="exampleInputUsername" required>
+		                        </div>
+		                        <div class="mb-3">
+		                            <label for="exampleInputAddress" class="form-label">Address</label>
+		                            <input type="text" name="address" class="form-control" id="exampleInputAddress" required>
+		                        </div>
+		                        <div class="mb-3">
+		                            <label for="exampleInputPhone1" class="form-label">Phone1</label>
+		                            <input type="text" name="phone1" class="form-control" id="exampleInputPhone1" required>
+		                        </div>
+		                        <div class="mb-3">
+		                            <label for="exampleInputPhone2" class="form-label">Phone2</label>
+		                            <input type="text" name="phone2" class="form-control" id="exampleInputPhone2">
+		                        </div>
+		                        <div class="mb-3">
+		                            <label for="exampleInputPassword" class="form-label">Password</label>
+		                            <input type="password" name="password" class="form-control" id="exampleInputPassword" required>
+		                        </div>
+		                        <button type="submit" class="btn btn-primary col-md-12">Register</button>
+		                    </form>
+		
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+	  </div>
 </section>
 
 </body>

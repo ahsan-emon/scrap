@@ -23,6 +23,7 @@ public class CustomerController {
         String username = principal.getName();
         UserDtls user = userRepository.findByUsername(username);
         model.addAttribute("user",user);
+        model.addAttribute("userRole",user.getRole());
     }
 
 	@GetMapping("/")

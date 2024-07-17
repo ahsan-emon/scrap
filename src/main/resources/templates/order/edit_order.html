@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		        <div class="row align-item-center">
+		            <div class="col-md-8">
+		                <h2>Edit Product</h2>
+		                <div class="card p-3">
+		                    <th:block th:if="${msg}">
+		                        <p class="text-center">[[${msg}]]</p>
+		                    </th:block>
+		                        <form th:action="@{/order/updateOrder}" th:object="${order}" method="post">
+							        <div class="mb-3">
+							            <label for="exampleInputId" class="form-label">Id: [[*{id}]]</label>
+							            <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputId" readOnly required>
+							        </div>
+							        <div class="mb-3">
+							            <label for="exampleInputName" class="form-label">Order Date: [[*{orderDate}]]</label>
+							            <!-- <input type="datetime" th:field="*{orderDate}" class="form-control" id="exampleInputName" readOnly required> -->
+							        </div>
+							        <div class="mb-3">
+							            <label for="exampleInputName" class="form-label">Customer Name: [[*{customer.username}]]</label>
+							            <!-- <input type="text" th:field="*{customer.username}" class="form-control" id="exampleInputName" readOnly required> -->
+							        </div>
+							        <div class="mb-3">
+							            <label for="exampleInputShortName" class="form-label">Employee Name: [[*{userDtls.username}]]</label>
+							            <!-- <input type="text" th:field="*{userDtls.username}" class="form-control" id="exampleInputShortName" readOnly required> -->
+							        </div>
+							        <div id="products">
+			                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">
+			                                <label>Product</label>
+			                                <select th:field="*{orderItems[__${iterStat.index}__].product.id}" class="form-control" required>
+			                                    <option value="">Select Product</option>
+			                                    <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+			                                </select>
+			                
+			                                <label>Quantity</label>
+			                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].quantity}" class="form-control" step="0.01" min="0" required />
+			                
+			                                <label>Unit Price</label>
+			                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" required />
+			                
+			                                <button type="button" onclick="removeProduct(this)" class="btn btn-danger mt-2 mb-0">Remove</button>
+			                            </div>
+			                        </div>
+			                        <button type="button" class="btn btn-primary btn-small my-2" onclick="addProduct()">Add Product</button>
+							        <!-- <div class="mb-3">
+							            <label class="form-label"><strong>Total Amount : <span class="text-success">[[*{orderAmount}]]/= SAR</span></strong></label>
+							        </div> -->
+							        <button type="submit" class="btn btn-primary col-md-12">Update</button>
+							    </form>
+		
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>	
+	  </div>
+</section>
+</body>
+</html>

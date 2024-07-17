@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<head>
+    <title>Order Form</title>
+</head>
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+			<div class="container-fluid">
+		        <div class="row align-item-center">
+		            <div class="col-md-8">
+		                <h2>Add Order</h2>
+		                <div class="card p-3">
+		                    <th:block th:if="${msg}">
+		                        <p class="text-center alert alert-primary">[[${msg}]]</p>
+		                    </th:block>
+		                    
+		                    <form th:action="@{/order/saveOrder}" th:object="${order}" method="post">
+						        <div class="mb-3">
+								    <label for="customer" class="form-label">Customer:</label>
+								    <select id="customer" class="form-control" name="customerId" required>
+								    	<option value="" selected>Select Customer</option>
+								        <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.username}">[[${customer.username}]]</option>
+								    </select>
+								</div>
+						        <div id="products" class="mb-3">
+		                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">
+		                                <label>Product</label>
+		                                <select th:field="*{orderItems[__${iterStat.index}__].product.id}" class="form-control" required>
+		                                    <option value="" selected>Select Product</option>
+		                                    <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+		                                </select>
+		                
+		                                <label>Quantity</label>
+		                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].quantity}" class="form-control" step="0.01" min="0" required />
+		                
+		                                <label>Unit Price</label>
+		                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" required />
+		                
+		                                <button type="button" onclick="removeProduct(this)" class="btn btn-danger">Remove</button>
+		                            </div>
+		                        </div>
+						        <button type="button" class="btn btn-primary btn-small" onclick="addProduct()">Add Product</button>
+						        <button type="submit" class="btn btn-primary col-md-12">Submit Order</button>
+						    </form>
+		
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+	  </div>
+</section>
+</body>
+</html>

@@ -1,35 +1,349 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeLeaf.org" th:fragment="Layout(content)">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${userRole == 'ROLE_ADMIN' ? 'Admin Panel' : 'Employee Panel'}"></title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" th:href="@{/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css}">
+  <!-- iCheck -->
+  <link rel="stylesheet" th:href="@{/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" th:href="@{/plugins/jqvmap/jqvmap.min.css}">
+  <!-- Theme style -->
+  <link rel="stylesheet" th:href="@{/css/adminlte.min.css}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" th:href="@{/plugins/daterangepicker/daterangepicker.css}">
+  <!-- summernote -->
+  <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+  <!-- style.css -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  
 </head>
-<body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Scrap</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" th:src="@{/img/AdminLTELogo.png}" alt="AdminLTELogo" height="60" width="60">
+  </div>
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a class="nav-link active" aria-current="page" th:href="@{/admin/}">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block bg-danger rounded">
+        <a  th:href="@{/logout}" class="nav-link">Logout</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+          <i class="fas fa-search"></i>
+        </a>
+        <div class="navbar-search-block">
+          <form class="form-inline">
+            <div class="input-group input-group-sm">
+              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li>
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">3</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <div class="media">
+              <img th:src="@{/img/user1-128x128.jpg}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  Brad Diesel
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">Call me whenever you can...</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <div class="media">
+              <img th:src="@{/img/user8-128x128.jpg}" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  John Pierce
+                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">I got your message bro</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        </div>
+      </li>
+      <!-- Notifications Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">15</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+          <i class="fas fa-th-large"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a th:href="@{/admin/}" class="brand-link">
+      <img th:src="@{/img/AdminLTELogo.png}" alt="Scrap Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Scrap</span>
+    </a>
+
+    <div class="sidebar">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img th:src="@{/img/user2-160x160.jpg}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a th:href="@{/user/profile}" class="d-block">[[${user.fullName}]]</a>
+        </div>
+      </div>
+
+      <div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item menu-open">
+			<a th:href="@{${userRole == 'ROLE_ADMIN' ? '/admin/' : '/employee/'}}" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                [[${userRole == 'ROLE_ADMIN' ? 'Admin Dashboard' : 'Employee Dashboard'}]] 
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" th:href="@{/order/order_list}">
+              	<i class="nav-icon fas fa-th"></i>
+              	<p>Orders <i class="right fas fa-angle-left"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+            	<li class="nav-item">
+              		<a class="nav-link" th:href="@{/order/order_list}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Order List</p>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="signin">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register">Register</a>
+                    <a class="nav-link" th:href="@{/order/orderForm}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Add Order</p>
+                    </a>
                 </li>
             </ul>
-        </div>
+          </li>
+          <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item">
+              <a class="nav-link" th:href="@{/admin/user_list}">
+              	<i class="nav-icon fas fa-th"></i>
+              	<p>Employees <i class="right fas fa-angle-left"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+            	<li class="nav-item">
+              		<a class="nav-link" th:href="@{/admin/user_list}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Employee List</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/add_user}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Add Employee</p>
+                    </a>
+                </li>
+            </ul>
+          </li>
+          <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item">
+              <a class="nav-link" th:href="@{/admin/customer_list}">
+              	<i class="nav-icon fas fa-th"></i>
+              	<p>Customers <i class="right fas fa-angle-left"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+            	<li class="nav-item">
+              		<a class="nav-link" th:href="@{/admin/customer_list}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Customer List</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/add_customer}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Add Customer</p>
+                    </a>
+                </li>
+            </ul>
+          </li>
+          <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item">
+              <a class="nav-link" th:href="@{/admin/product_list}">
+              	<i class="nav-icon fas fa-th"></i>
+              	<p>Products <i class="right fas fa-angle-left"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+            	<li class="nav-item">
+              		<a class="nav-link" th:href="@{/admin/product_list}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Product List</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/add_product}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Add Product</p>
+                    </a>
+                </li>
+            </ul>
+          </li>
+          <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item">
+              <a class="nav-link" th:href="@{/admin/vehicle_list}">
+              	<i class="nav-icon fas fa-th"></i>
+              	<p>Vehicles <i class="right fas fa-angle-left"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+            	<li class="nav-item">
+              		<a class="nav-link" th:href="@{/admin/vehicle_list}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Vehicle List</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/add_vehicle}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Add Vehicle</p>
+                    </a>
+                </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link bg-danger" th:href="@{/logout}">Logout</a>
+          </li>
+        </ul>
+      </nav>
     </div>
-</nav>
-<div th:replace="${content}"></div>
+  </aside>
+<div class="container-fluid">
+    <div th:replace="${content}"></div>
+</div>
+  
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2023 <a href="#">Your Company</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 3.1.0
+    </div>
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <div class="p-3">
+      <h5>Control Sidebar</h5>
+      <p>Control panel options.</p>
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- ChartJS -->
+<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+<!-- Sparkline -->
+<script th:src="@{/plugins/sparkline/jquery.sparkline.min.js}"></script>
+<!-- JQVMap -->
+<script th:src="@{/plugins/jqvmap/jquery.vmap.min.js}"></script>
+<script th:src="@{/plugins/jqvmap/maps/jquery.vmap.usa.js}"></script>
+<!-- jQuery Knob Chart -->
+<script th:src="@{/plugins/jquery-knob/jquery.knob.min.js}"></script>
+<!-- daterangepicker -->
+<script th:src="@{/plugins/moment/moment.min.js}"></script>
+<script th:src="@{/plugins/daterangepicker/daterangepicker.js}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script th:src="@{/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
+<!-- Summernote -->
+<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/js/adminlte.js}"></script>
+<!-- AdminLTE for demo purposes -->
+<script th:src="@{/js/demo.js}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script th:src="@{/js/pages/dashboard.js}"></script>
+<!-- order js -->
+<script th:src="@{/js/orderForm.js}"></script>
+ 
 </body>
 </html>

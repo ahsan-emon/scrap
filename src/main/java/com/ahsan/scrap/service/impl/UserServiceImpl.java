@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDtls createUser(UserDtls user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("ROLE_USER");
+        user.setRole("ROLE_ADMIN");
         return userRepository.save(user);
     }
     @Override
@@ -43,6 +43,15 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserDtls updateUserDtls(UserDtls user) {
-    	return userRepository.save(user);
+    	UserDtls oldUserDtls = userRepository.findById(user.getId()).orElse(null);
+    	if(oldUserDtls != null) {
+    		if(!user.getPassword().isEmpty() && user.getPassword() != null) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+        	}else {
+                user.setPassword(oldUserDtls.getPassword());
+        	}
+        	return userRepository.save(user);
+    	}
+    	return null;
     }
 }
