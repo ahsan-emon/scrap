@@ -46,6 +46,7 @@ public class OrderController {
         String username = principal.getName();
         UserDtls user = userRepository.findByUsername(username);
         model.addAttribute("userRole",user.getRole());
+        model.addAttribute("user",user);
     }
 	
 	//oder 
@@ -58,9 +59,22 @@ public class OrderController {
 				List<Order> orders = orderService.getOrdersByOrderDateDesc();
 				model.addAttribute("orders",orders);
 	        }else {
-	        	List<Order> orders = orderService.findByUserDtls(userDtls);
+	        	List<Order> orders = orderService.getOrdersByUserDtlsAndUptoPrevOrderDate(userDtls);
 				model.addAttribute("orders",orders);
 	        }
+			return "order/order_list";
+		}
+		@GetMapping("/today_order_list")
+		public String todayOrderList(Model model, Principal principal) {
+			String username = principal.getName();
+			UserDtls userDtls = userRepository.findByUsername(username);
+			if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
+				List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+				model.addAttribute("orders",todayOrders);
+			}else {
+				List<Order> orders = orderService.getOrdersByUserDtlsAndCurrentDate(userDtls);
+				model.addAttribute("orders",orders);
+			}
 			return "order/order_list";
 		}
 		

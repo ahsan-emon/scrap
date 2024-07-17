@@ -119,4 +119,15 @@ public class OrderServiceImpl implements OrderService {
         LocalDate today = LocalDate.now();
         return orderRepository.findByOrderDate(today);
     }
+    @Override
+    public List<Order> getOrdersByUserDtlsAndCurrentDate(UserDtls userDtls) {
+        LocalDate today = LocalDate.now();
+        return orderRepository.findByUserDtlsAndOrderDate(userDtls, today);
+    }
+    @Override
+    public List<Order> getOrdersByUserDtlsAndUptoPrevOrderDate(UserDtls userDtls) {
+    	LocalDate endDate = LocalDate.now();
+    	LocalDate startDate = endDate.minusDays(1);
+    	return orderRepository.findByUserDtlsAndUptoPrevOrderDate(userDtls,startDate, endDate);
+    }
 }
