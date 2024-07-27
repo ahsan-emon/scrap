@@ -24,7 +24,7 @@
 		                    <td th:text="${vehicle.numberPlate}"></td>
 		                    <td th:text="${vehicle.vehicleExpDate}"></td>
 		                    <td>
-		                    	<a th:href="@{/admin/vehicleEdit/{id}(id=${vehicle.id})}" class="btn btn-small btn-primary">Edit</a>
+		                    	<a th:href="@{/admin/vehicleEdit/{id}(id=${vehicle.id})}" class="btn btn-small btn-warning">Edit</a>
 		        				<a th:href="@{/admin/vehicleDelete/{id}(id=${vehicle.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
 		                    </td>
 		                </tr>

@@ -8,7 +8,7 @@
 		    <h1>Order View</h1>
 		    <div class="row">
 		        <div class="col-12">
-		            <div th:object="${orders}" class="card mb-3">
+		            <div th:object="${order}" class="card mb-3">
 		                <div class="card-body">
 		                    <h5 class="card-title">Order ID: <span th:text="${order.id}"></span></h5>
 		                    <ul class="list-group list-group-flush">
@@ -47,7 +47,7 @@
 		                            <strong>Total Amount:</strong> <strong class="text-success" th:text="${order.orderAmount}+'/= SAR'"></strong>
 		                        </li>
 		                        <li class="list-group-item">
-		                            <a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-primary btn-sm">Edit</a>
+		                            <a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-warning btn-sm">Edit</a>
 		                            <a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/order/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</a>
 		                        </li>
 		                    </ul>

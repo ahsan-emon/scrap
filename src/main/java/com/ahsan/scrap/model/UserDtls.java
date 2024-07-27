@@ -38,4 +38,5 @@ public class UserDtls {
     private LocalDate visaExpDate;
     private String password;
     private String role;
+    private String photoPath;
 }

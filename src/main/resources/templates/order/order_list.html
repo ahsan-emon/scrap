@@ -30,7 +30,7 @@
 		                    <td th:text="${order.orderAmount}"></td>
 		                    <td>
 		                    	<a th:href="@{/order/orderView/{id}(id=${order.id})}" class="btn btn-small btn-primary">View</a>
-		                    	<a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-small btn-primary">Edit</a>
+		                    	<a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-small btn-warning">Edit</a>
 		        				<a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/order/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
 		                    </td>
 		                </tr>

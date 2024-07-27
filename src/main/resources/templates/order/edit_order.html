@@ -29,6 +29,10 @@
 							            <label for="exampleInputShortName" class="form-label">Employee Name: [[*{userDtls.username}]]</label>
 							            <!-- <input type="text" th:field="*{userDtls.username}" class="form-control" id="exampleInputShortName" readOnly required> -->
 							        </div>
+							        <div class="mb-3">
+									    <label>Customer Due Amount</label>
+									    <input type="number" th:name="customerDue" th:value="${order.customer.customerDue}" class="form-control" min="0" required />
+									</div>
 							        <div id="products">
 			                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">
 			                                <label>Product</label>

@@ -19,10 +19,14 @@
 		                    <form th:action="@{/order/saveOrder}" th:object="${order}" method="post">
 						        <div class="mb-3">
 								    <label for="customer" class="form-label">Customer:</label>
-								    <select id="customer" class="form-control" name="customerId" required>
+								    <select id="customer" class="form-control" name="customerId" required onchange="updateDueAmount()">
 								    	<option value="" selected>Select Customer</option>
-								        <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.username}">[[${customer.username}]]</option>
+								        <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.username}" th:attr="data-due=${customer.customerDue}">[[${customer.username}]]</option>
 								    </select>
+								</div>
+						        <div class="mb-3">
+								    <label>Due Amount</label>
+								    <input type="number" id="customerDue" name="customerDue" class="form-control" min="0" required />
 								</div>
 						        <div id="products" class="mb-3">
 		                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">

@@ -1,5 +1,6 @@
 package com.ahsan.scrap.controller.web;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ahsan.scrap.model.Customer;
 import com.ahsan.scrap.model.Order;
@@ -29,6 +32,7 @@ import com.ahsan.scrap.service.OrderService;
 import com.ahsan.scrap.service.ProductService;
 import com.ahsan.scrap.service.UserService;
 import com.ahsan.scrap.service.VehicleService;
+import com.ahsan.scrap.util.FileUploadService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -57,11 +61,15 @@ public class AdminController {
     private VehicleService vehicleService;
 	@Autowired
     private OrderService orderService;
+	@Autowired
+	private FileUploadService fileUploadService;
 
     @ModelAttribute
     private void userDetails(Model model, Principal principal){
         String username = principal.getName();
         UserDtls user = userRepository.findByUsername(username);
+        List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+        model.addAttribute("todayOrdersNot",todayOrders.size());
         model.addAttribute("user",user);
 		model.addAttribute("userRole",user.getRole());
     }
@@ -167,6 +175,18 @@ public class AdminController {
         model.addAttribute("customer", customer);
         return "admin/edit_customer";
 	}
+	@GetMapping("/customerView/{id}")
+	public String viewCustomer(@PathVariable("id") Long id, Model model) {
+		Customer customer = customerRepository.findById(id).orElse(null);
+		List<Order> custOrderList = orderRepository.findByCustomer(customer);
+		int custTotalOrderAmount = custOrderList.stream()
+		        .mapToInt(Order::getOrderAmount)
+		        .sum();
+		model.addAttribute("customer", customer);
+		model.addAttribute("custTotalNumOfOrder", custOrderList.size());
+		model.addAttribute("custTotalOrderAmount", custTotalOrderAmount);
+		return "admin/view_customer";
+	}
 	@PostMapping("/updateCustomer")
     public String updateCustomer(@ModelAttribute Customer customer, Model model) {
 		customerService.updateCustomer(customer);
@@ -190,25 +210,35 @@ public class AdminController {
         return "admin/add_user";
     }
     @PostMapping("/createUser")
-    public String createUser(@ModelAttribute UserDtls user, HttpSession session){
-        String msg = null;
-        if (!userService.checkUsername(user.getUsername())) {
-            UserDtls userDetails = userService.createUserByAdmin(user);
-            if (userDetails != null) {
-                msg = "Register Successfully!";
+    public String createUser(@ModelAttribute UserDtls user, @RequestParam("photo") MultipartFile photo, Model model, HttpSession session){
+    	try {
+            String msg = null;
+            if (!userService.checkUsername(user.getUsername())) {
+            	String fileName = fileUploadService.saveFile(photo,user.getUsername());
+                System.out.println("fileName==Controlleer==>>>"+fileName);
+                if (fileName != null) {
+                    user.setPhotoPath(fileName);
+                }
+                UserDtls userDetails = userService.createUserByAdmin(user);
+                if (userDetails != null) {
+                    msg = "Register Successfully!";
+                } else {
+                    msg = "Something went wrong on the server!";
+                }
             } else {
-                msg = "Something went wrong on the server!";
+                msg = "Username already exists!";
             }
-        } else {
-            msg = "Username already exists!";
+            session.setAttribute("msg", msg);
+        } catch (IOException e) {
+            model.addAttribute("error", "Error uploading file: " + e.getMessage());
+            return "redirect:/admin/add_user";
         }
-        session.setAttribute("msg", msg);
         return "redirect:/admin/add_user";
     }
 	@GetMapping("/userEdit/{id}")
 	public String editUser(@PathVariable("id") Long id, Model model) {
-        UserDtls user = userService.findUserById(id);
-        model.addAttribute("user", user);
+        UserDtls editUser = userService.findUserById(id);
+        model.addAttribute("editUser", editUser);
         return "admin/edit_user";
 	}
 	@PostMapping("/updateUser")

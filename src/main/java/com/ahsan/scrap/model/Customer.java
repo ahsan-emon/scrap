@@ -38,4 +38,6 @@ public class Customer {
     private String phone2;
     private String role;
     private String password;
+    @Column(name = "customer_due")
+    private int customerDue;
 }

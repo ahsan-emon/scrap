@@ -9,10 +9,13 @@
 		            <div class="col-md-8">
 		                <h2>Add User</h2>
 		                <div class="card p-3">
-		                    <th:block th:if="${msg}">
+		                    <!-- <th:block th:if="${msg}">
 		                        <p class="text-center alert alert-primary">[[${msg}]]</p>
-		                    </th:block>
-		                    <form th:action="@{/admin/createUser}" method="post">
+		                    </th:block> -->
+		                    <div th:if="${error}">
+						        <p th:text="${error}" style="color: red;"></p>
+						    </div>
+		                    <form th:action="@{/admin/createUser}" method="post" enctype="multipart/form-data">
 		                        <div class="mb-3">
 		                            <label for="exampleInputName" class="form-label">Full Name</label>
 		                            <input type="text" name="fullName" class="form-control" id="exampleInputName" required>
@@ -46,7 +49,6 @@
 					                <select name="role" class="form-control" id="exampleInputRole" required>
 					                    <option>Select Role</option>
 					                    <option value="ROLE_ADMIN">Admin</option>
-					                    <option value="ROLE_ADMIN">Admin</option>
 					                    <option value="ROLE_EMPLOYEE">Employee</option>
 					                    <option value="ROLE_USER">User</option>
 					                </select>
@@ -58,6 +60,10 @@
 		                        <div class="mb-3">
 		                            <label for="exampleInputVisaExp" class="form-label">Visa Expire Date</label>
 		                            <input type="date" name="visaExpDate" class="form-control" id="exampleInputVisaExp" required>
+		                        </div>
+		                        <div class="mb-3">
+		                            <label for="exampleInputphoto" class="form-label">Photo</label>
+		                            <input type="file" name="photo" class="form-control" id="exampleInputphoto" required>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary col-md-12">Register</button>
 		                    </form>

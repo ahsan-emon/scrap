@@ -92,8 +92,13 @@ public class OrderController {
 	    }
 
 	    @PostMapping("/saveOrder")
-	    public String saveOrder(@ModelAttribute Order order, @RequestParam("customerId") Long customerId) {
+	    public String saveOrder(@ModelAttribute Order order, @RequestParam("customerId") Long customerId, @RequestParam("customerDue") int customerDue) {
 	        orderService.saveOrder(order, customerId);
+	        Customer customer = order.getCustomer();
+	        if(customer != null) {
+	        	customer.setCustomerDue(customerDue);
+	        	customerRepository.save(customer);
+	        }
 	        return "redirect:/order/order_list";
 	    }
 	    @GetMapping("/orderView/{id}")
@@ -111,8 +116,13 @@ public class OrderController {
 	        return "order/edit_order";
 		}
 		@PostMapping("/updateOrder")
-	    public String updateOrder(@ModelAttribute Order order, Model model) {
+	    public String updateOrder(@ModelAttribute Order order, @RequestParam("customerDue") int customerDue) {
 			orderService.updateOrder(order);
+			Customer customer = order.getCustomer();
+	        if(customer != null) {
+	        	customer.setCustomerDue(customerDue);
+	        	customerRepository.save(customer);
+	        }
 	        return "redirect:/order/order_list";
 	    }
 		@GetMapping("/orderDelete/{id}")

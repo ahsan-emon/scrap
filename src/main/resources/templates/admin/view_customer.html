@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		    <div class="row">
+		        <div class="col-12">
+		            <div th:object="${customer}" class="card mb-3">
+		                <div class="card-body">
+		                	<h1 class="bg-primary text-white p-2 mb-2 text-center text-bold rounded">Customer View</h1>
+		                    <div class="row">
+		                    	<h5 class="card-title text-bold text-success">Customer ID: <span th:text="${customer.id}"></span></h5>
+		        				<div class="col-md-6">
+		        					<ul class="list-group list-group-flush">
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Name:</strong> <span class="text-end ms-2" th:text="${customer.fullName}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Username:</strong> <span class="text-end ms-2" th:text="${customer.username}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Address:</strong> <span class="text-end ms-2" th:text="${customer.address}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Email:</strong> <span class="text-end ms-2" th:text="${customer.email}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Total Number of Order:</strong> <strong class="text-end text-success ms-2" th:text="${custTotalNumOfOrder}"></strong>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Total Order Amount:</strong> <strong class="text-end text-success ms-2" th:text="${custTotalOrderAmount}+'/= SAR'"></strong>
+				                        </li>
+				                    </ul>
+		        				</div>
+		        				<div class="col-md-6">
+		        					<ul class="list-group list-group-flush">
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Phone 1:</strong> 
+				                            <span class="text-end ms-2">
+				                            	<span th:text="${customer.phone1}"></span>
+				                            	<a th:href="'tel:' + ${customer.phone1}" class="btn btn-small btn-success ms-2">Call</a>
+				                            </span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Phone 2:</strong> 
+				                            <span class="text-end ms-2">
+					                            <span th:text="${customer.phone2}"></span>
+					                            <a th:if="${customer.phone2 != null and !#strings.isEmpty(customer.phone2)}" th:href="'tel:' + ${customer.phone2}" class="btn btn-small btn-success ms-2">Call</a>
+				                        	</span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Due:</strong> <span class="text-end text-danger text-bold ms-2" th:text="${customer.customerDue} +'/= SAR'"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Role:</strong> <span class="text-end text-info ms-2" th:text="${customer.role}"></span>
+				                        </li>
+				                    </ul>
+		        				</div>
+		        				<ul class="list-group list-group-flush">
+			        				<li class="list-group-item">
+			                            <a th:href="@{/admin/customerEdit/{id}(id=${customer.id})}" class="btn btn-small btn-warning">Edit</a>
+			        					<a th:href="@{/admin/customerDelete/{id}(id=${customer.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+			                        </li>
+		        				</ul>
+	        				</div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+  </div>
+</section>
+</body>
+</html>

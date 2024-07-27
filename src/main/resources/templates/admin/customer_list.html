@@ -14,10 +14,8 @@
 		                    <th>Full Name</th>
 		                    <th>Username</th>
 		                    <th>Address</th>
-		                    <th>Email</th>
-		                    <th>Phone 1</th>
-		                    <th>Phone 2</th>
-		                    <th>Role</th>
+		                    <th>Phone</th>
+		                    <th>Due(SAR)</th>
 		                    <th>Action</th>
 		                </tr>
 		            </thead>
@@ -27,13 +25,12 @@
 		                    <td th:text="${customer.fullName}"></td>
 		                    <td th:text="${customer.username}"></td>
 		                    <td th:text="${customer.address}"></td>
-		                    <td th:text="${customer.email}"></td>
 		                    <td th:text="${customer.phone1}"></td>
-		                    <td th:text="${customer.phone2}"></td>
-		                    <td th:text="${customer.role}"></td>
+		                    <td th:text="${customer.customerDue}"></td>
 		                    <td>
-		                    	<a th:href="@{/admin/customerEdit/{id}(id=${customer.id})}" class="btn btn-small btn-primary">Edit</a>
-		        				<a th:href="@{/admin/customerDelete/{id}(id=${customer.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+		                    	<a th:href="@{/admin/customerView/{id}(id=${customer.id})}" class="btn btn-small btn-primary">View</a>
+		                    	<a th:href="@{/admin/customerEdit/{id}(id=${customer.id})}" class="btn btn-small btn-warning">Edit</a>
+								<a th:href="'tel:' + ${customer.phone1}" class="btn btn-small btn-success">Call</a>
 		                    </td>
 		                </tr>
 		            </tbody>
