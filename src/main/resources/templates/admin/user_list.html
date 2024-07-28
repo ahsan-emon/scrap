@@ -13,12 +13,8 @@
 		                    <th>ID</th>
 		                    <th>Full Name</th>
 		                    <th>Username</th>
-		                    <th>Address</th>
-		                    <th>Email</th>
 		                    <th>Phone</th>
-		                    <th>Iqama</th>
 		                    <th>Role</th>
-		                    <th>Passport</th>
 		                    <th>Visa Expire Date</th>
 		                    <th>Action</th>
 		                </tr>
@@ -28,14 +24,11 @@
 		                    <td th:text="${orderIndex}"></td>
 		                    <td th:text="${user.fullName}"></td>
 		                    <td th:text="${user.username}"></td>
-		                    <td th:text="${user.address}"></td>
-		                    <td th:text="${user.email}"></td>
 		                    <td th:text="${user.phone}"></td>
-		                    <td th:text="${user.iqama}"></td>
 		                    <td th:text="${user.role}"></td>
-		                    <td th:text="${user.passport}"></td>
 		                    <td th:text="${user.visaExpDate}"></td>
 		                    <td>
+		                    	<a th:href="@{/admin/userView/{id}(id=${user.id})}" class="btn btn-small btn-primary">View</a>
 		                    	<a th:href="@{/admin/userEdit/{id}(id=${user.id})}" class="btn btn-small btn-warning">Edit</a>
 		        				<a th:href="@{/admin/userDelete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
 		                    </td>

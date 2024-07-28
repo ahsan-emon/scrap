@@ -214,9 +214,8 @@ public class AdminController {
     	try {
             String msg = null;
             if (!userService.checkUsername(user.getUsername())) {
-            	String fileName = fileUploadService.saveFile(photo,user.getUsername());
-                System.out.println("fileName==Controlleer==>>>"+fileName);
-                if (fileName != null) {
+				String fileName = fileUploadService.saveFile(photo,user.getUsername());
+				if (fileName != null) {
                     user.setPhotoPath(fileName);
                 }
                 UserDtls userDetails = userService.createUserByAdmin(user);
@@ -235,6 +234,18 @@ public class AdminController {
         }
         return "redirect:/admin/add_user";
     }
+    @GetMapping("/userView/{id}")
+	public String viewUser(@PathVariable("id") Long id, Model model) {
+    	UserDtls viewUser = userRepository.findById(id).orElse(null);
+		List<Order> userOrderList = orderRepository.findByUserDtls(viewUser);
+		int userTotalOrderAmount = userOrderList.stream()
+		        .mapToInt(Order::getOrderAmount)
+		        .sum();
+		model.addAttribute("viewUser", viewUser);
+		model.addAttribute("userTotalNumOfOrder", userOrderList.size());
+		model.addAttribute("userTotalOrderAmount", userTotalOrderAmount);
+		return "admin/view_user";
+	}
 	@GetMapping("/userEdit/{id}")
 	public String editUser(@PathVariable("id") Long id, Model model) {
         UserDtls editUser = userService.findUserById(id);
@@ -242,8 +253,17 @@ public class AdminController {
         return "admin/edit_user";
 	}
 	@PostMapping("/updateUser")
-    public String updateUser(@ModelAttribute UserDtls user, Model model) {
-        userService.updateUserDtls(user);
+    public String updateUser(@ModelAttribute UserDtls user, Model model, @RequestParam("photo") MultipartFile photo) {
+		try {
+			String fileName = fileUploadService.saveFile(photo,user.getUsername());
+			if (fileName != null) {
+                user.setPhotoPath(fileName);
+            }
+			userService.updateUserDtls(user);
+		} catch (IOException e) {
+			model.addAttribute("error", "Error uploading file: " + e.getMessage());
+            return "redirect:/admin/edit_user";
+		}
         return "redirect:/admin/user_list"; // redirect to the list page after updating
     }
 	@GetMapping("/userDelete/{id}")

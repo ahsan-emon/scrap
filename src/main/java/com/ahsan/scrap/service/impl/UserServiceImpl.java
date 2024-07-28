@@ -50,6 +50,11 @@ public class UserServiceImpl implements UserService {
         	}else {
                 user.setPassword(oldUserDtls.getPassword());
         	}
+    		if(user.getPhotoPath() == null) {
+    			user.setPhotoPath(oldUserDtls.getPhotoPath());
+    		}
+    		//TODO for other not update field
+    		user.setUsername(oldUserDtls.getUsername());
         	return userRepository.save(user);
     	}
     	return null;

@@ -136,7 +136,7 @@
     <div class="sidebar">
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img th:src="@{'/uploads/'+${user.photoPath}}" class="img-circle elevation-2" alt="User Image">
+          <img th:src="@{'/uploads/user/'+${user.photoPath}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a th:href="@{/user/profile}" class="d-block">[[${user.fullName}]]</a>
@@ -277,12 +277,9 @@
   
 
   <!-- Main Footer -->
-  <footer class="main-footer">
-    <strong>Copyright &copy; 2023 <a href="#">Your Company</a>.</strong>
+  <footer class="main-footer text-center">
+    <strong>Copyright &copy; 2024 <a th:href="@{${userRole == 'ROLE_ADMIN' ? '/admin/' : '/employee/'}}">Ahsan Ullah Emon</a>.</strong>
     All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.1.0
-    </div>
   </footer>
 
   <!-- Control Sidebar -->

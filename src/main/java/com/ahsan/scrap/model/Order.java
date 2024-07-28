@@ -33,6 +33,8 @@ public class Order {
 	private int numberOfItems;
 	@Column(name = "order_amount")
 	private int orderAmount = 0;
+	@Column(name = "vehicle_id")
+	private Long vehicleId;
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")

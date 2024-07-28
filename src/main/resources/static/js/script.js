@@ -2,7 +2,7 @@
         function validateFile() {
             const fileInput = document.getElementById('exampleInputphoto');
             const filePath = fileInput.value;
-            const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
             const maxSize = 10 * 1024 * 1024; // 10MB
 
             if (!allowedExtensions.exec(filePath)) {

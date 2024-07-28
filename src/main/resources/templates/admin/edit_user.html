@@ -12,7 +12,7 @@
 		                    <th:block th:if="${msg}">
 		                        <p class="text-center">[[${msg}]]</p>
 		                    </th:block>
-		                        <form th:action="@{/admin/updateUser}" th:object="${editUser}" method="post">
+		                        <form th:action="@{/admin/updateUser}" th:object="${editUser}" method="post" enctype="multipart/form-data">
 							        <div class="mb-3">
 							            <label for="exampleInputId" class="form-label">Id</label>
 							            <input type="text" th:field="*{id}" class="form-control" id="exampleInputId" readOnly>
@@ -64,14 +64,13 @@
 							        </div>
 							        <div class="mb-3">
 							        	<label for="exampleInputphoto" class="form-label">Photo</label>
-							        	<div class="image">
-								          <img th:src="@{'/uploads/'+*{photoPath}}" class="img-fluid mb-2" width="100px" alt="User Image">
+							        	<div th:if="${editUser.photoPath != null and !#strings.isEmpty(editUser.photoPath)}" class="image">
+								          <img th:src="@{'/uploads/user/'+*{photoPath}}" class="img-fluid mb-2" width="100px" alt="User Image">
 								        </div>
-			                            <input type="file" th:field="*{photoPath}" class="form-control" id="exampleInputphoto" required>
+			                            <input type="file" name="photo" class="form-control" id="exampleInputphoto">
 			                        </div>
 							        <button type="submit" class="btn btn-primary col-md-12">Update</button>
 							    </form>
-		
 		                </div>
 		            </div>
 		        </div>

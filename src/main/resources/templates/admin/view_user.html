@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		    <div class="row">
+		        <div class="col-12">
+		            <div th:object="${viewUser}" class="card mb-3">
+		                <div class="card-body">
+		                	<h1 class="bg-primary text-white p-2 mb-2 text-center text-bold rounded">[[${viewUser.role == 'ROLE_ADMIN' ? 'Admin View' : 'Employee View'}]]</h1>
+		                    <div class="row">
+		                    	<h5 class="card-title text-bold text-success">[[${viewUser.role == 'ROLE_ADMIN' ? 'Admin ID' : 'Employee ID'}]]: <span th:text="*{id}"></span></h5>
+		        				<div class="col-md-6">
+		        					<ul class="list-group list-group-flush">
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Name:</strong> <span class="text-end ms-2" th:text="*{fullName}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Username:</strong> <span class="text-end ms-2" th:text="*{username}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Address:</strong> <span class="text-end ms-2" th:text="*{address}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Email:</strong> <span class="text-end ms-2" th:text="*{email}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Total Number of Order:</strong> <strong class="text-end text-success ms-2" th:text="${userTotalNumOfOrder}"></strong>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Total Order Amount:</strong> <strong class="text-end text-success ms-2" th:text="${userTotalOrderAmount}+'/= SAR'"></strong>
+				                        </li>
+				                        <li class="list-group-item">
+				                            <strong>Photo:</strong> 
+											<div th:if="${viewUser.photoPath != null and !#strings.isEmpty(viewUser.photoPath)}" class="image">
+									          <img th:src="@{'/uploads/user/'+*{photoPath}}" class="img-fluid mb-2" width="100px" alt="User Image">
+									        </div>
+				                        </li>
+				                    </ul>
+		        				</div>
+		        				<div class="col-md-6">
+		        					<ul class="list-group list-group-flush">
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Iqama:</strong> <span class="text-end ms-2" th:text="*{iqama}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Passport:</strong> <span class="text-end ms-2" th:text="*{passport}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Phone:</strong> 
+				                            <span class="text-end ms-2">
+				                            	<span th:text="*{phone}"></span>
+				                            	<a th:if="${viewUser.phone != null and !#strings.isEmpty(viewUser.phone)}" th:href="'tel:' + *{phone}" class="btn btn-small btn-success ms-2">Call</a>
+				                            </span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Rest Amount:</strong> <!-- <span class="text-end text-danger text-bold ms-2" th:text="*{userTotalNumOfOrder} +'/= SAR'"></span> -->
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Visa Expire Date:</strong> <span class="text-end ms-2" th:text="*{visaExpDate}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Role:</strong> <span class="text-end text-info ms-2" th:text="*{role}"></span>
+				                        </li>
+				                    </ul>
+		        				</div>
+		        				<ul class="list-group list-group-flush">
+			        				<li class="list-group-item">
+			        					<button onclick="history.back()" class="btn btn-secondary">Back</button>
+			                            <a th:href="@{/admin/userEdit/{id}(id=${user.id})}" class="btn btn-small btn-warning">Edit</a>
+		        						<a th:href="@{/admin/userDelete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+			                        </li>
+		        				</ul>
+	        				</div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+  </div>
+</section>
+</body>
+</html>

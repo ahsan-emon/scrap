@@ -39,4 +39,6 @@ public class UserDtls {
     private String password;
     private String role;
     private String photoPath;
+    @Column(name = "vehicle_id")
+	private Long vehicleId;
 }

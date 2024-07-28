@@ -11,19 +11,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileUploadService {
-	private final String uploadDir = "uploads/";
+	private final String uploadDir = "uploads/user/";
 
     public String saveFile(MultipartFile file, String userName) throws IOException {
         if (file.isEmpty()) {
             return null;
         }
         UUID uuid = UUID.randomUUID();
-        String fileName = uuid+"_"+userName+"_"+file.getOriginalFilename();
-//        String fileName = file.getOriginalFilename();
-        Path path = Paths.get(uploadDir + fileName);
-        Files.createDirectories(path.getParent());
-        Files.write(path, file.getBytes());
-        System.out.println("fileName====>>>"+fileName);
-        return fileName;
+        String originalFileName = file.getOriginalFilename();
+        String fileExtension = "";
+        if (originalFileName != null && originalFileName.contains(".")) {
+            fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String fileName = uuid.toString() + "_" + userName + fileExtension;
+            Path path = Paths.get(uploadDir + fileName);
+            Files.createDirectories(path.getParent());
+            Files.write(path, file.getBytes());
+            return fileName;
+        }
+        return null;
     }
 }

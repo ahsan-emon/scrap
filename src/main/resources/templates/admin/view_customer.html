@@ -60,6 +60,7 @@
 		        				</div>
 		        				<ul class="list-group list-group-flush">
 			        				<li class="list-group-item">
+			        					<button onclick="history.back()" class="btn btn-secondary">Back</button>
 			                            <a th:href="@{/admin/customerEdit/{id}(id=${customer.id})}" class="btn btn-small btn-warning">Edit</a>
 			        					<a th:href="@{/admin/customerDelete/{id}(id=${customer.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
 			                        </li>
