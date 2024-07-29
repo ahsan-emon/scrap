@@ -19,6 +19,9 @@
 		                            <strong>Employee Name:</strong> <span th:text="${order.userDtls.username}"></span>
 		                        </li>
 		                        <li class="list-group-item">
+		                            <strong>Vehicle Name:</strong> <span th:text="${vehicleName}"></span>
+		                        </li>
+		                        <li class="list-group-item">
 		                            <strong>Order Date:</strong> <span th:text="${@dateUtils.formatDate(order.orderDate)}"></span>
 		                        </li>
 		                        <li class="list-group-item">

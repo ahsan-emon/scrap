@@ -61,6 +61,7 @@ public class OrderServiceImpl implements OrderService {
         if(userDtls != null && customer != null) {
             order.setUserDtls(userDtls);
             order.setCustomer(customer);
+            order.setVehicleId(userDtls.getVehicleId());
         }
         order.setNumberOfItems(numberOfItems);
         order.setOrderAmount(totalAmount);

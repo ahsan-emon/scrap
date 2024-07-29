@@ -15,20 +15,19 @@
 		                    <th:block th:if="${msg}">
 		                        <p class="text-center alert alert-primary">[[${msg}]]</p>
 		                    </th:block>
-		                    
 		                    <form th:action="@{/order/saveOrder}" th:object="${order}" method="post">
-						        <div class="mb-3">
+						        <div class="mb-2">
 								    <label for="customer" class="form-label">Customer:</label>
 								    <select id="customer" class="form-control" name="customerId" required onchange="updateDueAmount()">
 								    	<option value="" selected>Select Customer</option>
-								        <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.username}" th:attr="data-due=${customer.customerDue}">[[${customer.username}]]</option>
+								        <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.username}" th:attr="data-due=${customer.customerDue}"></option>
 								    </select>
 								</div>
-						        <div class="mb-3">
+						        <div class="mb-2">
 								    <label>Due Amount</label>
 								    <input type="number" id="customerDue" name="customerDue" class="form-control" min="0" required />
 								</div>
-						        <div id="products" class="mb-3">
+						        <div id="products" class="mb-2">
 		                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">
 		                                <label>Product</label>
 		                                <select th:field="*{orderItems[__${iterStat.index}__].product.id}" class="form-control" required>
@@ -42,13 +41,16 @@
 		                                <label>Unit Price</label>
 		                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" required />
 		                
-		                                <button type="button" onclick="removeProduct(this)" class="btn btn-danger">Remove</button>
+		                                <button type="button" onclick="removeProduct(this)" class="btn btn-danger mt-2">Remove</button>
 		                            </div>
 		                        </div>
 						        <button type="button" class="btn btn-primary btn-small" onclick="addProduct()">Add Product</button>
+						        <div class="my-2">
+							        <label class="mb-0">Total Order Amount:</label>
+							        <h3 id="totalAmount" class="text-bold text-info">0</h3>
+							    </div>
 						        <button type="submit" class="btn btn-primary col-md-12">Submit Order</button>
 						    </form>
-		
 		                </div>
 		            </div>
 		        </div>

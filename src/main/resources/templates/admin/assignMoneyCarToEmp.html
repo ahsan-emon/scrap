@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		        <div class="row align-item-center">
+		            <div class="col-md-8">
+		                <h2>Assign Employee to Money</h2>
+		                <div class="card p-3">
+		                    <th:block th:if="${msg}">
+		                        <p class="text-center alert alert-primary">[[${msg}]]</p>
+		                    </th:block>
+		                    <form th:action="@{/admin/updateUserToAssign}" method="post">
+		                    	<div class="mb-2">
+								    <label for="employee" class="form-label">Employee:</label>
+								    <select id="employee" class="form-control" name="id" required onchange="updateTotalAssignAmount()">
+								    	<option value="" selected>Select Employee</option>
+								        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.username}" th:attr="data-amount=${employee.hasAmount}"></option>
+								    </select>
+								</div>
+								<div class="mb-2">
+								    <label for="vehicle" class="form-label">Vehicle:</label>
+								    <select id="vehicle" class="form-control" name="vehicleId">
+								    	<option value="" selected>Select Vehicle</option>
+								        <option th:each="vehicle : ${vehicles}" th:value="${vehicle.id}" th:text="${vehicle.model}+'('+${vehicle.numberPlate}+')'"></option>
+								    </select>
+								</div>
+		                        <div class="mb-3">
+		                            <label for="exampleInputHasAmount" class="form-label">Assign Amount</label>
+		                            <input type="number" name="hasAmount" class="form-control" id="exampleInputHasAmount" required>
+		                        </div>
+		                        <div class="my-2">
+							        <label class="mb-0">Total Assign Amount:</label>
+							        <h3 id="totalAssignAmount" class="text-bold text-info">0</h3>
+							    </div>
+		                        <button type="submit" class="btn btn-primary col-md-12">Assign</button>
+		                    </form>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+	  </div>
+</section>
+
+</body>
+</html>

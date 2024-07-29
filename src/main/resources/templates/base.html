@@ -164,25 +164,23 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
-              <a class="nav-link" th:href="@{/order/order_list}">
-              	<i class="nav-icon fas fa-th"></i>
-              	<p>Orders <i class="right fas fa-angle-left"></i></p>
-              </a>
-              <ul class="nav nav-treeview">
-            	<li class="nav-item">
-              		<a class="nav-link" th:href="@{/order/order_list}">
-                    	<i class="far fa-circle nav-icon"></i>
-                    	<p>Order List</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/order/orderForm}">
-                    	<i class="far fa-circle nav-icon"></i>
-                    	<p>Add Order</p>
-                    </a>
-                </li>
-            </ul>
+          <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item menu-open">
+			<a class="nav-link" th:href="@{/admin/assignMoneyCarToEmployee}">
+             	<i class="nav-icon fas fa-edit"></i>
+             	<p>Assign Employee</p>
+             </a>
+          </li>
+          <li class="nav-item menu-open">
+			<a class="nav-link" th:href="@{/order/orderForm}">
+	           <i class="nav-icon far fa-plus-square"></i>
+	           <p>Add Order</p>
+           </a>
+          </li>
+          <li class="nav-item menu-open">
+			<a class="nav-link" th:href="@{/order/order_list}">
+             	<i class="nav-icon fas fa-table"></i>
+             	<p>Order List</p>
+             </a>
           </li>
           <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item">
               <a class="nav-link" th:href="@{/admin/user_list}">
@@ -307,6 +305,7 @@
 <script th:src="@{/js/demo.js}"></script>
 <!-- order js -->
 <script th:src="@{/js/orderForm.js}"></script>
+<script th:src="@{/js/assignToEmp.js}"></script>
 <script th:src="@{/js/script.js}"></script>
  
 </body>

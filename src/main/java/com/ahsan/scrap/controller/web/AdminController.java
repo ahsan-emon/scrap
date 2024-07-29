@@ -2,6 +2,7 @@ package com.ahsan.scrap.controller.web;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ahsan.scrap.constraint.CommonConstraint;
 import com.ahsan.scrap.model.Customer;
 import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.OrderItem;
@@ -238,10 +240,16 @@ public class AdminController {
 	public String viewUser(@PathVariable("id") Long id, Model model) {
     	UserDtls viewUser = userRepository.findById(id).orElse(null);
 		List<Order> userOrderList = orderRepository.findByUserDtls(viewUser);
+		Vehicle vehicle = vehicleRepository.findById(viewUser.getVehicleId()).orElse(null);
+		String vehicleName = "";
+		if(vehicle != null) {
+			vehicleName = vehicle.getModel();
+		}
 		int userTotalOrderAmount = userOrderList.stream()
 		        .mapToInt(Order::getOrderAmount)
 		        .sum();
 		model.addAttribute("viewUser", viewUser);
+		model.addAttribute("vehicleName", vehicleName);
 		model.addAttribute("userTotalNumOfOrder", userOrderList.size());
 		model.addAttribute("userTotalOrderAmount", userTotalOrderAmount);
 		return "admin/view_user";
@@ -357,4 +365,39 @@ public class AdminController {
 		vehicleRepository.deleteById(id);
         return "redirect:/admin/vehicle_list";
 	}
+	//assign money car to employee
+	@GetMapping("/assignMoneyCarToEmployee")
+    public String assignMoneyCarToEmployee(HttpSession session, Model model) {
+        String msg = (String) session.getAttribute("msg");
+        if (msg != null) {
+            model.addAttribute("msg", msg);
+            session.removeAttribute("msg");
+        }
+        List<UserDtls> users = userRepository.findAll();
+        List<UserDtls> employees = new ArrayList<>();
+        for(UserDtls emp : users) {
+        	if(emp.getRole().equals(CommonConstraint.ROLE_ADMIN) || emp.getRole().equals(CommonConstraint.ROLE_EMPLOYEE)) {
+        		employees.add(emp);
+        	}
+        }
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+        model.addAttribute("employees", employees);
+        model.addAttribute("vehicles", vehicles);
+        return "admin/assignMoneyCarToEmp";
+    }
+	@PostMapping("/updateUserToAssign")
+    public String updateUserToAssign(@ModelAttribute UserDtls employee, HttpSession session){
+		String msg = null;
+		UserDtls oldEmp = userService.findUserById(employee.getId());
+        if(oldEmp != null) {
+        	oldEmp.setVehicleId(employee.getVehicleId());
+        	oldEmp.setHasAmount(employee.getHasAmount()+oldEmp.getHasAmount());
+        	userRepository.save(oldEmp);
+        	msg = "Assign Successfully!";
+        }else {
+        	msg = "Something went wrong on the server!";
+        }
+        session.setAttribute("msg", msg);
+        return "redirect:/admin/assignMoneyCarToEmployee";
+    }
 }

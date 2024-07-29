@@ -27,6 +27,13 @@
 				                            <strong>Email:</strong> <span class="text-end ms-2" th:text="*{email}"></span>
 				                        </li>
 				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Phone:</strong> 
+				                            <span class="text-end ms-2">
+				                            	<span th:text="*{phone}"></span>
+				                            	<a th:if="${viewUser.phone != null and !#strings.isEmpty(viewUser.phone)}" th:href="'tel:' + *{phone}" class="btn btn-small btn-success ms-2">Call</a>
+				                            </span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
 				                            <strong>Total Number of Order:</strong> <strong class="text-end text-success ms-2" th:text="${userTotalNumOfOrder}"></strong>
 				                        </li>
 				                        <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -49,14 +56,10 @@
 				                            <strong>Passport:</strong> <span class="text-end ms-2" th:text="*{passport}"></span>
 				                        </li>
 				                        <li class="list-group-item d-flex justify-content-between align-items-center">
-				                            <strong>Phone:</strong> 
-				                            <span class="text-end ms-2">
-				                            	<span th:text="*{phone}"></span>
-				                            	<a th:if="${viewUser.phone != null and !#strings.isEmpty(viewUser.phone)}" th:href="'tel:' + *{phone}" class="btn btn-small btn-success ms-2">Call</a>
-				                            </span>
+				                            <strong>Vehicle:</strong> <span class="text-end ms-2" th:text="${vehicleName}"></span>
 				                        </li>
 				                        <li class="list-group-item d-flex justify-content-between align-items-center">
-				                            <strong>Rest Amount:</strong> <!-- <span class="text-end text-danger text-bold ms-2" th:text="*{userTotalNumOfOrder} +'/= SAR'"></span> -->
+				                            <strong>Rest Amount:</strong> <span class="text-end text-danger text-bold ms-2" th:text="*{hasAmount} +'/= SAR'"></span>
 				                        </li>
 				                        <li class="list-group-item d-flex justify-content-between align-items-center">
 				                            <strong>Visa Expire Date:</strong> <span class="text-end ms-2" th:text="*{visaExpDate}"></span>

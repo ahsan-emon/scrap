@@ -21,10 +21,12 @@ import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.OrderItem;
 import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.UserDtls;
+import com.ahsan.scrap.model.Vehicle;
 import com.ahsan.scrap.repository.CustomerRepository;
 import com.ahsan.scrap.repository.OrderRepository;
 import com.ahsan.scrap.repository.ProductRepository;
 import com.ahsan.scrap.repository.UserRepository;
+import com.ahsan.scrap.repository.VehicleRepository;
 import com.ahsan.scrap.service.OrderService;
 
 @Controller
@@ -40,6 +42,8 @@ public class OrderController {
 	private OrderRepository orderRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private VehicleRepository vehicleRepository;
 	
 	@ModelAttribute
     private void userDetails(Model model, Principal principal){
@@ -104,7 +108,13 @@ public class OrderController {
 	    @GetMapping("/orderView/{id}")
 	   	public String viewOrder(@PathVariable("id") Long id, Model model) {
 	   		Order order = orderRepository.findById(id).orElse(null);
+	   		String vehicleName = "";
+	   		if(order.getVehicleId() != null) {
+	   			Vehicle vehicle = vehicleRepository.findById(order.getVehicleId()).orElse(null);
+	   			vehicleName = vehicle.getModel() + "(" + vehicle.getNumberPlate() + ")";
+	   		}
 	        model.addAttribute("order", order);
+	        model.addAttribute("vehicleName", vehicleName);
 	        return "order/view_order";
 	   	}
 	    @GetMapping("/orderEdit/{id}")
