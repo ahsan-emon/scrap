@@ -73,11 +73,13 @@ public class OrderController {
 			String username = principal.getName();
 			UserDtls userDtls = userRepository.findByUsername(username);
 			if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
-				List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+//				List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+				List<Order> todayOrders = orderService.getOrdersWithinDateTimeRange();
 				model.addAttribute("orders",todayOrders);
 			}else {
-				List<Order> orders = orderService.getOrdersByUserDtlsAndCurrentDate(userDtls);
-				model.addAttribute("orders",orders);
+//				List<Order> orders = orderService.getOrdersByUserDtlsAndCurrentDate(userDtls);
+				List<Order> ordersForUser = orderService.getOrdersByUserDtlsAndCurrentDateTimeRange(userDtls);
+				model.addAttribute("orders",ordersForUser);
 			}
 			return "order/order_list";
 		}

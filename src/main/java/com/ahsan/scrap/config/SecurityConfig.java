@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                                 .requestMatchers("/admin/**").hasAuthority(CommonConstraint.ROLE_ADMIN)
                                 .requestMatchers("/order/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN,CommonConstraint.ROLE_EMPLOYEE)
+                                .requestMatchers("/expense/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN,CommonConstraint.ROLE_EMPLOYEE)
                                 .requestMatchers("/user/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN,CommonConstraint.ROLE_EMPLOYEE,CommonConstraint.ROLE_USER)
                                 .requestMatchers("/customer/**").hasAuthority(CommonConstraint.ROLE_CUSTOMER)
                                 .requestMatchers("/**").permitAll()

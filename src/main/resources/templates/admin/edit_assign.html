@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		        <div class="row align-item-center">
+		            <div class="col-md-8">
+		                <h2>Edit Assign</h2>
+		                <div class="card p-3">
+		                    <th:block th:if="${msg}">
+		                        <p class="text-center">[[${msg}]]</p>
+		                    </th:block>
+		                        <form th:action="@{/admin/updateAssign}" th:object="${assignEmployee}" method="post">
+								    <input type="hidden" th:name="id" th:value="${assignEmployee.id}" />
+								    
+								    <div class="mb-2">
+								        <label for="employee" class="form-label">Employee:</label>
+								        <select id="employee" class="form-control" name="userDtlsId" required>
+								            <option value="" selected>Select Employee</option>
+								            <option th:each="employee : ${employees}" 
+								                    th:value="${employee.id}" 
+								                    th:text="${employee.username}" 
+								                    th:selected="${employee.id == assignEmployee.userDtls.id}"></option>
+								        </select>
+								    </div>
+								
+								    <div class="mb-2">
+								        <label for="vehicle" class="form-label">Vehicle:</label>
+								        <select id="vehicle" class="form-control" name="vehicleId">
+								            <option value="" selected>Select Vehicle</option>
+								            <option th:each="vehicle : ${vehicles}" 
+								                    th:value="${vehicle.id}" 
+								                    th:text="${vehicle.model}+'('+${vehicle.numberPlate}+')'"
+								                    th:selected="${assignEmployee.vehicle != null ? vehicle.id == assignEmployee.vehicle.id : false}"></option>
+								        </select>
+								    </div> 
+								
+								    <div class="mb-3">
+								        <label for="exampleInputAssignAmount" class="form-label">Assign Amount</label>
+								        <input type="number" name="assignAmount" class="form-control" id="exampleInputAssignAmount" 
+								               th:value="${assignEmployee.assignAmount}" required>
+								    </div>
+								
+								    <button type="submit" class="btn btn-primary col-md-12">Update</button>
+								</form>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+	  </div>
+</section>
+
+</body>
+</html>

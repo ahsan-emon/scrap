@@ -24,7 +24,7 @@
 	    <div class="content">
 	      <div class="container-fluid">
 	        <div class="row">
-	          <div class="col-sm-6">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-info">
 	              <div class="inner">
 	                <h3>[[${todayOrders}]]</h3>
@@ -36,7 +36,7 @@
 	              <a th:href="@{/order/today_order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
-	          <div class="col-sm-6">
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-success">
 	              <div class="inner">
 	                <h3>[[${todayOrderAmount}]] <strong>SAR</strong></h3>
@@ -46,6 +46,54 @@
 	                <i class="ion ion-stats-bars"></i>
 	              </div>
 	              <a th:href="@{/order/today_order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-primary">
+	              <div class="inner">
+	                <h3>[[${todayAssignAmount}]] <strong>SAR</strong></h3>
+	                <p>Today Assign Amount</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-stats-bars"></i>
+	              </div>
+	              <!-- <a th:href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-primary">
+	              <div class="inner">
+	                <h3>[[${totalAssignAmount}]] <strong>SAR</strong></h3>
+	                <p>Total Assign Amount</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-stats-bars"></i>
+	              </div>
+   	              <!-- <a th:href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-danger">
+	              <div class="inner">
+	                <h3>[[${todayExpenseAmount}]] <strong>SAR</strong></h3>
+	                <p>Today Expense Amount</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-stats-bars"></i>
+	              </div>
+	              <a th:href="@{/expense/todayExpenseList}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-danger">
+	              <div class="inner">
+	                <h3>[[${totalExpenseAmount}]] <strong>SAR</strong></h3>
+	                <p>Total Expense Amount</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-stats-bars"></i>
+	              </div>
+	              <a th:href="@{/expense/todayExpenseList}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
 	        </div>

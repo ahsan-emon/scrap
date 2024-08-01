@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+<!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <div class="content-header">
+	      <div class="container-fluid">
+		    <h1>Assign List</h1>
+		    <table class="table table-striped mt-3">
+		            <thead>
+		                <tr>
+		                    <th>ID</th>
+		                    <th>Username</th>
+		                    <th>Vehicle</th>
+		                    <th>Date</th>
+		                    <th>Amount</th>
+		                    <th>Action</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr th:each="assign, iterStat : ${assignEmployees}" th:with="orderIndex=${iterStat.index + 1}">
+		                    <td th:text="${orderIndex}"></td>
+		                    <td th:text="${assign.userDtls.username}"></td>
+		                    <td th:text="${assign.vehicle != null ? assign.vehicle.model +'('+ assign.vehicle.numberPlate+')' : ''}"></td>
+		                    <td th:text="${@dateUtils.formatDate(assign.assignDate)}"></td>
+		                    <td th:text="${assign.assignAmount}"></td>
+		                    <td>
+		                    	<a th:href="@{/admin/assignEdit/{id}(id=${assign.id})}" class="btn btn-small btn-warning">Edit</a>
+		        				<a th:href="@{/admin/assignDelete/{id}(id=${assign.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+	        </div>
+	    </div>
+	  </div>
+</section>
+</body>
+</html>

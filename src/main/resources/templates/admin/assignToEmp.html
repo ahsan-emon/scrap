@@ -12,10 +12,10 @@
 		                    <th:block th:if="${msg}">
 		                        <p class="text-center alert alert-primary">[[${msg}]]</p>
 		                    </th:block>
-		                    <form th:action="@{/admin/updateUserToAssign}" method="post">
+		                    <form th:action="@{/admin/addAssign}" method="post">
 		                    	<div class="mb-2">
 								    <label for="employee" class="form-label">Employee:</label>
-								    <select id="employee" class="form-control" name="id" required onchange="updateTotalAssignAmount()">
+								    <select id="employee" class="form-control" name="userDtlsId" required onchange="updateTotalAssignAmount()">
 								    	<option value="" selected>Select Employee</option>
 								        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.username}" th:attr="data-amount=${employee.hasAmount}"></option>
 								    </select>
@@ -28,8 +28,8 @@
 								    </select>
 								</div>
 		                        <div class="mb-3">
-		                            <label for="exampleInputHasAmount" class="form-label">Assign Amount</label>
-		                            <input type="number" name="hasAmount" class="form-control" id="exampleInputHasAmount" required>
+		                            <label for="exampleInputAssignAmount" class="form-label">Assign Amount</label>
+		                            <input type="number" name="assignAmount" class="form-control" id="exampleInputAssignAmount" required>
 		                        </div>
 		                        <div class="my-2">
 							        <label class="mb-0">Total Assign Amount:</label>

@@ -17,19 +17,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ahsan.scrap.constraint.CommonConstraint;
+import com.ahsan.scrap.exception.UserNotAuthenticatedException;
+import com.ahsan.scrap.model.AssignEmployee;
 import com.ahsan.scrap.model.Customer;
+import com.ahsan.scrap.model.Expense;
 import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.OrderItem;
 import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.model.Vehicle;
+import com.ahsan.scrap.repository.AssignEmployeeRepository;
 import com.ahsan.scrap.repository.CustomerRepository;
+import com.ahsan.scrap.repository.ExpenseRepository;
 import com.ahsan.scrap.repository.OrderItemRepository;
 import com.ahsan.scrap.repository.OrderRepository;
 import com.ahsan.scrap.repository.ProductRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.repository.VehicleRepository;
+import com.ahsan.scrap.service.AssignEmployeeService;
 import com.ahsan.scrap.service.CustomerService;
+import com.ahsan.scrap.service.ExpenseService;
 import com.ahsan.scrap.service.OrderService;
 import com.ahsan.scrap.service.ProductService;
 import com.ahsan.scrap.service.UserService;
@@ -54,6 +61,10 @@ public class AdminController {
 	@Autowired
 	private OrderItemRepository orderItemRepository ;
 	@Autowired
+	private AssignEmployeeRepository assignEmployeeRepository;
+	@Autowired
+	private ExpenseRepository expenseRepository;
+	@Autowired
     private CustomerService customerService;
 	@Autowired
     private UserService userService;
@@ -65,15 +76,23 @@ public class AdminController {
     private OrderService orderService;
 	@Autowired
 	private FileUploadService fileUploadService;
+	@Autowired
+	private AssignEmployeeService assignEmployeeService;
+	@Autowired
+	private ExpenseService expenseService;
 
     @ModelAttribute
     private void userDetails(Model model, Principal principal){
-        String username = principal.getName();
-        UserDtls user = userRepository.findByUsername(username);
-        List<Order> todayOrders = orderService.getOrdersByCurrentDate();
-        model.addAttribute("todayOrdersNot",todayOrders.size());
-        model.addAttribute("user",user);
-		model.addAttribute("userRole",user.getRole());
+    	if(principal != null) {    
+    		String username = principal.getName();
+	        UserDtls user = userRepository.findByUsername(username);
+	        List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+	        model.addAttribute("todayOrdersNot",todayOrders.size());
+	        model.addAttribute("user",user);
+			model.addAttribute("userRole",user.getRole());
+	    }else {
+	    	throw new UserNotAuthenticatedException("User is not authenticated");
+	    }
     }
 
 	@GetMapping("/")
@@ -81,9 +100,15 @@ public class AdminController {
 		List<UserDtls> users = userService.getUserDtls();
 		List<Product> products = productRepository.findAll();
 		List<Order> orders = orderRepository.findAll();
-		List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+//		List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+		List<Order> todayOrders = orderService.getOrdersWithinDateTimeRange();
 		List<OrderItem> orderItems = orderItemRepository.findAll();
+		List<AssignEmployee> assignList = assignEmployeeRepository.findAll();
+		List<AssignEmployee> todayAssignList = assignEmployeeService.getAssignsWithinCurrentDateTimeRange();
+		List<Expense> expenses = expenseRepository.findAll();
+		List<Expense> todayExpenses = expenseService.getExpensesWithinCurrentDateTimeRange();
 		List<Customer> customers = customerRepository.findAll();
+		List<Vehicle> vehicles = vehicleRepository.findAll();
 		int todayOrderAmount = todayOrders.stream()
 		        .mapToInt(Order::getOrderAmount)
 		        .sum();
@@ -97,14 +122,31 @@ public class AdminController {
                 .mapToDouble(Product::getQuantity)
                 .sum();
 		float totalProductQuantity = orderProductQuantity + storeProductQuantity;
+		int todayAssignAmount = todayAssignList.stream()
+		        .mapToInt(AssignEmployee::getAssignAmount)
+		        .sum();
+		int totalAssignAmount = assignList.stream()
+				.mapToInt(AssignEmployee::getAssignAmount)
+				.sum();
+		int todayExpenseAmount = todayExpenses.stream()
+				.mapToInt(Expense::getExpenseAmount)
+				.sum();
+		int totalExpenseAmount = expenses.stream()
+				.mapToInt(Expense::getExpenseAmount)
+				.sum();
 		model.addAttribute("todayOrders",todayOrders.size());
 		model.addAttribute("numOfUsers",users.size());
 		model.addAttribute("numOfOrders",orders.size());
 		model.addAttribute("numOfProducts",products.size());
 		model.addAttribute("numOfCustomers",customers.size());
+		model.addAttribute("numOfVehicles",vehicles.size());
 		model.addAttribute("todayOrderAmount",todayOrderAmount);
 		model.addAttribute("totalOrderAmount",totalOrderAmount);
 		model.addAttribute("totalProductQuantity",totalProductQuantity);
+		model.addAttribute("todayAssignAmount",todayAssignAmount);
+		model.addAttribute("totalAssignAmount",totalAssignAmount);
+		model.addAttribute("todayExpenseAmount",todayExpenseAmount);
+		model.addAttribute("totalExpenseAmount",totalExpenseAmount);
 		return "admin/dashboard";
 	}
 	
@@ -366,38 +408,73 @@ public class AdminController {
         return "redirect:/admin/vehicle_list";
 	}
 	//assign money car to employee
-	@GetMapping("/assignMoneyCarToEmployee")
-    public String assignMoneyCarToEmployee(HttpSession session, Model model) {
-        String msg = (String) session.getAttribute("msg");
-        if (msg != null) {
-            model.addAttribute("msg", msg);
-            session.removeAttribute("msg");
-        }
-        List<UserDtls> users = userRepository.findAll();
-        List<UserDtls> employees = new ArrayList<>();
-        for(UserDtls emp : users) {
-        	if(emp.getRole().equals(CommonConstraint.ROLE_ADMIN) || emp.getRole().equals(CommonConstraint.ROLE_EMPLOYEE)) {
-        		employees.add(emp);
-        	}
-        }
-        List<Vehicle> vehicles = vehicleRepository.findAll();
-        model.addAttribute("employees", employees);
-        model.addAttribute("vehicles", vehicles);
-        return "admin/assignMoneyCarToEmp";
+	@GetMapping("/assignList")
+    public String assignList(Model model) {
+		List<AssignEmployee> assignEmployees = assignEmployeeService.getAssignEmployeesByAssignDateDesc();
+        model.addAttribute("assignEmployees", assignEmployees);
+        return "admin/assign_list";
     }
-	@PostMapping("/updateUserToAssign")
-    public String updateUserToAssign(@ModelAttribute UserDtls employee, HttpSession session){
+	@GetMapping("/todayAssignList")
+	public String todayAssignList(Model model) {
+		List<AssignEmployee> assignEmployees = assignEmployeeService.getAssignsWithinCurrentDateTimeRange();
+		model.addAttribute("assignEmployees", assignEmployees);
+		return "admin/assign_list";
+	}
+	@GetMapping("/assignToEmployee")
+	public String assignToEmployee(HttpSession session, Model model) {
+		String msg = (String) session.getAttribute("msg");
+		if (msg != null) {
+			model.addAttribute("msg", msg);
+			session.removeAttribute("msg");
+		}
+		List<UserDtls> users = userRepository.findAll();
+		List<UserDtls> employees = new ArrayList<>();
+		for(UserDtls emp : users) {
+			if(emp.getRole().equals(CommonConstraint.ROLE_ADMIN) || emp.getRole().equals(CommonConstraint.ROLE_EMPLOYEE)) {
+				employees.add(emp);
+			}
+		}
+		List<Vehicle> vehicles = vehicleRepository.findAll();
+		model.addAttribute("employees", employees);
+		model.addAttribute("vehicles", vehicles);
+		return "admin/assignToEmp";
+	}
+	@PostMapping("/addAssign")
+    public String addAssign(@ModelAttribute AssignEmployee assignEmployee, @RequestParam("userDtlsId") Long userDtlsId, @RequestParam(name = "vehicleId", required = false) Long vehicleId, HttpSession session){
 		String msg = null;
-		UserDtls oldEmp = userService.findUserById(employee.getId());
-        if(oldEmp != null) {
-        	oldEmp.setVehicleId(employee.getVehicleId());
-        	oldEmp.setHasAmount(employee.getHasAmount()+oldEmp.getHasAmount());
-        	userRepository.save(oldEmp);
+		AssignEmployee assignEmp = assignEmployeeService.saveAssign(assignEmployee, userDtlsId, vehicleId);
+        if(assignEmp != null) {
         	msg = "Assign Successfully!";
         }else {
         	msg = "Something went wrong on the server!";
         }
         session.setAttribute("msg", msg);
-        return "redirect:/admin/assignMoneyCarToEmployee";
+        return "redirect:/admin/assignToEmployee";
     }
+	@GetMapping("/assignEdit/{id}")
+	public String editAssign(@PathVariable("id") Long id, Model model) {
+		AssignEmployee assignEmployee = assignEmployeeRepository.findById(id).orElse(null);
+		List<UserDtls> users = userRepository.findAll();
+		List<UserDtls> employees = new ArrayList<>();
+		for(UserDtls emp : users) {
+			if(emp.getRole().equals(CommonConstraint.ROLE_ADMIN) || emp.getRole().equals(CommonConstraint.ROLE_EMPLOYEE)) {
+				employees.add(emp);
+			}
+		}
+		List<Vehicle> vehicles = vehicleRepository.findAll();
+		model.addAttribute("employees", employees);
+		model.addAttribute("vehicles", vehicles);
+        model.addAttribute("assignEmployee", assignEmployee);
+        return "admin/edit_assign";
+	}
+	@PostMapping("/updateAssign")
+    public String updateAssign(@ModelAttribute AssignEmployee assignEmployee, @RequestParam("userDtlsId") Long userDtlsId, @RequestParam(name = "vehicleId", required = false) Long vehicleId) {
+		assignEmployeeService.saveAssign(assignEmployee, userDtlsId, vehicleId);
+		return "redirect:/admin/assignList"; // redirect to the list page after updating
+    }
+	@GetMapping("/assignDelete/{id}")
+	public String deleteAssign(@PathVariable("id") Long id) {
+		assignEmployeeRepository.deleteById(id);
+        return "redirect:/admin/assignList";
+	}
 }

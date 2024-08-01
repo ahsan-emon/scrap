@@ -1,6 +1,7 @@
 package com.ahsan.scrap.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,8 +19,12 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
 	List<Order> findByCustomer(Customer customer);
 	@Query("SELECT o FROM Order o WHERE DATE(o.orderDate) = :orderDate")
     List<Order> findByOrderDate(@Param("orderDate") LocalDate orderDate);
+	@Query("SELECT o FROM Order o WHERE o.orderDate BETWEEN :start AND :end")
+    List<Order> findOrdersWithinDateTimeRange(@Param("start") LocalDateTime startDateTime, @Param("end") LocalDateTime endDateTime);
     @Query("SELECT o FROM Order o WHERE o.userDtls = :userDtls AND DATE(o.orderDate) BETWEEN :startOfDay AND :endOfDay")
     List<Order> findByUserDtlsAndUptoPrevOrderDate(@Param("userDtls") UserDtls userDtls, @Param("startOfDay") LocalDate startOfDay, @Param("endOfDay") LocalDate endOfDay);
     @Query("SELECT o FROM Order o WHERE o.userDtls = :userDtls AND DATE(o.orderDate) = :orderDate")
     List<Order> findByUserDtlsAndOrderDate(@Param("userDtls") UserDtls userDtls, @Param("orderDate") LocalDate orderDate);
+    @Query("SELECT o FROM Order o WHERE o.userDtls = :userDtls AND o.orderDate BETWEEN :start AND :end")
+    List<Order> findByUserDtlsAndOrderDateTimeRange(@Param("userDtls") UserDtls userDtls, @Param("start") LocalDateTime startDateTime, @Param("end") LocalDateTime endDateTime);
 }

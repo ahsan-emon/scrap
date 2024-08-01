@@ -16,6 +16,8 @@ public interface OrderService {
     public Order updateOrder(Order order);
     public List<Order> findByUserDtls(UserDtls userDtls);
     public List<Order> getOrdersByCurrentDate();
+    public List<Order> getOrdersWithinDateTimeRange();
     public List<Order> getOrdersByUserDtlsAndUptoPrevOrderDate(UserDtls userDtls);
     public List<Order> getOrdersByUserDtlsAndCurrentDate(UserDtls userDtls);
+    public List<Order> getOrdersByUserDtlsAndCurrentDateTimeRange(UserDtls userDtls);
 }

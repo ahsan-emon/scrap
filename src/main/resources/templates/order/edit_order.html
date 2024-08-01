@@ -18,7 +18,7 @@
 							            <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputId" readOnly required>
 							        </div>
 							        <div class="mb-3">
-							            <label for="exampleInputName" class="form-label">Order Date: [[*{orderDate}]]</label>
+							            <label for="exampleInputName" class="form-label">Order Date: [[${@dateUtils.formatDate(order.orderDate)}]]</label>
 							            <!-- <input type="datetime" th:field="*{orderDate}" class="form-control" id="exampleInputName" readOnly required> -->
 							        </div>
 							        <div class="mb-3">
@@ -31,7 +31,7 @@
 							        </div>
 							        <div class="mb-3">
 									    <label>Customer Due Amount</label>
-									    <input type="number" th:name="customerDue" th:value="${order.customer.customerDue}" class="form-control" min="0" required />
+									    <input type="number" th:name="customerDue" th:value="${order.customer.customerDue}" class="form-control" required />
 									</div>
 							        <div id="products">
 			                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">

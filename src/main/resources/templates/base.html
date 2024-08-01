@@ -165,7 +165,7 @@
             </a>
           </li>
           <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item menu-open">
-			<a class="nav-link" th:href="@{/admin/assignMoneyCarToEmployee}">
+			<a class="nav-link" th:href="@{/admin/assignToEmployee}">
              	<i class="nav-icon fas fa-edit"></i>
              	<p>Assign Employee</p>
              </a>
@@ -176,10 +176,28 @@
 	           <p>Add Order</p>
            </a>
           </li>
+          <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item menu-open">
+			<a class="nav-link" th:href="@{/admin/assignList}">
+             	<i class="nav-icon fas fa-table"></i>
+             	<p>Assign List</p>
+             </a>
+          </li>
           <li class="nav-item menu-open">
 			<a class="nav-link" th:href="@{/order/order_list}">
              	<i class="nav-icon fas fa-table"></i>
              	<p>Order List</p>
+             </a>
+          </li>
+          <li class="nav-item menu-open">
+			<a class="nav-link" th:href="@{/expense/addExpense}">
+             	<i class="nav-icon far fa-plus-square"></i>
+             	<p>Add Expense</p>
+             </a>
+          </li>
+          <li class="nav-item menu-open">
+			<a class="nav-link" th:href="@{/expense/expenseList}">
+             	<i class="nav-icon fas fa-table"></i>
+             	<p>Expense List</p>
              </a>
           </li>
           <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item">

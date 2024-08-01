@@ -25,7 +25,7 @@
 								</div>
 						        <div class="mb-2">
 								    <label>Due Amount</label>
-								    <input type="number" id="customerDue" name="customerDue" class="form-control" min="0" required />
+								    <input type="number" id="customerDue" name="customerDue" class="form-control" required />
 								</div>
 						        <div id="products" class="mb-2">
 		                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">

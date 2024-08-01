@@ -120,10 +120,31 @@ public class OrderServiceImpl implements OrderService {
         LocalDate today = LocalDate.now();
         return orderRepository.findByOrderDate(today);
     }
+    //date 6AM to next day 6AM
+    @Override
+    public List<Order> getOrdersWithinDateTimeRange() {
+    	// Get the current date
+        LocalDate today = LocalDate.now();
+        // Define the start of the period (6 AM today)
+        LocalDateTime startDateTime = today.atTime(6, 0);
+        // Define the end of the period (6 AM the next day)
+        LocalDateTime endDateTime = today.plusDays(1).atTime(6, 0);
+    	return orderRepository.findOrdersWithinDateTimeRange(startDateTime, endDateTime);
+    }
     @Override
     public List<Order> getOrdersByUserDtlsAndCurrentDate(UserDtls userDtls) {
         LocalDate today = LocalDate.now();
         return orderRepository.findByUserDtlsAndOrderDate(userDtls, today);
+    }
+    @Override
+    public List<Order> getOrdersByUserDtlsAndCurrentDateTimeRange(UserDtls userDtls) {
+    	// Get the current date
+        LocalDate today = LocalDate.now();
+        // Define the start of the period (6 AM today)
+        LocalDateTime startDateTime = today.atTime(6, 0);
+        // Define the end of the period (6 AM the next day)
+        LocalDateTime endDateTime = today.plusDays(1).atTime(6, 0);
+    	return orderRepository.findByUserDtlsAndOrderDateTimeRange(userDtls, startDateTime, endDateTime);
     }
     @Override
     public List<Order> getOrdersByUserDtlsAndUptoPrevOrderDate(UserDtls userDtls) {
