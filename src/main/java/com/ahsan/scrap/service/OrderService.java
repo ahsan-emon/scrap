@@ -1,5 +1,6 @@
 package com.ahsan.scrap.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.ahsan.scrap.model.Customer;
@@ -20,4 +21,5 @@ public interface OrderService {
     public List<Order> getOrdersByUserDtlsAndUptoPrevOrderDate(UserDtls userDtls);
     public List<Order> getOrdersByUserDtlsAndCurrentDate(UserDtls userDtls);
     public List<Order> getOrdersByUserDtlsAndCurrentDateTimeRange(UserDtls userDtls);
+    public List<Order> searchOrders(LocalDate fromDate, LocalDate toDate, Long customerId, Long userId);
 }

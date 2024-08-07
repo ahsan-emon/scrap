@@ -63,38 +63,27 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
+          <span class="badge badge-danger navbar-badge">[[${orderRequestMessage}]]</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
-            <div class="media">
-              <img th:src="@{/img/user1-128x128.jpg}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Brad Diesel
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <div class="media">
-              <img th:src="@{/img/user8-128x128.jpg}" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+        <div th:each="orderRequestMessage, iterStat : ${orderRequestMessageList}">
+	        <div th:if="${iterStat.index < 2}">
+	        	<a th:href="@{/admin/todayOrderRequestList}" class="dropdown-item">
+		            <div class="media">
+		              <div class="media-body">
+		                <h3 class="dropdown-item-title">
+		                  [[${orderRequestMessage.name}]]
+		                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+		                </h3>
+		                <p class="text-sm">[[${orderRequestMessage.phone}]]</p>
+		                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> [[${orderRequestMessage.getRequestedTime}]]</p>
+		              </div>
+		            </div>
+		          </a>
+		          <div class="dropdown-divider"></div>
+	        </div>
+        </div>
+          <a th:href="@{/admin/todayOrderRequestList}" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
       </li>
       <!-- Notifications Dropdown Menu -->
@@ -186,6 +175,12 @@
 			<a class="nav-link" th:href="@{/order/order_list}">
              	<i class="nav-icon fas fa-table"></i>
              	<p>Order List</p>
+             </a>
+          </li>
+          <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item menu-open">
+			<a class="nav-link" th:href="@{/admin/orderRequestList}">
+             	<i class="nav-icon fas fa-table"></i>
+             	<p>Order Request List</p>
              </a>
           </li>
           <li class="nav-item menu-open">
@@ -323,7 +318,6 @@
 <script th:src="@{/js/demo.js}"></script>
 <!-- order js -->
 <script th:src="@{/js/orderForm.js}"></script>
-<script th:src="@{/js/assignToEmp.js}"></script>
 <script th:src="@{/js/script.js}"></script>
  
 </body>

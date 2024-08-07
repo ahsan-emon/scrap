@@ -7,7 +7,44 @@
 	  <div class="content-wrapper">
 	    <div class="content-header">
 	      <div class="container-fluid">
+	      	<button onclick="history.back()" class="btn btn-secondary btn-sm">Back</button>
 		    <h1>Order List</h1>
+		    
+		    <!-- Search Form -->
+	        <div th:if="${userRole == 'ROLE_ADMIN'}">
+	        	<form action="#" th:action="@{/order/order_list}" method="GET" class="form-inline">
+		          <div class="form-group mb-2">
+		            <label for="fromDate" class="sr-only">From Date</label>
+		            <input type="date" class="form-control" id="fromDate" name="fromDate" th:value="${fromDate}">
+		          </div>
+		          <div class="form-group mx-sm-3 mb-2">
+		            <label for="toDate" class="sr-only">To Date</label>
+		            <input type="date" class="form-control" id="toDate" name="toDate" th:value="${toDate}">
+		          </div>
+		          <div class="form-group mb-2">
+                    <label for="customerId" class="sr-only">Customer</label>
+                    <select id="customerId" name="customerId" class="form-control">
+                        <option value="">Select Customer</option>
+                        <option th:each="customer : ${customers}"
+                                th:value="${customer.id}"
+                                th:text="${customer.username}"
+                                th:selected="${customer.id == customerId}"></option>
+                    </select>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="userId" class="sr-only">Employee</label>
+                    <select id="userId" name="userId" class="form-control">
+                        <option value="">Select Employee</option>
+                        <option th:each="user : ${userList}"
+                                th:value="${user.id}"
+                                th:text="${user.username}"
+                                th:selected="${user.id == userId}"></option>
+                    </select>
+                </div>
+		          <button type="submit" class="btn btn-primary mb-2">Search</button>
+		        </form>
+	        </div>
+		    
 		    <table class="table table-striped mt-3">
 		            <thead>
 		                <tr>

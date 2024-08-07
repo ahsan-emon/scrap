@@ -45,7 +45,7 @@
 				                            <strong>Phone:</strong> 
 				                            <span class="text-end ms-2">
 				                            	<span th:text="*{phone}"></span>
-				                            	<a th:href="'tel:' + *{phone}" class="btn btn-small btn-success ms-2">Call</a>
+				                            	<a th:if="*{phone != null and !#strings.isEmpty(phone)}" th:href="'tel:' + *{phone}" class="btn btn-small btn-success ms-2">Call</a>
 				                            </span>
 				                        </li>
 				                        <li class="list-group-item d-flex justify-content-between align-items-center">

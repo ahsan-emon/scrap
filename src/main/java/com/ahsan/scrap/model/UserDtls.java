@@ -39,8 +39,6 @@ public class UserDtls {
     private String password;
     private String role;
     private String photoPath;
-    @Column(name = "has_amount")
-    private int hasAmount;
     @Column(name = "vehicle_id")
 	private Long vehicleId;
 }

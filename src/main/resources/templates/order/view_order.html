@@ -50,6 +50,7 @@
 		                            <strong>Total Amount:</strong> <strong class="text-success" th:text="${order.orderAmount}+'/= SAR'"></strong>
 		                        </li>
 		                        <li class="list-group-item">
+		                        	<button onclick="history.back()" class="btn btn-secondary btn-sm">Back</button>
 		                            <a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-warning btn-sm">Edit</a>
 		                            <a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/order/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</a>
 		                        </li>

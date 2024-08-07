@@ -49,10 +49,12 @@ public class EmployeeController {
 		String username = principal.getName();
 		UserDtls userDtls = userRepository.findByUsername(username);
 		List<Order> todayOrdersByEmp = orderService.getOrdersByUserDtlsAndCurrentDate(userDtls);
+		List<Order> userWiseOrders = orderService.findByUserDtls(userDtls);
 		List<Expense> todayExpenses = expenseService.getExpensesByUserAndCurrentDateTimeRange(userDtls);
 		List<Expense> totalExpenses = expenseService.getExpensesByUserDtls(userDtls);
 		List<AssignEmployee> userAssignList = assignEmployeeService.getAssignsByUserDtls(userDtls);
 		List<AssignEmployee> todayUserAssignList = assignEmployeeService.getAssignsByUserDtlsAndCurrentDateTimeRange(userDtls);
+		
 		int todayOrderAmount = todayOrdersByEmp.stream()
 		        .mapToInt(Order::getOrderAmount)
 		        .sum();
@@ -68,12 +70,17 @@ public class EmployeeController {
 		int totalAssignAmount = userAssignList.stream()
 				.mapToInt(AssignEmployee::getAssignAmount)
 				.sum();
+		int userTotalOrderAmount = userWiseOrders.stream()
+				.mapToInt(Order::getOrderAmount)
+				.sum();
+		int hasAmount = totalAssignAmount - userTotalOrderAmount - totalExpenseAmount;
         model.addAttribute("todayOrderAmount",todayOrderAmount);
         model.addAttribute("todayOrders",todayOrdersByEmp.size());
         model.addAttribute("todayAssignAmount",todayAssignAmount);
         model.addAttribute("totalAssignAmount",totalAssignAmount);
         model.addAttribute("todayExpenseAmount",todayExpenseAmount);
         model.addAttribute("totalExpenseAmount",totalExpenseAmount);
+        model.addAttribute("hasAmount",hasAmount);
 		return "employee/home";
 	}
 }

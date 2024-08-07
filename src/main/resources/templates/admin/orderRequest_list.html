@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+<!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <div class="content-header">
+	      <div class="container-fluid">
+		    <h1>Order Request List</h1>
+		    <table class="table table-striped mt-3">
+		            <thead>
+		                <tr>
+		                    <th>ID</th>
+		                    <th>Name</th>
+		                    <th>Phone Number</th>
+		                    <th>Quantity</th>
+		                    <th>Message</th>
+		                    <th>Request Date</th>
+		                    <th>Action</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr th:each="orderRequest, iterStat : ${orderRequests}" th:with="orderIndex=${iterStat.index + 1}">
+		                    <td th:text="${orderIndex}"></td>
+		                    <td th:text="${orderRequest.name}"></td>
+		                    <td th:text="${orderRequest.phone}"></td>
+		                    <td th:text="${orderRequest.quantity}"></td>
+		                    <td th:text="${orderRequest.message}"></td>
+		                    <td th:text="${@dateUtils.formatDate(orderRequest.requestDate)}"></td>
+		                    <td>
+		                    	<a th:href="'tel:' + ${orderRequest.phone}" class="btn btn-small btn-success">Call</a>
+		        				<a th:href="@{/admin/orderRequestDelete/{id}(id=${orderRequest.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+	        </div>
+	    </div>
+	  </div>
+</section>
+</body>
+</html>

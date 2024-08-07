@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		    <div class="row">
+		        <div class="col-12">
+		            <div th:object="${product}" class="card mb-3">
+		                <div class="card-body">
+		                	<h1 class="bg-primary text-white p-2 mb-2 text-center text-bold rounded">Product View</h1>
+		                    <div class="row">
+		                    	<h5 class="card-title text-bold text-success">Product ID: <span th:text="${product.id}"></span></h5>
+		        				<div class="col-md-6">
+		        					<ul class="list-group list-group-flush">
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Name:</strong> <span class="text-end ms-2" th:text="${product.name}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Short Name:</strong> <span class="text-end ms-2" th:text="${product.shortName}"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Unit Price:</strong> <span class="text-end ms-2" th:text="${product.unitPrice} +'/= SAR'"></span>
+				                        </li>
+				                    </ul>
+		        				</div>
+		        				<div class="col-md-6">
+		        					<ul class="list-group list-group-flush">
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Previous Quantity in Store:</strong> <span class="text-end text-danger text-bold ms-2" th:text="${product.quantity} +' KG'"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Current Quantity in Store:</strong> <span class="text-end text-info ms-2" th:text="${currentQuantityInStore} +' KG'"></span>
+				                        </li>
+				                        <li class="list-group-item d-flex justify-content-between align-items-center">
+				                            <strong>Total Buying Price:</strong> <span class="text-end text-info ms-2" th:text="${totalBuyingAmount} +'/= SAR'"></span>
+				                        </li>
+				                    </ul>
+		        				</div>
+		        				<ul class="list-group list-group-flush">
+			        				<li class="list-group-item">
+			        					<button onclick="history.back()" class="btn btn-secondary">Back</button>
+			                            <a th:href="@{/admin/productEdit/{id}(id=${product.id})}" class="btn btn-small btn-warning">Edit</a>
+			        					<a th:href="@{/admin/productDelete/{id}(id=${product.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+			                        </li>
+		        				</ul>
+	        				</div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+  </div>
+</section>
+</body>
+</html>

@@ -59,7 +59,7 @@
 				                            <strong>Vehicle:</strong> <span class="text-end ms-2" th:text="${vehicleName}"></span>
 				                        </li>
 				                        <li class="list-group-item d-flex justify-content-between align-items-center">
-				                            <strong>Rest Amount:</strong> <span class="text-end text-danger text-bold ms-2" th:text="*{hasAmount} +'/= SAR'"></span>
+				                            <strong>Rest Amount:</strong> <span class="text-end text-danger text-bold ms-2" th:text="${hasAmount} +'/= SAR'"></span>
 				                        </li>
 				                        <li class="list-group-item d-flex justify-content-between align-items-center">
 				                            <strong>Visa Expire Date:</strong> <span class="text-end ms-2" th:text="*{visaExpDate}"></span>
@@ -72,8 +72,9 @@
 		        				<ul class="list-group list-group-flush">
 			        				<li class="list-group-item">
 			        					<button onclick="history.back()" class="btn btn-secondary">Back</button>
-			                            <a th:href="@{/admin/userEdit/{id}(id=${user.id})}" class="btn btn-small btn-warning">Edit</a>
-		        						<a th:href="@{/admin/userDelete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+			                            <a th:href="@{/admin/userEdit/{id}(id=${viewUser.id})}" class="btn btn-small btn-warning">Edit</a>
+		        						<a th:href="@{/admin/userDelete/{id}(id=${viewUser.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+			                        	<a th:href="@{/admin/userOrderList/{id}(id=${viewUser.id})}" class="btn btn-small btn-primary">View Orders</a>
 			                        </li>
 		        				</ul>
 	        				</div>

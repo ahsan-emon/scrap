@@ -28,7 +28,7 @@
 		                        </div>
 		                        <div class="mb-3">
 		                            <label for="exampleInputExpenseAmount" class="form-label">Expense Amount (SAR)</label>
-		                            <input type="number" name="expenseAmount" th:value="${expense != null ? expense.expenseAmount:''}" class="form-control" id="exampleInputExpenseAmount" required>
+		                            <input type="number" min="0" max="100000" name="expenseAmount" th:value="${expense != null ? expense.expenseAmount:''}" class="form-control" id="exampleInputExpenseAmount" required>
 		                        </div>
 		                        <button type="submit" class="btn btn-primary col-md-12">Submit</button>
 		                    </form>

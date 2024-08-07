@@ -8,8 +8,37 @@
 </head>
 <body>
 <section>
-    <h1>Index Page</h1>
+    <div class="content-wrapper">
+	    <div class="content-header">
+	      <div class="container-fluid">
+		        <div class="container mt-3">
+			        <div class="row">
+			            <div class="col-12 text-center">
+			                <h1 class="display-4">Welcome to Scrap Metal</h1>
+			                <p class="lead mb-0">Check out our latest products prices!</p>
+			                <p class="lead">Where you can sell your scrap product with best prices!</p>
+			            </div>
+			        </div>
+			
+			        <div class="row">
+			            <div class="col-xl-3 col-lg-4 col-sm-6" th:each="product, iterStat : ${productList}">
+			                <div class="card-deck">
+			                    <div class="card">
+			                        <div class="card-body">
+			                            <h5 class="card-title" th:text="${product.name}">Product Name</h5>
+			                            <p class="card-text"><strong th:text="${product.unitPrice + ' SAR'}">Product Price</strong></p>
+			                        </div>
+			                        <div class="card-footer">
+			                            <small class="text-muted" th:text="${product.lastUpdatedTime}">Last updated just now</small>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+	        </div>
+	    </div>
+	  </div>
 </section>
-
 </body>
 </html>

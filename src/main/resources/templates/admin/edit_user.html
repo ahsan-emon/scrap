@@ -14,36 +14,35 @@
 		                    </th:block>
 		                        <form th:action="@{/admin/updateUser}" th:object="${editUser}" method="post" enctype="multipart/form-data">
 							        <div class="mb-3">
-							            <label for="exampleInputId" class="form-label">Id</label>
-							            <input type="text" th:field="*{id}" class="form-control" id="exampleInputId" readOnly>
+							            <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputId" readOnly>
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputName" class="form-label">Full Name</label>
-							            <input type="text" th:field="*{fullName}" class="form-control" id="exampleInputName">
+							            <input type="text" maxlength="100" th:field="*{fullName}" class="form-control" id="exampleInputName">
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputEmail" class="form-label">Email address</label>
-							            <input type="email" th:field="*{email}" class="form-control" id="exampleInputEmail">
+							            <input type="email" maxlength="100" th:field="*{email}" class="form-control" id="exampleInputEmail">
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputUsername" class="form-label">Username</label>
-							            <input type="text" th:field="*{username}" class="form-control" id="exampleInputUsername" readOnly>
+							            <input type="text" maxlength="100" th:field="*{username}" class="form-control" id="exampleInputUsername" readOnly>
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputAddress" class="form-label">Address</label>
-							            <input type="text" th:field="*{address}" class="form-control" id="exampleInputAddress">
+							            <input type="text" maxlength="100" th:field="*{address}" class="form-control" id="exampleInputAddress">
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputPhone" class="form-label">Phone</label>
-							            <input type="text" th:field="*{phone}" class="form-control" id="exampleInputPhone">
+							            <input type="text" maxlength="100" th:field="*{phone}" class="form-control" id="exampleInputPhone">
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputIqama" class="form-label">Iqama</label>
-							            <input type="text" th:field="*{iqama}" class="form-control" id="exampleInputIqama" readOnly>
+							            <input type="text" maxlength="100" th:field="*{iqama}" class="form-control" id="exampleInputIqama" readOnly>
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputPassport" class="form-label">Passport</label>
-							            <input type="text" th:field="*{passport}" class="form-control" id="exampleInputPassport" readOnly>
+							            <input type="text" maxlength="100" th:field="*{passport}" class="form-control" id="exampleInputPassport" readOnly>
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputRole" class="form-label">Role Type</label>
@@ -55,7 +54,7 @@
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputPassword" class="form-label">Password</label>
-							            <input type="password" th:field="*{password}" class="form-control" id="exampleInputPassword">
+							            <input type="password" maxlength="100" th:field="*{password}" class="form-control" id="exampleInputPassword">
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputVisaExp" class="form-label">Visa Expire Date</label>

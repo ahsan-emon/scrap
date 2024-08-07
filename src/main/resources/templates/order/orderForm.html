@@ -36,10 +36,10 @@
 		                                </select>
 		                
 		                                <label>Quantity</label>
-		                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].quantity}" class="form-control" step="0.01" min="0" required />
+		                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].quantity}" class="form-control" step="0.01" min="0" max="100000" required />
 		                
 		                                <label>Unit Price</label>
-		                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" required />
+		                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" max="10000" required />
 		                
 		                                <button type="button" onclick="removeProduct(this)" class="btn btn-danger mt-2">Remove</button>
 		                            </div>

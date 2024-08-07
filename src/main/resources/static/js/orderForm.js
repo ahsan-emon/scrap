@@ -85,3 +85,14 @@ function updateTotalAmount() {
         document.getElementById('totalAmount').innerText = totalAmount;
     }
 }
+
+
+//order list maximum date check
+function setMaxDate() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('fromDate').setAttribute('max', today);
+    document.getElementById('toDate').setAttribute('max', today);
+}
+if(document.getElementById('fromDate') || document.getElementById('toDate')){
+	window.onload = setMaxDate;
+}

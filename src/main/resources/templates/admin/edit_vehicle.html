@@ -14,16 +14,15 @@
 		                    </th:block>
 		                        <form th:action="@{/admin/updateVehicle}" th:object="${vehicle}" method="post">
 							        <div class="mb-3">
-							            <label for="exampleInputId" class="form-label">Id</label>
-							            <input type="text" th:field="*{id}" class="form-control" id="exampleInputId" readOnly required>
+							            <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputId" readOnly required>
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputModel" class="form-label">Model</label>
-							            <input type="text" th:field="*{model}" class="form-control" id="exampleInputModel" required>
+							            <input type="text" maxlength="100" th:field="*{model}" class="form-control" id="exampleInputModel" required>
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputNumberPlate" class="form-label">Number Plate</label>
-							            <input type="text" th:field="*{numberPlate}" class="form-control" id="exampleInputNumberPlate" readOnly required>
+							            <input type="text" maxlength="100" th:field="*{numberPlate}" class="form-control" id="exampleInputNumberPlate" readOnly required>
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputVehicleExpDate" class="form-label">Vehicle Expire Date</label>

@@ -14,36 +14,35 @@
 		                    </th:block>
 		                        <form th:action="@{/admin/updateCustomer}" th:object="${customer}" method="post">
 			                        <div class="mb-3">
-			                            <label for="exampleInputId" class="form-label">Id</label>
-			                            <input type="text" th:field="*{id}" name="fullName" class="form-control" id="exampleInputId" readOnly>
+			                            <input type="hidden" th:field="*{id}" name="id" class="form-control" id="exampleInputId" readOnly>
 			                        </div>
 			                        <div class="mb-3">
 			                            <label for="exampleInputName" class="form-label">Full Name</label>
-			                            <input type="text" th:field="*{fullName}" name="fullName" class="form-control" id="exampleInputName">
+			                            <input type="text" th:field="*{fullName}" maxlength="100" name="fullName" class="form-control" id="exampleInputName">
 			                        </div>
 			                        <div class="mb-3">
 			                            <label for="exampleInputEmail" class="form-label">Email address</label>
-			                            <input type="email" th:field="*{email}" name="email" class="form-control" id="exampleInputEmail">
+			                            <input type="email" th:field="*{email}" maxlength="100" name="email" class="form-control" id="exampleInputEmail">
 			                        </div>
 			                        <div class="mb-3">
 			                            <label for="exampleInputUsername" class="form-label">Username</label>
-			                            <input type="text" th:field="*{username}" name="username" class="form-control" id="exampleInputUsername" readOnly>
+			                            <input type="text" th:field="*{username}" maxlength="100" name="username" class="form-control" id="exampleInputUsername" readOnly>
 			                        </div>
 			                        <div class="mb-3">
 			                            <label for="exampleInputAddress" class="form-label">Address</label>
-			                            <input type="text" th:field="*{address}" name="address" class="form-control" id="exampleInputAddress">
+			                            <input type="text" th:field="*{address}" maxlength="100" name="address" class="form-control" id="exampleInputAddress">
 			                        </div>
 			                        <div class="mb-3">
 			                            <label for="exampleInputPhone1" class="form-label">Phone1</label>
-			                            <input type="text" th:field="*{phone1}" name="phone1" class="form-control" id="exampleInputPhone1">
+			                            <input type="text" th:field="*{phone1}" maxlength="100" name="phone1" class="form-control" id="exampleInputPhone1">
 			                        </div>
 			                        <div class="mb-3">
 			                            <label for="exampleInputPhone2" class="form-label">Phone2</label>
-			                            <input type="text" th:field="*{phone2}" name="phone2" class="form-control" id="exampleInputPhone2">
+			                            <input type="text" th:field="*{phone2}" maxlength="100" name="phone2" class="form-control" id="exampleInputPhone2">
 			                        </div>
 			                        <div class="mb-3">
 			                            <label for="exampleInputCustomerDue" class="form-label">Customer Due</label>
-			                            <input type="text" th:field="*{customerDue}" name="customerDue" class="form-control" id="exampleInputCustomerDue">
+			                            <input type="number" th:field="*{customerDue}" max="100000" name="customerDue" class="form-control" id="exampleInputCustomerDue">
 			                        </div>
 							        <button type="submit" class="btn btn-primary col-md-12">Update</button>
 							    </form>

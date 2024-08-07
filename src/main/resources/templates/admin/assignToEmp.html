@@ -15,9 +15,9 @@
 		                    <form th:action="@{/admin/addAssign}" method="post">
 		                    	<div class="mb-2">
 								    <label for="employee" class="form-label">Employee:</label>
-								    <select id="employee" class="form-control" name="userDtlsId" required onchange="updateTotalAssignAmount()">
+								    <select id="employee" class="form-control" name="userDtlsId" required>
 								    	<option value="" selected>Select Employee</option>
-								        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.username}" th:attr="data-amount=${employee.hasAmount}"></option>
+								        <option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.username}"></option>
 								    </select>
 								</div>
 								<div class="mb-2">
@@ -28,13 +28,9 @@
 								    </select>
 								</div>
 		                        <div class="mb-3">
-		                            <label for="exampleInputAssignAmount" class="form-label">Assign Amount</label>
-		                            <input type="number" name="assignAmount" class="form-control" id="exampleInputAssignAmount" required>
+		                            <label for="exampleInputAssignAmount" class="form-label">Assign Amount(SAR)</label>
+		                            <input type="number" min="0" max="1000000" name="assignAmount" class="form-control" id="exampleInputAssignAmount" required>
 		                        </div>
-		                        <div class="my-2">
-							        <label class="mb-0">Total Assign Amount:</label>
-							        <h3 id="totalAssignAmount" class="text-bold text-info">0</h3>
-							    </div>
 		                        <button type="submit" class="btn btn-primary col-md-12">Assign</button>
 		                    </form>
 		                </div>

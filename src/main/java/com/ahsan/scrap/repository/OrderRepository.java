@@ -27,4 +27,11 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
     List<Order> findByUserDtlsAndOrderDate(@Param("userDtls") UserDtls userDtls, @Param("orderDate") LocalDate orderDate);
     @Query("SELECT o FROM Order o WHERE o.userDtls = :userDtls AND o.orderDate BETWEEN :start AND :end")
     List<Order> findByUserDtlsAndOrderDateTimeRange(@Param("userDtls") UserDtls userDtls, @Param("start") LocalDateTime startDateTime, @Param("end") LocalDateTime endDateTime);
+    @Query("SELECT o FROM Order o WHERE " +
+    	       "(:fromDate IS NULL OR DATE(o.orderDate) >= :fromDate) AND " +
+    	       "(:toDate IS NULL OR DATE(o.orderDate) <= :toDate) AND " +
+    	       "(:customerId IS NULL OR o.customer.id = :customerId) AND " +
+    	       "(:userId IS NULL OR o.userDtls.id = :userId) " +
+    	       "ORDER BY o.orderDate DESC")
+    List<Order> searchOrders(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate, @Param("customerId") Long customerId, @Param("userId") Long userId);
 }

@@ -1,11 +1,13 @@
 package com.ahsan.scrap.controller.web;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,19 +57,58 @@ public class OrderController {
 	
 	//oder 
 	
+//		@GetMapping("/order_list")
+//		public String orderList(Model model, Principal principal) {
+//	        String username = principal.getName();
+//	        UserDtls userDtls = userRepository.findByUsername(username);
+//	        if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
+//				List<Order> orders = orderService.getOrdersByOrderDateDesc();
+//				model.addAttribute("orders",orders);
+//	        }else {
+//	        	List<Order> orders = orderService.getOrdersByUserDtlsAndUptoPrevOrderDate(userDtls);
+//				model.addAttribute("orders",orders);
+//	        }
+//			return "order/order_list";
+//		}
+		
+		
+		//order list with search mechanism
 		@GetMapping("/order_list")
-		public String orderList(Model model, Principal principal) {
-	        String username = principal.getName();
-	        UserDtls userDtls = userRepository.findByUsername(username);
-	        if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
-				List<Order> orders = orderService.getOrdersByOrderDateDesc();
-				model.addAttribute("orders",orders);
-	        }else {
-	        	List<Order> orders = orderService.getOrdersByUserDtlsAndUptoPrevOrderDate(userDtls);
-				model.addAttribute("orders",orders);
-	        }
-			return "order/order_list";
+		public String orderList(
+		    @RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+		    @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+		    @RequestParam(name = "customerId", required = false) Long customerId,
+		    @RequestParam(name = "userId", required = false) Long userId,
+		    Model model,
+		    Principal principal) {
+	
+		    String username = principal.getName();
+		    UserDtls userDtls = userRepository.findByUsername(username);
+		    
+		    List<Order> orders;
+		    if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
+		        orders = orderService.searchOrders(fromDate, toDate, customerId, userId);
+		    } else {
+		        orders = orderService.getOrdersByUserDtlsAndUptoPrevOrderDate(userDtls);
+		    }
+	
+		    model.addAttribute("orders", orders);
+	
+		    if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
+		        List<Customer> customers = customerRepository.findAll();
+		        List<UserDtls> userList = userRepository.findAll();
+		        model.addAttribute("fromDate", fromDate);
+			    model.addAttribute("toDate", toDate);
+		        model.addAttribute("userId", userId);
+		        model.addAttribute("customerId", customerId);
+		        model.addAttribute("customers", customers);
+		        model.addAttribute("userList", userList);
+		    }
+	
+		    return "order/order_list";
 		}
+
+		
 		@GetMapping("/today_order_list")
 		public String todayOrderList(Model model, Principal principal) {
 			String username = principal.getName();

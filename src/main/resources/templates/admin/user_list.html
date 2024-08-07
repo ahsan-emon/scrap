@@ -19,16 +19,16 @@
 		                </tr>
 		            </thead>
 		            <tbody>
-		                <tr th:each="user, iterStat : ${users}" th:with="orderIndex=${iterStat.index + 1}">
+		                <tr th:each="userDto, iterStat : ${users}" th:with="orderIndex=${iterStat.index + 1}">
 		                    <td th:text="${orderIndex}"></td>
-		                    <td th:text="${user.username}"></td>
-		                    <td th:text="${user.phone}"></td>
-		                    <td th:text="${user.role}"></td>
-		                    <td th:text="${user.hasAmount}"></td>
+		                    <td th:text="${userDto.userDtls.username}"></td>
+		                    <td th:text="${userDto.userDtls.phone}"></td>
+		                    <td th:text="${userDto.userDtls.role}"></td>
+		                    <td th:text="${userDto.hasAmount}"></td>
 		                    <td>
-		                    	<a th:href="@{/admin/userView/{id}(id=${user.id})}" class="btn btn-small btn-primary">View</a>
-		                    	<a th:href="@{/admin/userEdit/{id}(id=${user.id})}" class="btn btn-small btn-warning">Edit</a>
-		        				<a th:href="@{/admin/userDelete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+		                    	<a th:href="@{/admin/userView/{id}(id=${userDto.userDtls.id})}" class="btn btn-small btn-primary">View</a>
+		                    	<a th:href="@{/admin/userEdit/{id}(id=${userDto.userDtls.id})}" class="btn btn-small btn-warning">Edit</a>
+		        				<a th:href="@{/admin/userDelete/{id}(id=${userDto.userDtls.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
 		                    </td>
 		                </tr>
 		            </tbody>

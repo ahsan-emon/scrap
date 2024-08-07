@@ -152,4 +152,8 @@ public class OrderServiceImpl implements OrderService {
     	LocalDate startDate = endDate.minusDays(1);
     	return orderRepository.findByUserDtlsAndUptoPrevOrderDate(userDtls,startDate, endDate);
     }
+    @Override
+    public List<Order> searchOrders(LocalDate fromDate, LocalDate toDate, Long customerId, Long userId) {
+        return orderRepository.searchOrders(fromDate, toDate, customerId, userId);
+    }
 }

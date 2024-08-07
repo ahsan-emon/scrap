@@ -2,6 +2,7 @@ package com.ahsan.scrap.controller.web;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ahsan.scrap.constraint.CommonConstraint;
+import com.ahsan.scrap.dto.UserDto;
 import com.ahsan.scrap.exception.UserNotAuthenticatedException;
 import com.ahsan.scrap.model.AssignEmployee;
 import com.ahsan.scrap.model.Customer;
 import com.ahsan.scrap.model.Expense;
 import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.OrderItem;
+import com.ahsan.scrap.model.OrderRequest;
 import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.model.Vehicle;
@@ -31,12 +34,14 @@ import com.ahsan.scrap.repository.CustomerRepository;
 import com.ahsan.scrap.repository.ExpenseRepository;
 import com.ahsan.scrap.repository.OrderItemRepository;
 import com.ahsan.scrap.repository.OrderRepository;
+import com.ahsan.scrap.repository.OrderRequestRepository;
 import com.ahsan.scrap.repository.ProductRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.repository.VehicleRepository;
 import com.ahsan.scrap.service.AssignEmployeeService;
 import com.ahsan.scrap.service.CustomerService;
 import com.ahsan.scrap.service.ExpenseService;
+import com.ahsan.scrap.service.OrderRequestService;
 import com.ahsan.scrap.service.OrderService;
 import com.ahsan.scrap.service.ProductService;
 import com.ahsan.scrap.service.UserService;
@@ -65,6 +70,8 @@ public class AdminController {
 	@Autowired
 	private ExpenseRepository expenseRepository;
 	@Autowired
+	private OrderRequestRepository orderRequestRepository;
+	@Autowired
     private CustomerService customerService;
 	@Autowired
     private UserService userService;
@@ -80,6 +87,8 @@ public class AdminController {
 	private AssignEmployeeService assignEmployeeService;
 	@Autowired
 	private ExpenseService expenseService;
+	@Autowired
+	private OrderRequestService orderRequestService;
 
     @ModelAttribute
     private void userDetails(Model model, Principal principal){
@@ -87,7 +96,10 @@ public class AdminController {
     		String username = principal.getName();
 	        UserDtls user = userRepository.findByUsername(username);
 	        List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+	        List<OrderRequest> orderRequestMessageList = orderRequestService.getOrderRequestsByCurrentDateDesc();
 	        model.addAttribute("todayOrdersNot",todayOrders.size());
+	        model.addAttribute("orderRequestMessageList",orderRequestMessageList);
+	        model.addAttribute("orderRequestMessage",orderRequestMessageList.size());
 	        model.addAttribute("user",user);
 			model.addAttribute("userRole",user.getRole());
 	    }else {
@@ -160,7 +172,26 @@ public class AdminController {
 	@GetMapping("/user_list")
 	public String userList(Model model) {
 		List<UserDtls> users = userService.getUserDtls();
-		model.addAttribute("users",users);
+		List<UserDto> userDtos = new ArrayList<>();
+		for(UserDtls user : users) {
+			List<AssignEmployee> userWiseAssignList = assignEmployeeService.getAssignsByUserDtls(user);
+			List<Order> userWiseOrders = orderService.findByUserDtls(user);
+			List<Expense> userWiseExpenses = expenseService.getExpensesByUserDtls(user);
+			
+			int userTotalAssignAmount = userWiseAssignList.stream()
+					.mapToInt(AssignEmployee::getAssignAmount)
+					.sum();
+			int userTotalOrderAmount = userWiseOrders.stream()
+					.mapToInt(Order::getOrderAmount)
+					.sum();
+			int userTotalExpenseAmount = userWiseExpenses.stream()
+					.mapToInt(Expense::getExpenseAmount)
+					.sum();
+			int hasAmount = userTotalAssignAmount - userTotalOrderAmount - userTotalExpenseAmount;
+			UserDto userDto = new UserDto(user, hasAmount);
+			userDtos.add(userDto);
+		}
+		model.addAttribute("users",userDtos);
 		return "admin/user_list";
 	}
 	@GetMapping("/product_list")
@@ -282,18 +313,30 @@ public class AdminController {
 	public String viewUser(@PathVariable("id") Long id, Model model) {
     	UserDtls viewUser = userRepository.findById(id).orElse(null);
 		List<Order> userOrderList = orderRepository.findByUserDtls(viewUser);
-		Vehicle vehicle = vehicleRepository.findById(viewUser.getVehicleId()).orElse(null);
+		List<Expense> totalExpenses = expenseService.getExpensesByUserDtls(viewUser);
+		List<AssignEmployee> userAssignList = assignEmployeeService.getAssignsByUserDtls(viewUser);
 		String vehicleName = "";
-		if(vehicle != null) {
-			vehicleName = vehicle.getModel();
+		if(viewUser.getVehicleId() != null) {
+			Vehicle vehicle = vehicleRepository.findById(viewUser.getVehicleId()).orElse(null);
+			if(vehicle != null) {
+				vehicleName = vehicle.getModel();
+			}
 		}
 		int userTotalOrderAmount = userOrderList.stream()
 		        .mapToInt(Order::getOrderAmount)
 		        .sum();
+		int totalAssignAmount = userAssignList.stream()
+				.mapToInt(AssignEmployee::getAssignAmount)
+				.sum();
+		int totalExpenseAmount = totalExpenses.stream()
+				.mapToInt(Expense::getExpenseAmount)
+				.sum();
+		int hasAmount = totalAssignAmount - userTotalOrderAmount - totalExpenseAmount;
 		model.addAttribute("viewUser", viewUser);
 		model.addAttribute("vehicleName", vehicleName);
 		model.addAttribute("userTotalNumOfOrder", userOrderList.size());
 		model.addAttribute("userTotalOrderAmount", userTotalOrderAmount);
+		model.addAttribute("hasAmount", hasAmount);
 		return "admin/view_user";
 	}
 	@GetMapping("/userEdit/{id}")
@@ -336,6 +379,7 @@ public class AdminController {
     public String createProduct(@ModelAttribute Product product, HttpSession session){
         String msg = null;
         if (!productService.checkShortName(product.getShortName())) {
+        	product.setUpdateDate(LocalDateTime.now());
         	Product productDetails = productRepository.save(product);
             if (productDetails != null) {
                 msg = "Register Successfully!";
@@ -354,8 +398,27 @@ public class AdminController {
         model.addAttribute("product", product);
         return "admin/edit_product";
 	}
+	@GetMapping("/productView/{id}")
+	public String viewProduct(@PathVariable("id") Long id, Model model) {
+		Product product = productRepository.findById(id).orElse(null);
+		List<OrderItem> prodOrderItemList = orderItemRepository.findByProduct(product);
+		float totalOrderQuantity = (float) prodOrderItemList.stream()
+                .mapToDouble(OrderItem::getQuantity)
+                .sum();
+		int totalOrderBuyingAmount = prodOrderItemList.stream()
+                .mapToInt(OrderItem::getAmount)
+                .sum();
+		//total order buying amount with previous store buying (previous quantity multiply with current unit price)
+		int totalBuyingAmount = totalOrderBuyingAmount + (int) ( product.getQuantity() * product.getUnitPrice());
+		float currentQuantityInStore = totalOrderQuantity + product.getQuantity();
+		model.addAttribute("currentQuantityInStore", currentQuantityInStore);
+		model.addAttribute("totalBuyingAmount", totalBuyingAmount);
+		model.addAttribute("product", product);
+		return "admin/view_product";
+	}
 	@PostMapping("/updateProduct")
     public String updateProduct(@ModelAttribute Product product, Model model) {
+		product.setUpdateDate(LocalDateTime.now());
 		productRepository.save(product);
         return "redirect:/admin/product_list"; // redirect to the list page after updating
     }
@@ -476,5 +539,38 @@ public class AdminController {
 	public String deleteAssign(@PathVariable("id") Long id) {
 		assignEmployeeRepository.deleteById(id);
         return "redirect:/admin/assignList";
+	}
+	
+//	user order list
+	@GetMapping("/userOrderList/{id}")
+	public String userOrderList(@PathVariable("id") Long id, Model model) {
+        UserDtls userDtls = userRepository.findById(id).orElse(null);
+		List<Order> orders = orderRepository.findByUserDtls(userDtls);
+		List<Customer> customers = customerRepository.findAll();
+        List<UserDtls> userList = userRepository.findAll();
+        model.addAttribute("userId", userDtls.getId());
+        model.addAttribute("customers", customers);
+        model.addAttribute("userList", userList);
+		model.addAttribute("orders",orders);
+		return "order/order_list";
+	}
+	//order request 
+
+    @GetMapping("/orderRequestList")
+    public String orderRequestList(Model model){
+    	List<OrderRequest> orderRequests = orderRequestRepository.findAllByOrderByRequestDateDesc();
+    	model.addAttribute("orderRequests", orderRequests);
+        return "admin/orderRequest_list";
+    }
+    @GetMapping("/todayOrderRequestList")
+    public String todayOrderRequestList(Model model){
+    	List<OrderRequest> orderRequests = orderRequestService.getOrderRequestsByCurrentDateDesc();
+    	model.addAttribute("orderRequests", orderRequests);
+    	return "admin/orderRequest_list";
+    }
+    @GetMapping("/orderRequestDelete/{id}")
+	public String deleteOrderRequest(@PathVariable("id") Long id) {
+    	orderRequestRepository.deleteById(id);
+        return "redirect:/admin/orderRequestList";
 	}
 }
