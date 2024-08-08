@@ -24,6 +24,7 @@
 	    <div class="content">
 	      <div class="container-fluid">
 	        <div class="row">
+	        <!-- today order -->
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-info">
 	              <div class="inner">
@@ -32,6 +33,18 @@
 	              </div>
 	              <div class="icon">
 	                <i class="ion ion-bag"></i>
+	              </div>
+	              <a th:href="@{/order/today_order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-info">
+	              <div class="inner">
+	                <h3>[[${todayOrderQuantity}]]</h3>
+	                <p>Today Order Quantity</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-pie-graph"></i>
 	              </div>
 	              <a th:href="@{/order/today_order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
@@ -48,6 +61,44 @@
 	              <a th:href="@{/order/today_order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
+	          <!-- today sell -->
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-secondary">
+	              <div class="inner">
+	                <h3>[[${numOfTodaySells}]]</h3>
+	                <p>Today Sells</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-bag"></i>
+	              </div>
+	              <a th:href="@{/sell/today_sell_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-secondary">
+	              <div class="inner">
+	                <h3>[[${todaySellProdQuantity}]]</h3>
+	                <p>Today Sell Quantity</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-pie-graph"></i>
+	              </div>
+	              <a th:href="@{/sell/today_sell_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-secondary">
+	              <div class="inner">
+	                <h3>[[${todaySellAmount}]] <span>SAR</span></h3>
+	                <p>Today Sell Amount</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-stats-bars"></i>
+	              </div>
+	              <a th:href="@{/sell/today_sell_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <!-- total order -->
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-success">
 	              <div class="inner">
@@ -70,6 +121,43 @@
 	              	<i class="ion ion-stats-bars"></i>
 	              </div>
 	              <a th:href="@{/order/order_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <!-- total sell -->
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-success">
+	              <div class="inner">
+	                <h3>[[${numOfSells}]]</h3>
+	                <p>Total Order</p>
+	              </div>
+	              <div class="icon">
+	              	<i class="ion ion-bag"></i>
+	              </div>
+	              <a th:href="@{/sell/sell_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-info">
+	              <div class="inner">
+	                <h3>[[${totalSellProdQuantity}]]</h3>
+	                <p>Total Sell Quantity</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-pie-graph"></i>
+	              </div>
+	              <a th:href="@{/sell/sell_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-success">
+	              <div class="inner">
+	                <h3>[[${totalSellAmount}]] <span>SAR</span></h3>
+	                <p>Total Sell Amount</p>
+	              </div>
+	              <div class="icon">
+	              	<i class="ion ion-stats-bars"></i>
+	              </div>
+	              <a th:href="@{/sell/sell_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
 	          <div class="col-xl-3 col-lg-4 col-sm-6">

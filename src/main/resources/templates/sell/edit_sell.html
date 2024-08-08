@@ -7,52 +7,42 @@
 		    <div class="container-fluid">
 		        <div class="row align-item-center">
 		            <div class="col-md-8">
-		                <h2>Edit Order</h2>
+		                <h2>Edit Sell</h2>
 		                <div class="card p-3">
 		                    <th:block th:if="${msg}">
 		                        <p class="text-center">[[${msg}]]</p>
 		                    </th:block>
-		                        <form th:action="@{/order/updateOrder}" th:object="${order}" method="post">
+		                        <form th:action="@{/sell/saveSell}" th:object="${sell}" method="post">
 							        <div class="mb-3">
 							            <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputId" readOnly required>
 							        </div>
 							        <div class="mb-3">
-							            <label for="exampleInputName" class="form-label">Order Date: [[${@dateUtils.formatDate(order.orderDate)}]]</label>
-							            <!-- <input type="datetime" th:field="*{orderDate}" class="form-control" id="exampleInputName" readOnly required> -->
-							        </div>
-							        <div class="mb-3">
-							            <label for="exampleInputName" class="form-label">Customer Name: [[*{customer.username}]]</label>
-							            <!-- <input type="text" th:field="*{customer.username}" class="form-control" id="exampleInputName" readOnly required> -->
+							            <label for="exampleInputName" class="form-label">Sell Date: [[${@dateUtils.formatDate(sell.sellDate)}]]</label>
 							        </div>
 							        <div class="mb-3">
 							            <label for="exampleInputShortName" class="form-label">Employee Name: [[*{userDtls.username}]]</label>
-							            <!-- <input type="text" th:field="*{userDtls.username}" class="form-control" id="exampleInputShortName" readOnly required> -->
 							        </div>
-							        <div class="mb-3">
-									    <label>Customer Due Amount</label>
-									    <input type="number" max="100000" th:name="customerDue" th:value="${order.customer.customerDue}" class="form-control" required />
-									</div>
 							        <div id="products">
-			                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">
+			                            <div th:each="sellItem, iterStat : ${sell.sellItems}" class="product">
 			                                <label>Product</label>
-			                                <select th:field="*{orderItems[__${iterStat.index}__].product.id}" class="form-control" required>
+			                                <select th:field="*{sellItems[__${iterStat.index}__].product.id}" class="form-control" required>
 			                                    <option value="">Select Product</option>
 			                                    <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
 			                                </select>
 			                
 			                                <label>Quantity</label>
-			                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].quantity}" class="form-control" step="0.01" min="0" max="100000" required />
+			                                <input type="number" th:field="*{sellItems[__${iterStat.index}__].quantity}" class="form-control" step="0.01" min="0" max="100000" required />
 			                
 			                                <label>Unit Price</label>
-			                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" max="10000" required />
+			                                <input type="number" th:field="*{sellItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" max="10000" required />
 			                
 			                                <button type="button" onclick="removeProduct(this)" class="btn btn-danger mt-2 mb-0">Remove</button>
 			                            </div>
 			                        </div>
 			                        <button type="button" class="btn btn-primary btn-small my-2" onclick="addProduct()">Add Product</button>
 							        <div class="my-2">
-								        <label class="mb-0">Total Order Amount:</label>
-								        <h3 id="totalAmount" class="text-bold text-info">[[*{orderAmount}]]</h3>
+								        <label class="mb-0">Total Sell Amount:</label>
+								        <h3 id="totalAmount" class="text-bold text-info">[[*{sellAmount}]]</h3>
 								    </div>
 							        <button type="submit" class="btn btn-primary col-md-12">Update</button>
 							    </form>

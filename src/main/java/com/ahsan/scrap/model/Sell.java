@@ -22,30 +22,26 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name = "orders")
-public class Order {
+@Table(name = "sell")
+public class Sell {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-	@Column(name = "order_date")
-	private LocalDateTime orderDate;
+	@Column(name = "sell_date")
+	private LocalDateTime sellDate;
 	@Column(name="number_of_items")
 	private int numberOfItems;
-	@Column(name = "order_amount")
-	private int orderAmount = 0;
-	@Column(name = "order_quantity")
-	private Float orderQuantity;
-	@Column(name = "vehicle_id")
-	private Long vehicleId;
-	
-	@ManyToOne
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
+	@Column(name = "sell_amount")
+	private Float sellAmount;
+	@Column(name = "sell_quantity")
+	private Float sellQuantity;
+	@Column(name = "sell_receipt")
+	private String sellReceipt;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_dtls_id")
     private UserDtls userDtls;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems = new ArrayList<>();
+    @OneToMany(mappedBy = "sell", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SellItem> sellItems = new ArrayList<>();
 }

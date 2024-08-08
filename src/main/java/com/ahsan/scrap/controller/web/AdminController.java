@@ -27,6 +27,7 @@ import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.OrderItem;
 import com.ahsan.scrap.model.OrderRequest;
 import com.ahsan.scrap.model.Product;
+import com.ahsan.scrap.model.Sell;
 import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.model.Vehicle;
 import com.ahsan.scrap.repository.AssignEmployeeRepository;
@@ -36,6 +37,7 @@ import com.ahsan.scrap.repository.OrderItemRepository;
 import com.ahsan.scrap.repository.OrderRepository;
 import com.ahsan.scrap.repository.OrderRequestRepository;
 import com.ahsan.scrap.repository.ProductRepository;
+import com.ahsan.scrap.repository.SellRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.repository.VehicleRepository;
 import com.ahsan.scrap.service.AssignEmployeeService;
@@ -44,6 +46,7 @@ import com.ahsan.scrap.service.ExpenseService;
 import com.ahsan.scrap.service.OrderRequestService;
 import com.ahsan.scrap.service.OrderService;
 import com.ahsan.scrap.service.ProductService;
+import com.ahsan.scrap.service.SellService;
 import com.ahsan.scrap.service.UserService;
 import com.ahsan.scrap.service.VehicleService;
 import com.ahsan.scrap.util.FileUploadService;
@@ -62,9 +65,11 @@ public class AdminController {
 	@Autowired
 	private VehicleRepository vehicleRepository;
 	@Autowired
-	private OrderRepository orderRepository ;
+	private OrderRepository orderRepository;
 	@Autowired
-	private OrderItemRepository orderItemRepository ;
+	private OrderItemRepository orderItemRepository;
+	@Autowired
+	private SellRepository sellRepository;
 	@Autowired
 	private AssignEmployeeRepository assignEmployeeRepository;
 	@Autowired
@@ -81,6 +86,8 @@ public class AdminController {
     private VehicleService vehicleService;
 	@Autowired
     private OrderService orderService;
+	@Autowired
+	private SellService sellService;
 	@Autowired
 	private FileUploadService fileUploadService;
 	@Autowired
@@ -114,26 +121,61 @@ public class AdminController {
 		List<Order> orders = orderRepository.findAll();
 //		List<Order> todayOrders = orderService.getOrdersByCurrentDate();
 		List<Order> todayOrders = orderService.getOrdersWithinDateTimeRange();
-		List<OrderItem> orderItems = orderItemRepository.findAll();
 		List<AssignEmployee> assignList = assignEmployeeRepository.findAll();
 		List<AssignEmployee> todayAssignList = assignEmployeeService.getAssignsWithinCurrentDateTimeRange();
 		List<Expense> expenses = expenseRepository.findAll();
 		List<Expense> todayExpenses = expenseService.getExpensesWithinCurrentDateTimeRange();
 		List<Customer> customers = customerRepository.findAll();
 		List<Vehicle> vehicles = vehicleRepository.findAll();
+		
+		//sell 
+		List<Sell> sells = sellRepository.findAll();
+		List<Sell> todaySells = sellService.getSellsByCurrentDate();
+		
+		//sell calculation
+		float todaySellAmount = (float) todaySells.stream()
+		        .mapToDouble(Sell::getSellAmount)
+		        .sum();
+		todaySellAmount = Float.parseFloat(String.format("%.2f", todaySellAmount));
+		float todaySellProdQuantity = (float) todaySells.stream()
+				.mapToDouble(Sell::getSellQuantity)
+				.sum();
+		todaySellProdQuantity = Float.parseFloat(String.format("%.2f", todaySellProdQuantity));
+		float totalSellAmount = (float) sells.stream()
+				.mapToDouble(Sell::getSellAmount)
+				.sum();
+		totalSellAmount = Float.parseFloat(String.format("%.2f", totalSellAmount));
+		float totalSellProdQuantity = (float) sells.stream()
+				.mapToDouble(Sell::getSellQuantity)
+				.sum();
+		totalSellProdQuantity = Float.parseFloat(String.format("%.2f", totalSellProdQuantity));
+		model.addAttribute("numOfTodaySells",todaySells.size());
+		model.addAttribute("numOfSells",sells.size());
+		model.addAttribute("todaySellAmount",todaySellAmount);
+		model.addAttribute("todaySellProdQuantity",todaySellProdQuantity);
+		model.addAttribute("totalSellAmount",totalSellAmount);
+		model.addAttribute("totalSellProdQuantity",totalSellProdQuantity);
+		
 		int todayOrderAmount = todayOrders.stream()
 		        .mapToInt(Order::getOrderAmount)
 		        .sum();
+		float todayOrderQuantity = (float) todayOrders.stream()
+                .mapToDouble(Order::getOrderQuantity)
+                .sum();
+		todayOrderQuantity = Float.parseFloat(String.format("%.2f", todayOrderQuantity));
 		int totalOrderAmount = orders.stream()
 				.mapToInt(Order::getOrderAmount)
 				.sum();
-		float orderProductQuantity = (float) orderItems.stream()
-                .mapToDouble(OrderItem::getQuantity)
+		float orderProductQuantity = (float) orders.stream()
+                .mapToDouble(Order::getOrderQuantity)
                 .sum();
+		orderProductQuantity = Float.parseFloat(String.format("%.2f", orderProductQuantity));
 		float storeProductQuantity = (float) products.stream()
                 .mapToDouble(Product::getQuantity)
                 .sum();
+		storeProductQuantity = Float.parseFloat(String.format("%.2f", storeProductQuantity));
 		float totalProductQuantity = orderProductQuantity + storeProductQuantity;
+		totalProductQuantity = Float.parseFloat(String.format("%.2f", totalProductQuantity));
 		int todayAssignAmount = todayAssignList.stream()
 		        .mapToInt(AssignEmployee::getAssignAmount)
 		        .sum();
@@ -153,6 +195,7 @@ public class AdminController {
 		model.addAttribute("numOfCustomers",customers.size());
 		model.addAttribute("numOfVehicles",vehicles.size());
 		model.addAttribute("todayOrderAmount",todayOrderAmount);
+		model.addAttribute("todayOrderQuantity",todayOrderQuantity);
 		model.addAttribute("totalOrderAmount",totalOrderAmount);
 		model.addAttribute("totalProductQuantity",totalProductQuantity);
 		model.addAttribute("todayAssignAmount",todayAssignAmount);

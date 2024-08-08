@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+	<div class="content-wrapper">
+	    <div class="content-header">
+		    <div class="container-fluid">
+		    <h1>Sell View</h1>
+		    <div class="row">
+		        <div class="col-12">
+		            <div th:object="${sell}" class="card mb-3">
+		                <div class="card-body">
+		                    <h5 class="card-title">Sell ID: <span th:text="${sell.id}"></span></h5>
+		                    <ul class="list-group list-group-flush">
+		                        <li class="list-group-item">
+		                            <strong>Employee Name:</strong> <span th:text="${sell.userDtls.username}"></span>
+		                        </li>
+		                        <li class="list-group-item">
+		                            <strong>Sell Date:</strong> <span th:text="${@dateUtils.formatDate(sell.sellDate)}"></span>
+		                        </li>
+		                        <li class="list-group-item">
+		                            <strong>Number Of Items:</strong> <span th:text="${sell.numberOfItems}"></span>
+		                        </li>
+		                        <li class="list-group-item" th:each="sellItem, iterStat : ${sell.sellItems}" th:with="sellIndex=${iterStat.index + 1}">
+		                        	<ul class="list-group list-group-flush">
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>[[${sellIndex}]]</strong>
+		   		                        </li>
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>Product Name:</strong> <span th:text="${sellItem.product.name}"></span>
+		   		                        </li>
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>Quantity:</strong> <span th:text="${sellItem.quantity}"></span><span> KG</span>
+		   		                        </li>
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>Unit Price:</strong> <span th:text="${sellItem.unitPrice}"></span><span> SAR</span>
+		   		                        </li>
+		   		                        <li class="list-group-item ps-0">
+		   		                        	<strong>Sell Amount:</strong> <span th:text="${sellItem.amount}"></span><span> SAR</span>
+		   		                        </li>
+		                        	</ul>
+		                        </li>
+		                        <li class="list-group-item">
+		                            <strong>Total Amount:</strong> <strong class="text-success" th:text="${sell.sellAmount}+'/= SAR'"></strong>
+		                        </li>
+		                        <li class="list-group-item">
+		                        	<button onclick="history.back()" class="btn btn-secondary btn-sm">Back</button>
+		                            <a th:href="@{/sell/sellEdit/{id}(id=${sell.id})}" class="btn btn-warning btn-sm">Edit</a>
+		                            <a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/sell/sellDelete/{id}(id=${sell.id})}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</a>
+		                        </li>
+		                    </ul>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+  </div>
+</section>
+</body>
+</html>

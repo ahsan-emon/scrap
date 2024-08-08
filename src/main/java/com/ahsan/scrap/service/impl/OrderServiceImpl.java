@@ -39,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order saveOrder(Order order, Long customerId) {
     	int totalAmount = 0;
+    	float totalQuantity = 0f;
     	int numberOfItems = 0;
     	// Calculate total order amount
         order.getOrderItems().forEach(item -> item.calculateAmount());
@@ -52,8 +53,10 @@ public class OrderServiceImpl implements OrderService {
             for (OrderItem item : savedOrder.getOrderItems()) {
                 item.setOrder(savedOrder);
                 totalAmount = item.getAmount() + totalAmount;
+                totalQuantity = item.getQuantity() + totalQuantity;
             }
         }
+        totalQuantity = Float.parseFloat(String.format("%.2f", totalQuantity));
         order.setOrderDate(LocalDateTime.now());
         String currentUsername = UserUtil.getCurrentUsername();
         UserDtls userDtls = userRepository.findByUsername(currentUsername);
@@ -64,6 +67,7 @@ public class OrderServiceImpl implements OrderService {
             order.setVehicleId(userDtls.getVehicleId());
         }
         order.setNumberOfItems(numberOfItems);
+        order.setOrderQuantity(totalQuantity);
         order.setOrderAmount(totalAmount);
         return orderRepository.save(order);
     }
@@ -71,6 +75,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order updateOrder(Order order) {
     	int totalAmount = 0;
+    	float totalQuantity = 0f;
     	int numberOfItems = 0;
     	// Calculate total order amount
         Order currentOrder = orderRepository.findById(order.getId()).orElse(null);
@@ -85,10 +90,13 @@ public class OrderServiceImpl implements OrderService {
                 for (OrderItem item : order.getOrderItems()) {
                     item.setOrder(order);
                     totalAmount = item.getAmount() + totalAmount;
+                    totalQuantity = item.getQuantity() + totalQuantity;
                 }
             }
+            totalQuantity = Float.parseFloat(String.format("%.2f", totalQuantity));
             order.setNumberOfItems(numberOfItems);
             order.setOrderAmount(totalAmount);
+            order.setOrderQuantity(totalQuantity);
             return orderRepository.save(order);
         }
         return null;

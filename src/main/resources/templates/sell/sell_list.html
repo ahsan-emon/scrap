@@ -8,11 +8,11 @@
 	    <div class="content-header">
 	      <div class="container-fluid">
 	      	<button onclick="history.back()" class="btn btn-secondary btn-sm">Back</button>
-		    <h1>Order List</h1>
+		    <h1>Sell List</h1>
 		    
 		    <!-- Search Form -->
 	        <div th:if="${userRole == 'ROLE_ADMIN'}">
-	        	<form th:action="@{/order/order_list}" method="GET" class="form-inline">
+	        	<form action="#" th:action="@{/sell/sell_list}" method="GET" class="form-inline">
 		          <div class="form-group mb-2">
 		            <label for="fromDate" class="sr-only">From Date</label>
 		            <input type="date" class="form-control" id="fromDate" name="fromDate" th:value="${fromDate}">
@@ -21,16 +21,6 @@
 		            <label for="toDate" class="sr-only">To Date</label>
 		            <input type="date" class="form-control" id="toDate" name="toDate" th:value="${toDate}">
 		          </div>
-		          <div class="form-group mb-2">
-                    <label for="customerId" class="sr-only">Customer</label>
-                    <select id="customerId" name="customerId" class="form-control">
-                        <option value="">Select Customer</option>
-                        <option th:each="customer : ${customers}"
-                                th:value="${customer.id}"
-                                th:text="${customer.username}"
-                                th:selected="${customer.id == customerId}"></option>
-                    </select>
-                </div>
                 <div class="form-group mx-sm-3 mb-2">
                     <label for="userId" class="sr-only">Employee</label>
                     <select id="userId" name="userId" class="form-control">
@@ -49,28 +39,26 @@
 		            <thead>
 		                <tr>
 		                    <th>ID</th>
-		                    <th>Customer Name</th>
 		                    <th>Employee Name</th>
-		                    <th>Order Date</th>
+		                    <th>Sell Date</th>
 		                    <th>Number Of Items</th>
-		                    <th>Order Quantity</th>
-		                    <th>Order Amount (SAR)</th>
+		                    <th>Sell Quantity</th>
+		                    <th>Sell Amount (SAR)</th>
 		                    <th>Action</th>
 		                </tr>
 		            </thead>
 		            <tbody>
-		                <tr th:each="order, iterStat : ${orders}" th:with="orderIndex=${iterStat.index + 1}">
-		                    <td th:text="${orderIndex}"></td>
-		                    <td th:text="${order.customer.username}"></td>
-		                    <td th:text="${order.userDtls.username}"></td>
-		                    <td th:text="${@dateUtils.formatDate(order.orderDate)}"></td>
-		                    <td th:text="${order.numberOfItems}"></td>
-		                    <td th:text="${order.orderQuantity}"></td>
-		                    <td th:text="${order.orderAmount}"></td>
+		                <tr th:each="sell, iterStat : ${sells}" th:with="sellIndex=${iterStat.index + 1}">
+		                    <td th:text="${sellIndex}"></td>
+		                    <td th:text="${sell.userDtls.username}"></td>
+		                    <td th:text="${@dateUtils.formatDate(sell.sellDate)}"></td>
+		                    <td th:text="${sell.numberOfItems}"></td>
+		                    <td th:text="${sell.sellQuantity}"></td>
+		                    <td th:text="${sell.sellAmount}"></td>
 		                    <td>
-		                    	<a th:href="@{/order/orderView/{id}(id=${order.id})}" class="btn btn-small btn-primary">View</a>
-		                    	<a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-small btn-warning">Edit</a>
-		        				<a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/order/orderDelete/{id}(id=${order.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
+		                    	<a th:href="@{/sell/sellView/{id}(id=${sell.id})}" class="btn btn-small btn-primary">View</a>
+		                    	<a th:href="@{/sell/sellEdit/{id}(id=${sell.id})}" class="btn btn-small btn-warning">Edit</a>
+		        				<a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/sell/sellDelete/{id}(id=${sell.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a>
 		                    </td>
 		                </tr>
 		            </tbody>
