@@ -50,6 +50,7 @@ import com.ahsan.scrap.service.SellService;
 import com.ahsan.scrap.service.UserService;
 import com.ahsan.scrap.service.VehicleService;
 import com.ahsan.scrap.util.FileUploadService;
+import com.ahsan.scrap.util.UserUtil;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -116,93 +117,126 @@ public class AdminController {
 
 	@GetMapping("/")
 	public String home(Model model) {
-		List<UserDtls> users = userService.getUserDtls();
-		List<Product> products = productRepository.findAll();
-		List<Order> orders = orderRepository.findAll();
-//		List<Order> todayOrders = orderService.getOrdersByCurrentDate();
-		List<Order> todayOrders = orderService.getOrdersWithinDateTimeRange();
-		List<AssignEmployee> assignList = assignEmployeeRepository.findAll();
-		List<AssignEmployee> todayAssignList = assignEmployeeService.getAssignsWithinCurrentDateTimeRange();
-		List<Expense> expenses = expenseRepository.findAll();
-		List<Expense> todayExpenses = expenseService.getExpensesWithinCurrentDateTimeRange();
-		List<Customer> customers = customerRepository.findAll();
-		List<Vehicle> vehicles = vehicleRepository.findAll();
-		
-		//sell 
-		List<Sell> sells = sellRepository.findAll();
-		List<Sell> todaySells = sellService.getSellsByCurrentDate();
-		
-		//sell calculation
-		float todaySellAmount = (float) todaySells.stream()
-		        .mapToDouble(Sell::getSellAmount)
-		        .sum();
-		todaySellAmount = Float.parseFloat(String.format("%.2f", todaySellAmount));
-		float todaySellProdQuantity = (float) todaySells.stream()
-				.mapToDouble(Sell::getSellQuantity)
-				.sum();
-		todaySellProdQuantity = Float.parseFloat(String.format("%.2f", todaySellProdQuantity));
-		float totalSellAmount = (float) sells.stream()
-				.mapToDouble(Sell::getSellAmount)
-				.sum();
-		totalSellAmount = Float.parseFloat(String.format("%.2f", totalSellAmount));
-		float totalSellProdQuantity = (float) sells.stream()
-				.mapToDouble(Sell::getSellQuantity)
-				.sum();
-		totalSellProdQuantity = Float.parseFloat(String.format("%.2f", totalSellProdQuantity));
-		model.addAttribute("numOfTodaySells",todaySells.size());
-		model.addAttribute("numOfSells",sells.size());
-		model.addAttribute("todaySellAmount",todaySellAmount);
-		model.addAttribute("todaySellProdQuantity",todaySellProdQuantity);
-		model.addAttribute("totalSellAmount",totalSellAmount);
-		model.addAttribute("totalSellProdQuantity",totalSellProdQuantity);
-		
-		int todayOrderAmount = todayOrders.stream()
-		        .mapToInt(Order::getOrderAmount)
-		        .sum();
-		float todayOrderQuantity = (float) todayOrders.stream()
-                .mapToDouble(Order::getOrderQuantity)
-                .sum();
-		todayOrderQuantity = Float.parseFloat(String.format("%.2f", todayOrderQuantity));
-		int totalOrderAmount = orders.stream()
-				.mapToInt(Order::getOrderAmount)
-				.sum();
-		float orderProductQuantity = (float) orders.stream()
-                .mapToDouble(Order::getOrderQuantity)
-                .sum();
-		orderProductQuantity = Float.parseFloat(String.format("%.2f", orderProductQuantity));
-		float storeProductQuantity = (float) products.stream()
-                .mapToDouble(Product::getQuantity)
-                .sum();
-		storeProductQuantity = Float.parseFloat(String.format("%.2f", storeProductQuantity));
-		float totalProductQuantity = orderProductQuantity + storeProductQuantity;
-		totalProductQuantity = Float.parseFloat(String.format("%.2f", totalProductQuantity));
-		int todayAssignAmount = todayAssignList.stream()
-		        .mapToInt(AssignEmployee::getAssignAmount)
-		        .sum();
-		int totalAssignAmount = assignList.stream()
-				.mapToInt(AssignEmployee::getAssignAmount)
-				.sum();
-		int todayExpenseAmount = todayExpenses.stream()
-				.mapToInt(Expense::getExpenseAmount)
-				.sum();
-		int totalExpenseAmount = expenses.stream()
-				.mapToInt(Expense::getExpenseAmount)
-				.sum();
-		model.addAttribute("todayOrders",todayOrders.size());
-		model.addAttribute("numOfUsers",users.size());
-		model.addAttribute("numOfOrders",orders.size());
-		model.addAttribute("numOfProducts",products.size());
-		model.addAttribute("numOfCustomers",customers.size());
-		model.addAttribute("numOfVehicles",vehicles.size());
-		model.addAttribute("todayOrderAmount",todayOrderAmount);
-		model.addAttribute("todayOrderQuantity",todayOrderQuantity);
-		model.addAttribute("totalOrderAmount",totalOrderAmount);
-		model.addAttribute("totalProductQuantity",totalProductQuantity);
-		model.addAttribute("todayAssignAmount",todayAssignAmount);
-		model.addAttribute("totalAssignAmount",totalAssignAmount);
-		model.addAttribute("todayExpenseAmount",todayExpenseAmount);
-		model.addAttribute("totalExpenseAmount",totalExpenseAmount);
-		return "admin/dashboard";
+		String username = UserUtil.getCurrentUsername();
+		UserDtls user = userRepository.findByUsername(username);
+		if(user != null && user.getRole().equals(CommonConstraint.ROLE_ADMIN)) {   
+			List<UserDtls> users = userService.getUserDtls();
+			List<Product> products = productRepository.findAll();
+			List<Order> orders = orderRepository.findAll();
+	//		List<Order> todayOrders = orderService.getOrdersByCurrentDate();
+			List<Order> todayOrders = orderService.getOrdersWithinDateTimeRange();
+			List<AssignEmployee> assignList = assignEmployeeRepository.findAll();
+			List<AssignEmployee> assignListWithoutOwner = new ArrayList<AssignEmployee>();
+			for(AssignEmployee assignEmp : assignList) {
+				if(!assignEmp.getUserDtls().getRole().equals(CommonConstraint.ROLE_OWNER)) {
+					assignListWithoutOwner.add(assignEmp);
+				}
+			}
+			List<AssignEmployee> todayAssignList = assignEmployeeService.getAssignsWithinCurrentDateTimeRange();
+			List<AssignEmployee> todayAssignListWithoutOwner = new ArrayList<AssignEmployee>();
+			for(AssignEmployee assignEmp : todayAssignList) {
+				if(!assignEmp.getUserDtls().getRole().equals(CommonConstraint.ROLE_OWNER)) {
+					todayAssignListWithoutOwner.add(assignEmp);
+				}
+			}
+			List<Expense> expenses = expenseRepository.findAll();
+			List<Expense> todayExpenses = expenseService.getExpensesWithinCurrentDateTimeRange();
+			List<Customer> customers = customerRepository.findAll();
+			List<Vehicle> vehicles = vehicleRepository.findAll();
+			
+			//sell 
+			List<Sell> sells = sellRepository.findAll();
+			List<Sell> todaySells = sellService.getSellsByCurrentDate();
+			
+			//sell calculation
+			float todaySellAmount = (float) todaySells.stream()
+			        .mapToDouble(Sell::getSellAmount)
+			        .sum();
+			todaySellAmount = Float.parseFloat(String.format("%.2f", todaySellAmount));
+			float todaySellProdQuantity = (float) todaySells.stream()
+					.mapToDouble(Sell::getSellQuantity)
+					.sum();
+			todaySellProdQuantity = Float.parseFloat(String.format("%.2f", todaySellProdQuantity));
+			float totalSellAmount = (float) sells.stream()
+					.mapToDouble(Sell::getSellAmount)
+					.sum();
+			totalSellAmount = Float.parseFloat(String.format("%.2f", totalSellAmount));
+			float totalSellProdQuantity = (float) sells.stream()
+					.mapToDouble(Sell::getSellQuantity)
+					.sum();
+			totalSellProdQuantity = Float.parseFloat(String.format("%.2f", totalSellProdQuantity));
+			model.addAttribute("numOfTodaySells",todaySells.size());
+			model.addAttribute("numOfSells",sells.size());
+			model.addAttribute("todaySellAmount",todaySellAmount);
+			model.addAttribute("todaySellProdQuantity",todaySellProdQuantity);
+			model.addAttribute("totalSellAmount",totalSellAmount);
+			model.addAttribute("totalSellProdQuantity",totalSellProdQuantity);
+			
+			int todayOrderAmount = todayOrders.stream()
+			        .mapToInt(Order::getOrderAmount)
+			        .sum();
+			float todayOrderQuantity = (float) todayOrders.stream()
+	                .mapToDouble(Order::getOrderQuantity)
+	                .sum();
+			todayOrderQuantity = Float.parseFloat(String.format("%.2f", todayOrderQuantity));
+			int totalOrderAmount = orders.stream()
+					.mapToInt(Order::getOrderAmount)
+					.sum();
+			float orderProductQuantity = (float) orders.stream()
+	                .mapToDouble(Order::getOrderQuantity)
+	                .sum();
+			orderProductQuantity = Float.parseFloat(String.format("%.2f", orderProductQuantity));
+			float storeProductQuantity = (float) products.stream()
+	                .mapToDouble(Product::getQuantity)
+	                .sum();
+			storeProductQuantity = Float.parseFloat(String.format("%.2f", storeProductQuantity));
+			float totalProductQuantity = orderProductQuantity + storeProductQuantity - totalSellProdQuantity;
+			totalProductQuantity = Float.parseFloat(String.format("%.2f", totalProductQuantity));
+			int todayAssignAmount = todayAssignListWithoutOwner.stream()
+			        .mapToInt(AssignEmployee::getAssignAmount)
+			        .sum();
+			int totalAssignAmount = assignListWithoutOwner.stream()
+					.mapToInt(AssignEmployee::getAssignAmount)
+					.sum();
+			int todayExpenseAmount = todayExpenses.stream()
+					.mapToInt(Expense::getExpenseAmount)
+					.sum();
+			int totalExpenseAmount = expenses.stream()
+					.mapToInt(Expense::getExpenseAmount)
+					.sum();
+			//totalCompanyAmount
+			int totalCompanyAmount = 0;
+			UserDtls ownerUser = userRepository.findByRole(CommonConstraint.ROLE_OWNER);
+			if(ownerUser != null) {
+				List<AssignEmployee> ownerAssignList = assignEmployeeService.getAssignsByUserDtls(ownerUser);
+				int ownerTotalAssignAmount = ownerAssignList.stream()
+				        .mapToInt(AssignEmployee::getAssignAmount)
+				        .sum();
+//				totalCompanyAmount = ownerTotalAssignAmount + (int) totalSellAmount - totalOrderAmount - totalExpenseAmount;
+				totalCompanyAmount = ownerTotalAssignAmount + (int) totalSellAmount - totalAssignAmount;
+			}
+			//totalAmountEmployeeHas
+			int totalAmountEmployeeHas = totalAssignAmount - totalOrderAmount - totalExpenseAmount;
+			model.addAttribute("todayOrders",todayOrders.size());
+			model.addAttribute("numOfUsers",users.size());
+			model.addAttribute("numOfOrders",orders.size());
+			model.addAttribute("numOfProducts",products.size());
+			model.addAttribute("numOfCustomers",customers.size());
+			model.addAttribute("numOfVehicles",vehicles.size());
+			model.addAttribute("todayOrderAmount",todayOrderAmount);
+			model.addAttribute("todayOrderQuantity",todayOrderQuantity);
+			model.addAttribute("totalOrderAmount",totalOrderAmount);
+			model.addAttribute("totalProductQuantity",totalProductQuantity);
+			model.addAttribute("todayAssignAmount",todayAssignAmount);
+			model.addAttribute("totalAssignAmount",totalAssignAmount);
+			model.addAttribute("todayExpenseAmount",todayExpenseAmount);
+			model.addAttribute("totalExpenseAmount",totalExpenseAmount);
+			model.addAttribute("totalCompanyAmount",totalCompanyAmount);
+			model.addAttribute("totalAmountEmployeeHas",totalAmountEmployeeHas);
+			return "admin/dashboard";
+		}else {
+	    	throw new UserNotAuthenticatedException("User is not authenticated");
+	    }
 	}
 	
 	@GetMapping("/customer_list")
@@ -220,7 +254,22 @@ public class AdminController {
 			List<AssignEmployee> userWiseAssignList = assignEmployeeService.getAssignsByUserDtls(user);
 			List<Order> userWiseOrders = orderService.findByUserDtls(user);
 			List<Expense> userWiseExpenses = expenseService.getExpensesByUserDtls(user);
+			List<Sell> sells = sellRepository.findAll();
+			List<AssignEmployee> assignList = assignEmployeeRepository.findAll();
+			List<AssignEmployee> assignListWithoutOwner = new ArrayList<AssignEmployee>();
+			for(AssignEmployee assignEmp : assignList) {
+				if(!assignEmp.getUserDtls().getRole().equals(CommonConstraint.ROLE_OWNER)) {
+					assignListWithoutOwner.add(assignEmp);
+				}
+			}
 			
+			int totalAssignAmount = assignListWithoutOwner.stream()
+					.mapToInt(AssignEmployee::getAssignAmount)
+					.sum();
+			float totalSellAmount = (float) sells.stream()
+					.mapToDouble(Sell::getSellAmount)
+					.sum();
+			totalSellAmount = Float.parseFloat(String.format("%.2f", totalSellAmount));
 			int userTotalAssignAmount = userWiseAssignList.stream()
 					.mapToInt(AssignEmployee::getAssignAmount)
 					.sum();
@@ -230,7 +279,12 @@ public class AdminController {
 			int userTotalExpenseAmount = userWiseExpenses.stream()
 					.mapToInt(Expense::getExpenseAmount)
 					.sum();
-			int hasAmount = userTotalAssignAmount - userTotalOrderAmount - userTotalExpenseAmount;
+			int hasAmount = 0;
+			if(user.getRole().equals(CommonConstraint.ROLE_OWNER)) {
+				hasAmount = userTotalAssignAmount + (int) totalSellAmount - totalAssignAmount;
+			}else {
+				hasAmount = userTotalAssignAmount - userTotalOrderAmount - userTotalExpenseAmount;
+			}
 			UserDto userDto = new UserDto(user, hasAmount);
 			userDtos.add(userDto);
 		}
@@ -536,7 +590,7 @@ public class AdminController {
 		List<UserDtls> users = userRepository.findAll();
 		List<UserDtls> employees = new ArrayList<>();
 		for(UserDtls emp : users) {
-			if(emp.getRole().equals(CommonConstraint.ROLE_ADMIN) || emp.getRole().equals(CommonConstraint.ROLE_EMPLOYEE)) {
+			if(emp.getRole().equals(CommonConstraint.ROLE_ADMIN) || emp.getRole().equals(CommonConstraint.ROLE_EMPLOYEE) || emp.getRole().equals(CommonConstraint.ROLE_OWNER)) {
 				employees.add(emp);
 			}
 		}

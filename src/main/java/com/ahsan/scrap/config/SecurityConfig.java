@@ -43,7 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                                .requestMatchers("/admin/**").hasAuthority(CommonConstraint.ROLE_ADMIN)
+                                .requestMatchers("/admin/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN, CommonConstraint.ROLE_OWNER)
                                 .requestMatchers("/order/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN,CommonConstraint.ROLE_EMPLOYEE)
                                 .requestMatchers("/sell/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN,CommonConstraint.ROLE_EMPLOYEE)
                                 .requestMatchers("/expense/**").hasAnyAuthority(CommonConstraint.ROLE_ADMIN,CommonConstraint.ROLE_EMPLOYEE)

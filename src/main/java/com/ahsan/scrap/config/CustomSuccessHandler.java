@@ -21,7 +21,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-		if(roles.contains(CommonConstraint.ROLE_ADMIN)) {
+		if(roles.contains(CommonConstraint.ROLE_ADMIN) || roles.contains(CommonConstraint.ROLE_OWNER)) {
 			response.sendRedirect("/admin/");
 		}else if(roles.contains(CommonConstraint.ROLE_CUSTOMER)) {
 			response.sendRedirect("/customer/");

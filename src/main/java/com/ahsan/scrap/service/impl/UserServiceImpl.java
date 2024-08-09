@@ -20,7 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDtls createUser(UserDtls user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    	if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+    		user.setPassword(passwordEncoder.encode(user.getPassword()));
+    	}
         user.setRole("ROLE_USER");
         return userRepository.save(user);
     }

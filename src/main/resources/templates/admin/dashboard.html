@@ -52,7 +52,7 @@
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-info">
 	              <div class="inner">
-	                <h3>[[${todayOrderAmount}]] <span>SAR</span></h3>
+	                <h3>[[${todayOrderAmount}]]<span>/=</span></h3>
 	                <p>Today Order Amount</p>
 	              </div>
 	              <div class="icon">
@@ -89,13 +89,50 @@
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-secondary">
 	              <div class="inner">
-	                <h3>[[${todaySellAmount}]] <span>SAR</span></h3>
+	                <h3>[[${todaySellAmount}]]<span>/=</span></h3>
 	                <p>Today Sell Amount</p>
 	              </div>
 	              <div class="icon">
 	                <i class="ion ion-stats-bars"></i>
 	              </div>
 	              <a th:href="@{/sell/today_sell_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <!-- company account -->
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-info">
+	              <div class="inner">
+	                <h3>[[${totalProductQuantity}]] <span>KG</span></h3>
+	                <p>Total Product Quantity in Store</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-stats-bars"></i>
+	              </div>
+	              <a th:href="@{/admin/product_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-info">
+	              <div class="inner">
+	                <h3>[[${totalAmountEmployeeHas}]]<span>/=</span></h3>
+	                <p>Total Amount in Employee</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-stats-bars"></i>
+	              </div>
+	              <a th:href="@{/admin/user_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+	            </div>
+	          </div>
+	          <div class="col-xl-3 col-lg-4 col-sm-6">
+	            <div class="small-box bg-info">
+	              <div class="inner">
+	                <h3>[[${totalCompanyAmount}]]<span>/=</span></h3>
+	                <p>Total Amount in Company</p>
+	              </div>
+	              <div class="icon">
+	                <i class="ion ion-stats-bars"></i>
+	              </div>
+	              <a th:href="@{/admin/product_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
 	          </div>
 	          <!-- total order -->
@@ -114,7 +151,7 @@
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-success">
 	              <div class="inner">
-	                <h3>[[${totalOrderAmount}]] <span>SAR</span></h3>
+	                <h3>[[${totalOrderAmount}]]<span>/=</span></h3>
 	                <p>Total Order Amount</p>
 	              </div>
 	              <div class="icon">
@@ -149,9 +186,9 @@
 	            </div>
 	          </div>
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
-	            <div class="small-box bg-success">
+	            <div class="small-box bg-info">
 	              <div class="inner">
-	                <h3>[[${totalSellAmount}]] <span>SAR</span></h3>
+	                <h3>[[${totalSellAmount}]]<span>/=</span></h3>
 	                <p>Total Sell Amount</p>
 	              </div>
 	              <div class="icon">
@@ -163,7 +200,7 @@
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-primary">
 	              <div class="inner">
-	                <h3>[[${todayAssignAmount}]] <span>SAR</span></h3>
+	                <h3>[[${todayAssignAmount}]]<span>/=</span></h3>
 	                <p>Today Assign Amount</p>
 	              </div>
 	              <div class="icon">
@@ -175,7 +212,7 @@
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-primary">
 	              <div class="inner">
-	                <h3>[[${totalAssignAmount}]] <span>SAR</span></h3>
+	                <h3>[[${totalAssignAmount}]]<span>/=</span></h3>
 	                <p>Total Assign Amount</p>
 	              </div>
 	              <div class="icon">
@@ -187,7 +224,7 @@
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-danger">
 	              <div class="inner">
-	                <h3>[[${todayExpenseAmount}]] <span>SAR</span></h3>
+	                <h3>[[${todayExpenseAmount}]]<span>/=</span></h3>
 	                <p>Today Expense Amount</p>
 	              </div>
 	              <div class="icon">
@@ -199,7 +236,7 @@
 	          <div class="col-xl-3 col-lg-4 col-sm-6">
 	            <div class="small-box bg-danger">
 	              <div class="inner">
-	                <h3>[[${totalExpenseAmount}]] <span>SAR</span></h3>
+	                <h3>[[${totalExpenseAmount}]]<span>/=</span></h3>
 	                <p>Total Expense Amount</p>
 	              </div>
 	              <div class="icon">
@@ -216,18 +253,6 @@
 	              </div>
 	              <div class="icon">
 	                <i class="ion ion-pie-graph"></i>
-	              </div>
-	              <a th:href="@{/admin/product_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-	            </div>
-	          </div>
-	          <div class="col-xl-3 col-lg-4 col-sm-6">
-	            <div class="small-box bg-secondary">
-	              <div class="inner">
-	                <h3>[[${totalProductQuantity}]] <span>KG</span></h3>
-	                <p>Total Product Quantity in Store</p>
-	              </div>
-	              <div class="icon">
-	                <i class="ion ion-stats-bars"></i>
 	              </div>
 	              <a th:href="@{/admin/product_list}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 	            </div>
