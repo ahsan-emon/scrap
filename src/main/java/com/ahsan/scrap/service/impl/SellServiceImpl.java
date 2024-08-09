@@ -43,7 +43,11 @@ public class SellServiceImpl implements SellService {
         }else {
         	Sell oldSell = sellRepository.findById(sell.getId()).orElse(null);
         	sell.setSellDate(oldSell.getSellDate());
+        	if(sell.getSellReceipt() == null) {
+        		sell.setSellReceipt(oldSell.getSellReceipt());
+    		}
         }
+		
         // Save the sell first to get the ID
         Sell savedSell = sellRepository.save(sell);
         

@@ -9,13 +9,13 @@
 		            <div class="col-md-8">
 		                <h2>Add User</h2>
 		                <div class="card p-3">
-		                    <!-- <th:block th:if="${msg}">
+		                    <th:block th:if="${msg}">
 		                        <p class="text-center alert alert-primary">[[${msg}]]</p>
-		                    </th:block> -->
+		                    </th:block>
 		                    <div th:if="${error}">
 						        <p th:text="${error}" style="color: red;"></p>
 						    </div>
-		                    <form th:action="@{/admin/createUser}" method="post" enctype="multipart/form-data">
+		                    <form th:action="@{/admin/createUser}" method="post" enctype="multipart/form-data" onsubmit="return validateFile()">
 		                        <div class="mb-3">
 		                            <label for="exampleInputName" class="form-label">Full Name</label>
 		                            <input type="text" maxlength="100" name="fullName" class="form-control" id="exampleInputName" required>

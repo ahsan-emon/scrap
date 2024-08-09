@@ -12,7 +12,7 @@
 		                    <th:block th:if="${msg}">
 		                        <p class="text-center">[[${msg}]]</p>
 		                    </th:block>
-		                        <form th:action="@{/admin/updateUser}" th:object="${editUser}" method="post" enctype="multipart/form-data">
+		                        <form th:action="@{/admin/updateUser}" th:object="${editUser}" method="post" enctype="multipart/form-data" onsubmit="return validateFile()">
 							        <div class="mb-3">
 							            <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputId" readOnly>
 							        </div>

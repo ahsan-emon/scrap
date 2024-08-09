@@ -12,7 +12,7 @@
 		                    <th:block th:if="${msg}">
 		                        <p class="text-center">[[${msg}]]</p>
 		                    </th:block>
-		                        <form th:action="@{/sell/saveSell}" th:object="${sell}" method="post">
+		                        <form th:action="@{/sell/saveSell}" th:object="${sell}" method="post" enctype="multipart/form-data" onsubmit="return validateFile()">
 							        <div class="mb-3">
 							            <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputId" readOnly required>
 							        </div>
@@ -44,6 +44,13 @@
 								        <label class="mb-0">Total Sell Amount:</label>
 								        <h3 id="totalAmount" class="text-bold text-info">[[*{sellAmount}]]</h3>
 								    </div>
+								    <div class="mb-3">
+							        	<label for="exampleInputphoto" class="form-label">Sell Receipt</label>
+							        	<div th:if="${sell.sellReceipt != null and !#strings.isEmpty(sell.sellReceipt)}" class="image">
+								          <a th:href="@{'/uploads/sell/'+*{sellReceipt}}"><img th:src="@{'/uploads/sell/'+*{sellReceipt}}" class="img-fluid mb-2" width="100px" alt="User Image"></a>
+								        </div>
+			                            <input type="file" name="photo" class="form-control" id="exampleInputphoto">
+			                        </div>
 							        <button type="submit" class="btn btn-primary col-md-12">Update</button>
 							    </form>
 		                </div>

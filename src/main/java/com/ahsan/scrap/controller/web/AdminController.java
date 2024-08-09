@@ -386,7 +386,14 @@ public class AdminController {
     	try {
             String msg = null;
             if (!userService.checkUsername(user.getUsername())) {
-				String fileName = fileUploadService.saveFile(photo,user.getUsername());
+            	String previousFileName = "";
+				if(user.getId() != null) {
+					UserDtls oldUser = userRepository.findById(user.getId()).orElse(null);
+					if(oldUser != null && oldUser.getPhotoPath() != null) {
+						previousFileName = oldUser.getPhotoPath();
+					}
+				}
+				String fileName = fileUploadService.saveFile(photo,user.getUsername(),previousFileName);
 				if (fileName != null) {
                     user.setPhotoPath(fileName);
                 }
@@ -445,7 +452,14 @@ public class AdminController {
 	@PostMapping("/updateUser")
     public String updateUser(@ModelAttribute UserDtls user, Model model, @RequestParam("photo") MultipartFile photo) {
 		try {
-			String fileName = fileUploadService.saveFile(photo,user.getUsername());
+			String previousFileName = "";
+			if(user.getId() != null) {
+				UserDtls oldUser = userRepository.findById(user.getId()).orElse(null);
+				if(oldUser != null && oldUser.getPhotoPath() != null) {
+					previousFileName = oldUser.getPhotoPath();
+				}
+			}
+			String fileName = fileUploadService.saveFile(photo,user.getUsername(),previousFileName);
 			if (fileName != null) {
                 user.setPhotoPath(fileName);
             }

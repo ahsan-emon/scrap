@@ -44,6 +44,12 @@
 		                            <strong>Total Amount:</strong> <strong class="text-success" th:text="${sell.sellAmount}+'/= SAR'"></strong>
 		                        </li>
 		                        <li class="list-group-item">
+		                            <strong>Sell Receipt</strong> 
+									<div th:if="${sell.sellReceipt != null and !#strings.isEmpty(sell.sellReceipt)}" class="image">
+							          <a th:href="@{'/uploads/sell/'+*{sellReceipt}}"><img th:src="@{'/uploads/sell/'+*{sellReceipt}}" class="img-fluid mb-2" width="100px" alt="User Image"></a>
+							        </div>
+		                        </li>
+		                        <li class="list-group-item">
 		                        	<button onclick="history.back()" class="btn btn-secondary btn-sm">Back</button>
 		                            <a th:href="@{/sell/sellEdit/{id}(id=${sell.id})}" class="btn btn-warning btn-sm">Edit</a>
 		                            <a th:if="${userRole == 'ROLE_ADMIN'}" th:href="@{/sell/sellDelete/{id}(id=${sell.id})}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm">Delete</a>

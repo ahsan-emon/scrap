@@ -15,7 +15,7 @@
 		                    <th:block th:if="${msg}">
 		                        <p class="text-center alert alert-primary">[[${msg}]]</p>
 		                    </th:block>
-		                    <form th:action="@{/sell/saveSell}" th:object="${sell}" method="post">
+		                    <form th:action="@{/sell/saveSell}" th:object="${sell}" method="post" enctype="multipart/form-data" onsubmit="return validateFile()">
 						        <div id="products" class="mb-2">
 		                            <div th:each="sellItem, iterStat : ${sell.sellItems}" class="product">
 		                                <label>Product</label>
@@ -38,6 +38,10 @@
 							        <label class="mb-0">Total Sell Amount:</label>
 							        <h3 id="totalAmount" class="text-bold text-info">0</h3>
 							    </div>
+							    <div class="mb-3">
+		                            <label for="exampleInputphoto" class="form-label">Sell Receipt</label>
+		                            <input type="file" name="photo" class="form-control" id="exampleInputphoto">
+		                        </div>
 						        <button type="submit" class="btn btn-primary col-md-12">Submit</button>
 						    </form>
 		                </div>
