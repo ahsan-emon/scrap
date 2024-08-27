@@ -3,3 +3,4 @@ Scrap Management System
 - order can be placed by admin and employee
 - all stock management is handled by this software
 - all the buying and selling data stored by this system
+- search mechanism in order list, assign list, and expense list
