@@ -2,9 +2,11 @@ package com.ahsan.scrap.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ahsan.scrap.model.AssignEmployee;
@@ -14,6 +16,8 @@ import com.ahsan.scrap.repository.AssignEmployeeRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.repository.VehicleRepository;
 import com.ahsan.scrap.service.AssignEmployeeService;
+
+import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class AssignEmployeeServiceImpl implements AssignEmployeeService{
@@ -70,4 +74,32 @@ public class AssignEmployeeServiceImpl implements AssignEmployeeService{
         LocalDateTime endDateTime = today.plusDays(1).atTime(6, 0);
     	return assignEmployeeRepository.findAssignsByUserAndCurrentDateTimeRange(userDtls, startDateTime, endDateTime);
     }
+	@Override
+	public List<AssignEmployee> searchAssignEmployees(LocalDate fromDate, LocalDate toDate, Long userId) {
+	    Specification<AssignEmployee> spec = (root, query, criteriaBuilder) -> {
+	        List<Predicate> predicates = new ArrayList<>();
+
+	        if (fromDate != null) {
+	            // Extract only the date part from assignDate and compare
+	            predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+	                criteriaBuilder.function("DATE", LocalDate.class, root.get("assignDate")), fromDate));
+	        }
+
+	        if (toDate != null) {
+	            // Extract only the date part from assignDate and compare
+	            predicates.add(criteriaBuilder.lessThanOrEqualTo(
+	                criteriaBuilder.function("DATE", LocalDate.class, root.get("assignDate")), toDate));
+	        }
+
+	        if (userId != null) {
+	            predicates.add(criteriaBuilder.equal(root.get("userDtls").get("id"), userId));
+	        }
+
+	        query.orderBy(criteriaBuilder.desc(root.get("assignDate")));
+
+	        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+	    };
+
+	    return assignEmployeeRepository.findAll(spec);
+	}
 }

@@ -2,9 +2,11 @@ package com.ahsan.scrap.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.ahsan.scrap.model.Expense;
@@ -13,6 +15,8 @@ import com.ahsan.scrap.repository.ExpenseRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.service.ExpenseService;
 import com.ahsan.scrap.util.UserUtil;
+
+import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService{
@@ -65,5 +69,33 @@ public class ExpenseServiceImpl implements ExpenseService{
     @Override
     public List<Expense> getExpensesByUserDtls(UserDtls userDtls){
 		return expenseRepository.findByUserDtls(userDtls);
+	}
+    @Override
+	public List<Expense> searchExpenses(LocalDate fromDate, LocalDate toDate, Long userId) {
+	    Specification<Expense> spec = (root, query, criteriaBuilder) -> {
+	        List<Predicate> predicates = new ArrayList<>();
+
+	        if (fromDate != null) {
+	            // Extract only the date part from assignDate and compare
+	            predicates.add(criteriaBuilder.greaterThanOrEqualTo(
+	                criteriaBuilder.function("DATE", LocalDate.class, root.get("expenseDate")), fromDate));
+	        }
+
+	        if (toDate != null) {
+	            // Extract only the date part from assignDate and compare
+	            predicates.add(criteriaBuilder.lessThanOrEqualTo(
+	                criteriaBuilder.function("DATE", LocalDate.class, root.get("expenseDate")), toDate));
+	        }
+
+	        if (userId != null) {
+	            predicates.add(criteriaBuilder.equal(root.get("userDtls").get("id"), userId));
+	        }
+
+	        query.orderBy(criteriaBuilder.desc(root.get("expenseDate")));
+
+	        return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+	    };
+
+	    return expenseRepository.findAll(spec);
 	}
 }

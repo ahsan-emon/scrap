@@ -4,13 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ahsan.scrap.model.AssignEmployee;
 import com.ahsan.scrap.model.UserDtls;
 
-public interface AssignEmployeeRepository extends JpaRepository<AssignEmployee, Long> {
+public interface AssignEmployeeRepository extends JpaRepository<AssignEmployee, Long>, JpaSpecificationExecutor<AssignEmployee> {
 	List<AssignEmployee> findAllByOrderByAssignDateDesc();
 	@Query("SELECT o FROM AssignEmployee o WHERE o.assignDate BETWEEN :start AND :end")
     List<AssignEmployee> findAssignsWithinCurrentDateTimeRange(@Param("start") LocalDateTime startDateTime, @Param("end") LocalDateTime endDateTime);

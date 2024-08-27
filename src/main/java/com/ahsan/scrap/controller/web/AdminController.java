@@ -2,11 +2,13 @@ package com.ahsan.scrap.controller.web;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -582,12 +584,26 @@ public class AdminController {
         return "redirect:/admin/vehicle_list";
 	}
 	//assign money car to employee
+//	@GetMapping("/assignList")
+//    public String assignList(Model model) {
+//		List<AssignEmployee> assignEmployees = assignEmployeeService.getAssignEmployeesByAssignDateDesc();
+//        model.addAttribute("assignEmployees", assignEmployees);
+//        return "admin/assign_list";
+//    }
 	@GetMapping("/assignList")
-    public String assignList(Model model) {
-		List<AssignEmployee> assignEmployees = assignEmployeeService.getAssignEmployeesByAssignDateDesc();
-        model.addAttribute("assignEmployees", assignEmployees);
-        return "admin/assign_list";
-    }
+	public String assignList(@RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+		    @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+		    @RequestParam(name = "userId", required = false) Long userId, Model model, Principal principal) {
+	    List<AssignEmployee> assignEmployees = assignEmployeeService.searchAssignEmployees(fromDate, toDate, userId);
+        List<UserDtls> userList = userRepository.findAll();
+        model.addAttribute("fromDate", fromDate);
+	    model.addAttribute("toDate", toDate);
+        model.addAttribute("userId", userId);
+        model.addAttribute("userList", userList);
+		model.addAttribute("assignEmployees", assignEmployees);
+		return "admin/assign_list";
+	}
+	
 	@GetMapping("/todayAssignList")
 	public String todayAssignList(Model model) {
 		List<AssignEmployee> assignEmployees = assignEmployeeService.getAssignsWithinCurrentDateTimeRange();

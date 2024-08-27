@@ -7,6 +7,30 @@
 	    <div class="content-header">
 	      <div class="container-fluid">
 		    <h1>Expense List</h1>
+		    <!-- search form -->
+		    <div th:if="${userRole == 'ROLE_ADMIN'}">
+			    <form th:action="@{/expense/expenseList}" method="GET" class="form-inline">
+		          <div class="form-group mb-2">
+		            <label for="fromDate" class="sr-only">From Date</label>
+		            <input type="date" class="form-control" id="fromDate" name="fromDate" th:value="${fromDate}">
+		          </div>
+		          <div class="form-group mx-sm-3 mb-2">
+		            <label for="toDate" class="sr-only">To Date</label>
+		            <input type="date" class="form-control" id="toDate" name="toDate" th:value="${toDate}">
+		          </div>
+	               <div class="form-group mx-sm-3 mb-2">
+	                   <label for="userId" class="sr-only">Employee</label>
+	                   <select id="userId" name="userId" class="form-control">
+	                       <option value="">Select Employee</option>
+	                       <option th:each="user : ${userList}"
+	                               th:value="${user.id}"
+	                               th:text="${user.username}"
+	                               th:selected="${user.id == userId}"></option>
+	                   </select>
+	               </div>
+		          <button type="submit" class="btn btn-primary mb-2">Search</button>
+		        </form>
+		    </div>
 		    <table class="table table-striped mt-3">
 		            <thead>
 		                <tr>

@@ -1,5 +1,6 @@
 package com.ahsan.scrap.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.ahsan.scrap.model.Expense;
@@ -12,4 +13,5 @@ public interface ExpenseService {
     public List<Expense> getExpensesWithinCurrentDateTimeRange();
     public List<Expense> getExpensesByUserAndCurrentDateTimeRange(UserDtls userDtls);
     public List<Expense> getExpensesByUserDtls(UserDtls userDtls);
+    public List<Expense> searchExpenses(LocalDate fromDate, LocalDate toDate, Long userId);
 }

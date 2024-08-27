@@ -5,13 +5,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ahsan.scrap.model.Expense;
 import com.ahsan.scrap.model.UserDtls;
 
-public interface ExpenseRepository extends JpaRepository<Expense, Long> {
+public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpecificationExecutor<Expense>  {
 	List<Expense> findAllByOrderByExpenseDateDesc();
 	List<Expense> findByUserDtls(UserDtls userDtls);
 	@Query("SELECT o FROM Expense o WHERE o.userDtls = :userDtls AND DATE(o.expenseDate) BETWEEN :startOfDay AND :endOfDay")

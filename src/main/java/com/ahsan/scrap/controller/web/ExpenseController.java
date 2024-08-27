@@ -1,9 +1,11 @@
 package com.ahsan.scrap.controller.web;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ahsan.scrap.constraint.CommonConstraint;
 import com.ahsan.scrap.model.Expense;
@@ -40,21 +43,43 @@ public class ExpenseController {
     }
 	
 	//expense of employee
+//	@GetMapping("/expenseList")
+//    public String expenseList(Model model, Principal principal) {
+//		String username = principal.getName();
+//        UserDtls userDtls = userRepository.findByUsername(username);
+//		if(userDtls != null) {
+//			if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
+//				List<Expense> expenses = expenseService.getExpensesByExpenseDateDesc();
+//				model.addAttribute("expenses",expenses);
+//	        }else {
+//				List<Expense> expenses = expenseService.getExpensesByUserUptoPrevExpenseDate(userDtls);
+//	        	model.addAttribute("expenses", expenses);
+//	        }
+//		}
+//        return "expense/expense_list";
+//    }
 	@GetMapping("/expenseList")
-    public String expenseList(Model model, Principal principal) {
+	public String expenseList(@RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+		    @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+		    @RequestParam(name = "userId", required = false) Long userId, Model model, Principal principal) {
 		String username = principal.getName();
-        UserDtls userDtls = userRepository.findByUsername(username);
+		UserDtls userDtls = userRepository.findByUsername(username);
 		if(userDtls != null) {
 			if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
-				List<Expense> expenses = expenseService.getExpensesByExpenseDateDesc();
+				List<Expense> expenses = expenseService.searchExpenses(fromDate, toDate, userId);
+				List<UserDtls> userList = userRepository.findAll();
+		        model.addAttribute("fromDate", fromDate);
+			    model.addAttribute("toDate", toDate);
+		        model.addAttribute("userId", userId);
+		        model.addAttribute("userList", userList);
 				model.addAttribute("expenses",expenses);
-	        }else {
+			}else {
 				List<Expense> expenses = expenseService.getExpensesByUserUptoPrevExpenseDate(userDtls);
-	        	model.addAttribute("expenses", expenses);
-	        }
+				model.addAttribute("expenses", expenses);
+			}
 		}
-        return "expense/expense_list";
-    }
+		return "expense/expense_list";
+	}
 	@GetMapping("/todayExpenseList")
 	public String todayExpenseList(Model model, Principal principal) {
 		String username = principal.getName();
