@@ -20,7 +20,7 @@
 								    <label for="customer" class="form-label">Customer</label>
 								    <select id="customer" class="form-control" name="customerId" required onchange="updateDueAmount()">
 								    	<option value="" selected>Select Customer</option>
-								        <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.username}" th:attr="data-due=${customer.customerDue}"></option>
+								        <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.fullName}" th:attr="data-due=${customer.customerDue}"></option>
 								    </select>
 								</div>
 						        <div class="mb-2">

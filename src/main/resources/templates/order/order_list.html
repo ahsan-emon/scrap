@@ -61,7 +61,7 @@
 		            <tbody>
 		                <tr th:each="order, iterStat : ${orders}" th:with="orderIndex=${iterStat.index + 1}">
 		                    <td th:text="${orderIndex}"></td>
-		                    <td th:text="${order.customer.username}"></td>
+		                    <td th:text="${order.customer.fullName}"></td>
 		                    <td th:text="${order.userDtls.username}"></td>
 		                    <td th:text="${@dateUtils.formatDate(order.orderDate)}"></td>
 		                    <td th:text="${order.numberOfItems}"></td>
