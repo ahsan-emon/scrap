@@ -30,6 +30,7 @@ import com.ahsan.scrap.model.OrderItem;
 import com.ahsan.scrap.model.OrderRequest;
 import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.Sell;
+import com.ahsan.scrap.model.SellItem;
 import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.model.Vehicle;
 import com.ahsan.scrap.repository.AssignEmployeeRepository;
@@ -39,6 +40,7 @@ import com.ahsan.scrap.repository.OrderItemRepository;
 import com.ahsan.scrap.repository.OrderRepository;
 import com.ahsan.scrap.repository.OrderRequestRepository;
 import com.ahsan.scrap.repository.ProductRepository;
+import com.ahsan.scrap.repository.SellItemRepository;
 import com.ahsan.scrap.repository.SellRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.repository.VehicleRepository;
@@ -73,6 +75,8 @@ public class AdminController {
 	private OrderItemRepository orderItemRepository;
 	@Autowired
 	private SellRepository sellRepository;
+	@Autowired
+	private SellItemRepository sellItemRepository;
 	@Autowired
 	private AssignEmployeeRepository assignEmployeeRepository;
 	@Autowired
@@ -294,14 +298,55 @@ public class AdminController {
 		return "admin/user_list";
 	}
 	@GetMapping("/product_list")
-	public String productList(Model model) {
-		List<Product> products = productRepository.findAll();
-		for(Product product : products) {
-			List<OrderItem> orderItems = orderItemRepository.findByProduct(product);
-			float totalQuantity = (float) orderItems.stream()
-                    .mapToDouble(OrderItem::getQuantity)
-                    .sum();
-			product.setQuantity(product.getQuantity() + totalQuantity);
+	public String productList(
+			@RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+		    @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+		    Model model,
+		    Principal principal) {
+		String username = principal.getName();
+	    UserDtls userDtls = userRepository.findByUsername(username);
+	    List<Product> products;
+		if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN) && (fromDate != null || toDate != null)) {
+			products = productRepository.findAll();
+			for(Product product : products) {
+				List<Order> orders = orderRepository.searchOrdersWithDateForCalculation(fromDate, toDate);
+				float totalQuantity = 0f;
+				float totalQuantityAmount = 0f;
+				for(Order order : orders) {
+					List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+					for(OrderItem orderItem : orderItems) {
+						if(orderItem.getProduct().equals(product)) {
+							totalQuantity = (float) orderItem.getQuantity() + totalQuantity;
+							totalQuantityAmount = orderItem.getAmount() + totalQuantityAmount;
+						}
+					}
+				}
+				product.setQuantity(totalQuantity);	
+				product.setUnitPrice(totalQuantityAmount);
+			}
+	    } else {
+	    	products = productRepository.findAll();
+			for(Product product : products) {
+				List<OrderItem> orderItems = orderItemRepository.findByProduct(product);
+				List<SellItem> sellItems = sellItemRepository.findByProduct(product);
+				float totalQuantity = (float) orderItems.stream()
+	                    .mapToDouble(OrderItem::getQuantity)
+	                    .sum();
+				float totalQuantityAmount = (float) orderItems.stream()
+						.mapToInt(OrderItem::getAmount)
+						.sum();
+				float totalSellQuantity = (float) sellItems.stream()
+						.mapToDouble(SellItem::getQuantity)
+						.sum();
+				product.setUnitPrice((product.getQuantity() * product.getUnitPrice()) + totalQuantityAmount - (totalSellQuantity * product.getUnitPrice()));
+				product.setQuantity(product.getQuantity() + totalQuantity - totalSellQuantity);
+				
+			}
+	    }
+		
+		if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
+			model.addAttribute("fromDate", fromDate);
+		    model.addAttribute("toDate", toDate);
 		}
 		model.addAttribute("products",products);
 		return "admin/product_list";

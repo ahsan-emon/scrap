@@ -7,12 +7,27 @@
 	    <div class="content-header">
 	      <div class="container-fluid">
 		    <h1>Product List</h1>
+		    <!-- Search Form -->
+	        <div th:if="${userRole == 'ROLE_ADMIN'}">
+	        	<form th:action="@{/admin/product_list}" method="GET" class="form-inline">
+		          <div class="form-group mb-2">
+		            <label for="fromDate" class="pe-1">From Date</label>
+		            <input type="date" class="form-control" id="fromDate" name="fromDate" th:value="${fromDate}">
+		          </div>
+		          <div class="form-group mx-sm-3 mb-2">
+		            <label for="toDate" class="pe-1">To Date</label>
+		            <input type="date" class="form-control" id="toDate" name="toDate" th:value="${toDate}">
+		          </div>
+		          <button type="submit" class="btn btn-primary mb-2">Search</button>
+		        </form>
+	        </div>
+		    
 		    <table class="table table-striped mt-3">
 		            <thead>
 		                <tr>
 		                    <th>ID</th>
 		                    <th>Short Name</th>
-		                    <th>Unit Price (SAR)</th>
+		                    <th>T_Quantity Buying Price (SAR)</th>
 		                    <th>T_Quantity in Store (KG)</th>
 		                    <th>Updated Date</th>
 		                    <th>Action</th>
