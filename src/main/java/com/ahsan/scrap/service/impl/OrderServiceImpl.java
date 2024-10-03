@@ -164,4 +164,8 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> searchOrders(LocalDate fromDate, LocalDate toDate, Long customerId, Long userId) {
         return orderRepository.searchOrders(fromDate, toDate, customerId, userId);
     }
+    @Override
+    public List<Order> searchOrdersWithDateForCalculation(LocalDate fromDate, LocalDate toDate) {
+    	return orderRepository.searchOrdersWithDateForCalculation(fromDate, toDate);
+    }
 }

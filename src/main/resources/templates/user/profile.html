@@ -54,10 +54,11 @@
 				                    </ul>
 		        				</div>
 		        				<ul th:if="${userRole == 'ROLE_ADMIN'}" class="list-group list-group-flush">
-			        				<td>
+			        				<li class="list-group-item">
 				                    	<a th:href="@{/admin/userEdit/{id}(id=${user.id})}" class="btn btn-small btn-warning">Edit</a>
+				                    	<a th:href="@{/logout}" class="btn btn-small btn-danger">Logout</a>
 				        				<!-- <a th:href="@{/admin/userDelete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')" class="btn btn-small btn-danger">Delete</a> -->
-				                    </td>
+				                    </li>
 		        				</ul>
 	        				</div>
 		                </div>

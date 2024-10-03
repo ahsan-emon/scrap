@@ -22,4 +22,5 @@ public interface OrderService {
     public List<Order> getOrdersByUserDtlsAndCurrentDate(UserDtls userDtls);
     public List<Order> getOrdersByUserDtlsAndCurrentDateTimeRange(UserDtls userDtls);
     public List<Order> searchOrders(LocalDate fromDate, LocalDate toDate, Long customerId, Long userId);
+    public List<Order> searchOrdersWithDateForCalculation(LocalDate fromDate, LocalDate toDate);
 }
