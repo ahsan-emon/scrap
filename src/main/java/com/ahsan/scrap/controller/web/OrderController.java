@@ -86,8 +86,16 @@ public class OrderController {
 		    UserDtls userDtls = userRepository.findByUsername(username);
 		    
 		    List<Order> orders;
+		    int ordersAmount = 0;
+		    float ordersQuantity = 0f;
 		    if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
 		        orders = orderService.searchOrders(fromDate, toDate, customerId, userId);
+		        ordersAmount = orders.stream()
+						.mapToInt(Order::getOrderAmount)
+						.sum();
+				ordersQuantity = (float) orders.stream()
+		                .mapToDouble(Order::getOrderQuantity)
+		                .sum();
 		    } else {
 		        orders = orderService.getOrdersByUserDtlsAndUptoPrevOrderDate(userDtls);
 		    }
@@ -103,6 +111,8 @@ public class OrderController {
 		        model.addAttribute("customerId", customerId);
 		        model.addAttribute("customers", customers);
 		        model.addAttribute("userList", userList);
+		        model.addAttribute("ordersAmount", ordersAmount);
+		        model.addAttribute("ordersQuantity", ordersQuantity);
 		    }
 	
 		    return "order/order_list";
