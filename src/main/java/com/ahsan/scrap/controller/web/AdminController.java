@@ -231,6 +231,7 @@ public class AdminController {
 			model.addAttribute("numOfVehicles",vehicles.size());
 			model.addAttribute("todayOrderAmount",todayOrderAmount);
 			model.addAttribute("todayOrderQuantity",todayOrderQuantity);
+			model.addAttribute("totalOrderQuantity",orderProductQuantity);
 			model.addAttribute("totalOrderAmount",totalOrderAmount);
 			model.addAttribute("totalProductQuantity",totalProductQuantity);
 			model.addAttribute("todayAssignAmount",todayAssignAmount);
