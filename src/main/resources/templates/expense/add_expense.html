@@ -26,6 +26,9 @@
 							            <option value="STORE_COST" th:selected="${expense != null ? expense.expenseReason == 'STORE_COST' : false}">Store Cost</option>
 							            <option value="CUSTOMER_DUE" th:selected="${expense != null ? expense.expenseReason == 'CUSTOMER_DUE' : false}">Customer Due</option>
 							            <option value="CUSTOMER_EXTRA" th:selected="${expense != null ? expense.expenseReason == 'CUSTOMER_EXTRA' : false}">Customer Extra</option>
+							            <option value="PERSONAL_COST" th:selected="${expense != null ? expense.expenseReason == 'PERSONAL_COST' : false}">Personal Cost</option>
+							            <option value="EMPLOYEE_SALARY" th:selected="${expense != null ? expense.expenseReason == 'EMPLOYEE_SALARY' : false}">Employee Salary</option>
+							            <option value="COMPANY_COST" th:selected="${expense != null ? expense.expenseReason == 'COMPANY_COST' : false}">Company Cost</option>
 							            <option value="OTHER" th:selected="${expense != null ? expense.expenseReason == 'OTHER' : false}">Other</option>
 							        </select>
 		                        </div>
