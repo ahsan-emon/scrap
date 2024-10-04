@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ahsan.scrap.constraint.CommonConstraint;
+import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.Sell;
 import com.ahsan.scrap.model.SellItem;
@@ -67,8 +68,16 @@ public class SellController {
 		    UserDtls userDtls = userRepository.findByUsername(username);
 		    
 		    List<Sell> sells;
+		    float sellsAmount = 0f;
+		    float sellsQuantity = 0f;
 		    if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
 		        sells = sellService.searchSells(fromDate, toDate, userId);
+		        sellsAmount = (float) sells.stream()
+						.mapToDouble(Sell::getSellAmount)
+						.sum();
+		        sellsQuantity = (float) sells.stream()
+		                .mapToDouble(Sell::getSellQuantity)
+		                .sum();
 		    } else {
 		        sells = sellService.getSellsByUserDtlsAndUptoPrevSellDateDesc(userDtls);
 		    }
@@ -81,6 +90,8 @@ public class SellController {
 			    model.addAttribute("toDate", toDate);
 		        model.addAttribute("userId", userId);
 		        model.addAttribute("userList", userList);
+		        model.addAttribute("sellsAmount", sellsAmount);
+		        model.addAttribute("sellsQuantity", sellsQuantity);
 		    }
 	
 		    return "sell/sell_list";

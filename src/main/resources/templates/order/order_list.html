@@ -27,7 +27,7 @@
                         <option value="">Select Customer</option>
                         <option th:each="customer : ${customers}"
                                 th:value="${customer.id}"
-                                th:text="${customer.username}"
+                                th:text="${customer.fullName}"
                                 th:selected="${customer.id == customerId}"></option>
                     </select>
                 </div>
