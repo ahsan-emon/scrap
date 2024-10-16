@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ahsan.scrap.constraint.CommonConstraint;
-import com.ahsan.scrap.model.Order;
 import com.ahsan.scrap.model.Product;
 import com.ahsan.scrap.model.Sell;
 import com.ahsan.scrap.model.SellItem;
 import com.ahsan.scrap.model.UserDtls;
 import com.ahsan.scrap.repository.ProductRepository;
+import com.ahsan.scrap.repository.SellItemRepository;
 import com.ahsan.scrap.repository.SellRepository;
 import com.ahsan.scrap.repository.UserRepository;
 import com.ahsan.scrap.service.SellService;
@@ -40,6 +40,8 @@ public class SellController {
 	private ProductRepository productRepository;
 	@Autowired
 	private SellRepository sellRepository;
+	@Autowired
+	private SellItemRepository sellItemRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -161,6 +163,34 @@ public class SellController {
 			}
 	        
 	    }
+	  //product sell date wise with search mechanism
+	  		@GetMapping("/product_sell_date")
+	  		public String productSellDate(
+	  		    @RequestParam(name = "sellDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sellDate,
+	  		    Model model, Principal principal) {
+	  	
+	  		    String username = principal.getName();
+	  		    UserDtls userDtls = userRepository.findByUsername(username);
+	  		    
+	  		    List<SellItem> sellItems;
+	  		    float sellsAmount = 0f;
+	  		    float sellsQuantity = 0f;
+	  		    if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
+	  		    	sellItems = sellItemRepository.findAllBySellDateDesc(sellDate);
+	  		        sellsAmount = (float) sellItems.stream()
+	  						.mapToDouble(SellItem::getAmount)
+	  						.sum();
+	  		        sellsQuantity = (float) sellItems.stream()
+	  		                .mapToDouble(SellItem::getQuantity)
+	  		                .sum();
+	  		        model.addAttribute("sellItems", sellItems);
+	  		        model.addAttribute("sellDate", sellDate);
+	  		        model.addAttribute("sellsAmount", sellsAmount);
+	  		        model.addAttribute("sellsQuantity", sellsQuantity);
+	  		    }
+	  	
+	  		    return "sell/product_sell_date";
+	  		}
 		@GetMapping("/sellDelete/{id}")
 		public String deleteSell(@PathVariable("id") Long id) {
 			sellRepository.deleteById(id);

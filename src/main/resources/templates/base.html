@@ -207,6 +207,12 @@
              	<p>Sell List</p>
              </a>
           </li>
+          <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item menu-open">
+			<a class="nav-link" th:href="@{/sell/product_sell_date}">
+             	<i class="nav-icon fas fa-table"></i>
+             	<p>Product Sell History</p>
+             </a>
+          </li>
           <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item">
               <a class="nav-link" th:href="@{/admin/user_list}">
               	<i class="nav-icon fas fa-th"></i>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base::Layout(~{::section})">
+
+<body>
+<section>
+<!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <div class="content-header">
+	      <div class="container-fluid">
+	      	<button onclick="history.back()" class="btn btn-secondary btn-sm">Back</button>
+		    <h1>Sell List</h1>
+		    
+		    <!-- Search Form -->
+	        <div th:if="${userRole == 'ROLE_ADMIN'}">
+	        	<form action="#" th:action="@{/sell/product_sell_date}" method="GET" class="form-inline">
+		          <div class="form-group mb-2">
+		            <label for="sellDate" class="sr-only">Sell Date</label>
+		            <input type="date" class="form-control" id="sellDate" name="sellDate" th:value="${sellDate}">
+		          </div>
+		          <button type="submit" class="btn btn-primary mb-2">Search</button>
+		        </form>
+		        <div class="col-md-6">
+			        <ul class="list-group list-group-flush">
+	                    <li class="list-group-item d-flex justify-content-between align-items-center">
+	                        <strong>Sells Quantity:</strong> <span class="text-end text-info ms-2" th:text="${sellsQuantity} +' KG'"></span>
+	                    </li>
+	                    <li class="list-group-item d-flex justify-content-between align-items-center">
+	                        <strong>Sells Amount:</strong> <span class="text-end text-info ms-2" th:text="${sellsAmount} +'/= SAR'"></span>
+	                    </li>
+	                </ul>
+                </div>
+	        </div>
+		    
+		    <table class="table table-striped mt-3">
+		            <thead>
+		                <tr>
+		                    <th>ID</th>
+		                    <th>Product</th>
+		                    <th>Date</th>
+		                    <th>Unit Price</th>
+		                    <th>Quantity</th>
+		                    <th>Amount (SAR)</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr th:each="sellItem, iterStat : ${sellItems}" th:with="sellItemIndex=${iterStat.index + 1}">
+		                    <td th:text="${sellItemIndex}"></td>
+		                    <td th:text="${sellItem.product.name}"></td>
+		                    <td th:text="${@dateUtils.formatDate(sellItem.sell.sellDate)}"></td>
+		                    <td th:text="${sellItem.unitPrice}"></td>
+		                    <td th:text="${sellItem.quantity}"></td>
+		                    <td th:text="${sellItem.amount}"></td>
+		                </tr>
+		            </tbody>
+		        </table>
+	        </div>
+	    </div>
+	  </div>
+</section>
+</body>
+</html>
