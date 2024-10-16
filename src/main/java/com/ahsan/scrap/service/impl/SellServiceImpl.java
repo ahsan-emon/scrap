@@ -65,12 +65,12 @@ public class SellServiceImpl implements SellService {
         String currentUsername = UserUtil.getCurrentUsername();
         UserDtls userDtls = userRepository.findByUsername(currentUsername);
         if(userDtls != null) {
-            sell.setUserDtls(userDtls);
+        	savedSell.setUserDtls(userDtls);
         }
-        sell.setNumberOfItems(numberOfItems);
-        sell.setSellAmount(totalAmount);
-        sell.setSellQuantity(totalQuantity);
-        return sellRepository.save(sell);
+        savedSell.setNumberOfItems(numberOfItems);
+        savedSell.setSellAmount(totalAmount);
+        savedSell.setSellQuantity(totalQuantity);
+        return sellRepository.save(savedSell);
 	}
 
 	@Override
