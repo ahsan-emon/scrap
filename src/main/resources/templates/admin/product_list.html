@@ -27,8 +27,8 @@
 		                <tr>
 		                    <th>ID</th>
 		                    <th>Short Name</th>
-		                    <th>T_Quantity Buying Price (SAR)</th>
 		                    <th>T_Quantity in Store (KG)</th>
+		                    <th>T_Quantity Buying Price (SAR)</th>
 		                    <th>Updated Date</th>
 		                    <th>Action</th>
 		                </tr>
@@ -37,8 +37,8 @@
 		                <tr th:each="product, iterStat : ${products}" th:with="orderIndex=${iterStat.index + 1}">
 		                    <td th:text="${orderIndex}"></td>
 		                    <td th:text="${product.shortName}"></td>
-		                    <td th:text="${product.unitPrice}"></td>
 		                    <td th:text="${product.quantity}"></td>
+		                    <td th:text="${product.unitPrice}"></td>
 		                    <td th:text="${@dateUtils.formatDate(product.updateDate)}"></td>
 		                    <td>
 		                    	<a th:href="@{/admin/productView/{id}(id=${product.id})}" class="btn btn-small btn-primary">View</a>
