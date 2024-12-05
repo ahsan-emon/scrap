@@ -64,7 +64,8 @@
 		                    <th>Order Date</th>
 		                    <th>Number Of Items</th>
 		                    <th>Order Quantity</th>
-		                    <th>Order Amount (SAR)</th>
+		                    <th>Order Amount</th>
+		                    <th>Customer Due</th>
 		                    <th>Action</th>
 		                </tr>
 		            </thead>
@@ -77,6 +78,7 @@
 		                    <td th:text="${order.numberOfItems}"></td>
 		                    <td th:text="${order.orderQuantity}"></td>
 		                    <td th:text="${order.orderAmount}"></td>
+		                    <td th:text="${order.customerDue}"></td>
 		                    <td>
 		                    	<a th:href="@{/order/orderView/{id}(id=${order.id})}" class="btn btn-small btn-primary">View</a>
 		                    	<a th:href="@{/order/orderEdit/{id}(id=${order.id})}" class="btn btn-small btn-warning">Edit</a>

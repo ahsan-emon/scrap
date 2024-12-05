@@ -54,6 +54,10 @@
 								        <label class="mb-0">Total Order Amount:</label>
 								        <h3 id="totalAmount" class="text-bold text-info">[[*{orderAmount}]]</h3>
 								    </div>
+								    <div class="my-2">
+								        <label class="mb-0">Total Amount With Due:</label>
+								        <h3 id="totalAmountWithDue" class="text-bold text-info">[[*{orderAmount}+*{customer.customerDue}]]</h3>
+								    </div>
 							        <button type="submit" class="btn btn-primary col-md-12">Update</button>
 							    </form>
 		                </div>
