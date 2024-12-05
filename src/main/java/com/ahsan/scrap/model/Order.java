@@ -37,6 +37,8 @@ public class Order {
 	private Float orderQuantity;
 	@Column(name = "vehicle_id")
 	private Long vehicleId;
+	@Column(nullable = false, columnDefinition = "INT DEFAULT 0")
+	private int customerDue = 0;
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")

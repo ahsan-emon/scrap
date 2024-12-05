@@ -71,6 +71,7 @@ function updateTotalAmount() {
     if (document.querySelector('.product')) {
         const productDivs = document.querySelectorAll('.product');
         let totalAmount = 0;
+        let totalAmountWithDue = 0;
         
         productDivs.forEach(function(productDiv) {
             const quantityInput = productDiv.querySelector('input[name$=".quantity"]');
@@ -81,8 +82,12 @@ function updateTotalAmount() {
             
             totalAmount += Math.floor(quantity * unitPrice);
         });
-        
-        document.getElementById('totalAmount').innerText = totalAmount;
+		const dueInput = document.getElementById('customerDue');
+		const dueValue = parseFloat(dueInput.value) || 0;
+		totalAmountWithDue = totalAmount + dueValue;
+		
+		document.getElementById('totalAmount').innerText = totalAmount;
+        document.getElementById('totalAmountWithDue').innerText = totalAmountWithDue;
     }
 }
 

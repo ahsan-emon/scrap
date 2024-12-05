@@ -25,6 +25,9 @@
 		                            <strong>Order Date:</strong> <span th:text="${@dateUtils.formatDate(order.orderDate)}"></span>
 		                        </li>
 		                        <li class="list-group-item">
+		                            <strong>Customer Due:</strong> <span th:text="${order.customerDue}"></span>
+		                        </li>
+		                        <li class="list-group-item">
 		                            <strong>Number Of Items:</strong> <span th:text="${order.numberOfItems}"></span>
 		                        </li>
 		                        <table class="table table-striped mt-3">
