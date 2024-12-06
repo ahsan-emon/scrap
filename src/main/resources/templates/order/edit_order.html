@@ -30,7 +30,7 @@
 							        </div>
 							        <div class="mb-3">
 									    <label>Customer Due Amount</label>
-									    <input type="number" max="100000" th:name="customerDue" th:value="${order.customer.customerDue}" class="form-control" required />
+									    <input type="number" max="100000" id="customerDue" th:name="customerDue" th:value="${order.customer.customerDue}" class="form-control" required />
 									</div>
 							        <div id="products">
 			                            <div th:each="orderItem, iterStat : ${order.orderItems}" class="product">
