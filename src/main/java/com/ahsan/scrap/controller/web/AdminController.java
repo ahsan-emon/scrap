@@ -311,7 +311,7 @@ public class AdminController {
 		if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN) && (fromDate != null || toDate != null || customerId != null)) {
 			products = productRepository.findAll();
 			for(Product product : products) {
-				List<Order> orders = orderRepository.searchOrdersWithDateForCalculation(fromDate, toDate, customerId);
+				List<Order> orders = orderService.searchOrdersWithDateForCalculation(fromDate, toDate, customerId);
 				float totalQuantity = 0f;
 				float totalQuantityAmount = 0f;
 				for(Order order : orders) {
