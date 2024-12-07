@@ -165,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.searchOrders(fromDate, toDate, customerId, userId);
     }
     @Override
-    public List<Order> searchOrdersWithDateForCalculation(LocalDate fromDate, LocalDate toDate) {
-    	return orderRepository.searchOrdersWithDateForCalculation(fromDate, toDate);
+    public List<Order> searchOrdersWithDateForCalculation(LocalDate fromDate, LocalDate toDate, Long customerId) {
+    	return orderRepository.searchOrdersWithDateForCalculation(fromDate, toDate, customerId);
     }
 }
