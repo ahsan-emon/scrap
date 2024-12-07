@@ -166,8 +166,10 @@ public class SellController {
 	  //product sell date wise with search mechanism
 	  		@GetMapping("/product_sell_date")
 	  		public String productSellDate(
-	  		    @RequestParam(name = "sellDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate sellDate,
-	  		    Model model, Principal principal) {
+	  				@RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+	  			    @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+	  			    @RequestParam(name = "productId", required = false) Long productId,
+	  			    Model model, Principal principal) {
 	  	
 	  		    String username = principal.getName();
 	  		    UserDtls userDtls = userRepository.findByUsername(username);
@@ -176,15 +178,19 @@ public class SellController {
 	  		    float sellsAmount = 0f;
 	  		    float sellsQuantity = 0f;
 	  		    if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
-	  		    	sellItems = sellItemRepository.findAllBySellDateDesc(sellDate);
+	  		    	sellItems = sellItemRepository.findAllBySellDateDesc(fromDate,toDate,productId);
 	  		        sellsAmount = (float) sellItems.stream()
 	  						.mapToDouble(SellItem::getAmount)
 	  						.sum();
 	  		        sellsQuantity = (float) sellItems.stream()
 	  		                .mapToDouble(SellItem::getQuantity)
 	  		                .sum();
+	  		        List<Product> productList = productRepository.findAll();
+	  		        model.addAttribute("productList", productList);
+	  		        model.addAttribute("fromDate", fromDate);
+				    model.addAttribute("toDate", toDate);
+	  		        model.addAttribute("productId", productId);
 	  		        model.addAttribute("sellItems", sellItems);
-	  		        model.addAttribute("sellDate", sellDate);
 	  		        model.addAttribute("sellsAmount", sellsAmount);
 	  		        model.addAttribute("sellsQuantity", sellsQuantity);
 	  		    }

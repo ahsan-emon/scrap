@@ -36,6 +36,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>{
     List<Order> searchOrders(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate, @Param("customerId") Long customerId, @Param("userId") Long userId);
     @Query("SELECT o FROM Order o WHERE " +
     		"(:fromDate IS NULL OR DATE(o.orderDate) >= :fromDate) AND " +
-    		"(:toDate IS NULL OR DATE(o.orderDate) <= :toDate)")
-    List<Order> searchOrdersWithDateForCalculation(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate);
+    		"(:toDate IS NULL OR DATE(o.orderDate) <= :toDate) AND " +
+    		"(:customerId IS NULL OR o.customer.id = :customerId)")
+    List<Order> searchOrdersWithDateForCalculation(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate, @Param("customerId") Long customerId);
 }

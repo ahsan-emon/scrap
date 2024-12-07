@@ -12,6 +12,12 @@ import com.ahsan.scrap.model.SellItem;
 
 public interface SellItemRepository extends JpaRepository<SellItem, Long>{
 	List<SellItem> findByProduct(Product product);
-	@Query("SELECT o FROM SellItem o WHERE (:sellDate IS NULL OR DATE(o.sell.sellDate) = :sellDate) ORDER BY o.sell.sellDate DESC")
-	List<SellItem> findAllBySellDateDesc(@Param("sellDate") LocalDate sellDate);
+	@Query("SELECT o FROM SellItem o WHERE " +
+		       "(:fromDate IS NULL OR DATE(o.sell.sellDate) >= :fromDate) AND " +
+		       "(:toDate IS NULL OR DATE(o.sell.sellDate) <= :toDate) AND " +
+		       "(:productId IS NULL OR o.product.id = :productId) " +
+		       "ORDER BY o.sell.sellDate DESC")
+	List<SellItem> findAllBySellDateDesc(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate, @Param("productId") Long productId);
 }
+
+
