@@ -302,15 +302,16 @@ public class AdminController {
 	public String productList(
 			@RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
 		    @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+		    @RequestParam(name = "customerId", required = false) Long customerId,
 		    Model model,
 		    Principal principal) {
 		String username = principal.getName();
 	    UserDtls userDtls = userRepository.findByUsername(username);
 	    List<Product> products;
-		if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN) && (fromDate != null || toDate != null)) {
+		if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN) && (fromDate != null || toDate != null || customerId != null)) {
 			products = productRepository.findAll();
 			for(Product product : products) {
-				List<Order> orders = orderRepository.searchOrdersWithDateForCalculation(fromDate, toDate);
+				List<Order> orders = orderRepository.searchOrdersWithDateForCalculation(fromDate, toDate, customerId);
 				float totalQuantity = 0f;
 				float totalQuantityAmount = 0f;
 				for(Order order : orders) {
@@ -346,8 +347,11 @@ public class AdminController {
 	    }
 		
 		if (userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
+			List<Customer> customerList = customerRepository.findAll();
+			model.addAttribute("customerList", customerList);
 			model.addAttribute("fromDate", fromDate);
 		    model.addAttribute("toDate", toDate);
+		    model.addAttribute("customerId", customerId);
 		}
 		model.addAttribute("products",products);
 		return "admin/product_list";

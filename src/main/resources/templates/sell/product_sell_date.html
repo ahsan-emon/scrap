@@ -8,15 +8,33 @@
 	    <div class="content-header">
 	      <div class="container-fluid">
 	      	<button onclick="history.back()" class="btn btn-secondary btn-sm">Back</button>
-		    <h1>Sell List</h1>
+		    <h1>Product Sell List</h1>
 		    
 		    <!-- Search Form -->
 	        <div th:if="${userRole == 'ROLE_ADMIN'}">
 	        	<form action="#" th:action="@{/sell/product_sell_date}" method="GET" class="form-inline">
-		          <div class="form-group mb-2">
+		          <!-- <div class="form-group mb-2">
 		            <label for="sellDate" class="sr-only">Sell Date</label>
 		            <input type="date" class="form-control" id="sellDate" name="sellDate" th:value="${sellDate}">
+		          </div> -->
+		          <div class="form-group mb-2">
+		            <label for="fromDate" class="sr-only">From Date</label>
+		            <input type="date" class="form-control" id="fromDate" name="fromDate" th:value="${fromDate}">
 		          </div>
+		          <div class="form-group mx-sm-3 mb-2">
+		            <label for="toDate" class="sr-only">To Date</label>
+		            <input type="date" class="form-control" id="toDate" name="toDate" th:value="${toDate}">
+		          </div>
+		          <div class="form-group mx-sm-2 mb-2">
+                    <label for="productId" class="sr-only">Product</label>
+                    <select id="productId" name="productId" class="form-control">
+                        <option value="">Select Product</option>
+                        <option th:each="product : ${productList}"
+                                th:value="${product.id}"
+                                th:text="${product.name}"
+                                th:selected="${product.id == productId}"></option>
+                    </select>
+                  </div>
 		          <button type="submit" class="btn btn-primary mb-2">Search</button>
 		        </form>
 		        <div class="col-md-6">

@@ -18,6 +18,16 @@
 		            <label for="toDate" class="pe-1">To Date</label>
 		            <input type="date" class="form-control" id="toDate" name="toDate" th:value="${toDate}">
 		          </div>
+		          <div class="form-group mx-sm-2 mb-2">
+                    <label for="customerId" class="sr-only">Customer</label>
+                    <select id="customerId" name="customerId" class="form-control">
+                        <option value="">Select Customer</option>
+                        <option th:each="customer : ${customerList}"
+                                th:value="${customer.id}"
+                                th:text="${customer.fullName}"
+                                th:selected="${customer.id == customerId}"></option>
+                    </select>
+                  </div>
 		          <button type="submit" class="btn btn-primary mb-2">Search</button>
 		        </form>
 	        </div>
