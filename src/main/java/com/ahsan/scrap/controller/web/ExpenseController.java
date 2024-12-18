@@ -68,11 +68,16 @@ public class ExpenseController {
 			if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
 				List<Expense> expenses = expenseService.searchExpenses(fromDate, toDate, userId);
 				List<UserDtls> userList = userRepository.findAll();
+				int totalExpenseAmount = 0;
+				totalExpenseAmount = expenses.stream()
+						.mapToInt(Expense::getExpenseAmount)
+						.sum();
 		        model.addAttribute("fromDate", fromDate);
 			    model.addAttribute("toDate", toDate);
 		        model.addAttribute("userId", userId);
 		        model.addAttribute("userList", userList);
 				model.addAttribute("expenses",expenses);
+				model.addAttribute("totalExpenseAmount",totalExpenseAmount);
 			}else {
 				List<Expense> expenses = expenseService.getExpensesByUserUptoPrevExpenseDate(userDtls);
 				model.addAttribute("expenses", expenses);

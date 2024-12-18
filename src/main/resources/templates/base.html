@@ -263,6 +263,12 @@
                     	<p>Add Customer</p>
                     </a>
                 </li>
+                <li class="nav-item">
+              		<a class="nav-link" th:href="@{/admin/top_customer}">
+                    	<i class="far fa-circle nav-icon"></i>
+                    	<p>Top Customer</p>
+                    </a>
+                </li>
             </ul>
           </li>
           <li th:if="${userRole == 'ROLE_ADMIN'}" class="nav-item">
