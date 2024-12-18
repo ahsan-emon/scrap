@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::Layout(~{::section})">
+<body>
+<section>
+<!-- Content Wrapper. Contains page content -->
+	  <div class="content-wrapper">
+	    <div class="content-header">
+	      <div class="container-fluid">
+		    <h1>Top Customer List</h1>
+		    <form action="#" th:action="@{/admin/top_customer}" method="GET" class="form-inline">
+			    <div class="form-group mb-2">
+			        <label for="fromDate" class="sr-only">From Date</label>
+			        <input type="date" class="form-control" id="fromDate" name="fromDate" th:value="${fromDate}">
+			    </div>
+			    <div class="form-group mx-sm-3 mb-2">
+			        <label for="toDate" class="sr-only">To Date</label>
+			        <input type="date" class="form-control" id="toDate" name="toDate" th:value="${toDate}">
+			    </div>
+			    <button type="submit" class="btn btn-primary mb-2">Search</button>
+			</form>
+		    <table class="table table-striped mt-3">
+		            <thead>
+		                <tr>
+		                    <th>ID</th>
+		                    <th>Full Name</th>
+		                    <th>Address</th>
+		                    <th>Orders</th>
+		                    <th>Quantity</th>
+		                    <th>Amounts</th>
+		                    <th>Due(SAR)</th>
+		                    <th>Action</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr th:each="customer, iterStat : ${customers}" th:with="orderIndex=${iterStat.index + 1}">
+		                    <td th:text="${orderIndex}"></td>
+		                    <td th:text="${customer.fullName}"></td>
+		                    <td th:text="${customer.address}"></td>
+		                    <td th:text="${customerOrderSummaries[customer.id]?.totalOrders ?: 0}"></td>
+							<td th:text="${customerOrderSummaries[customer.id]?.totalOrderQuantity ?: 0.0}"></td>
+							<td th:text="${customerOrderSummaries[customer.id]?.totalOrderAmount ?: 0.0}"></td>
+		                    <td th:text="${customer.customerDue}"></td>
+		                    <td>
+		                    	<a th:href="@{/admin/customerView/{id}(id=${customer.id})}" class="btn btn-small btn-primary">View</a>
+		                    	<a th:href="@{/admin/customerEdit/{id}(id=${customer.id})}" class="btn btn-small btn-warning">Edit</a>
+								<a th:href="'tel:' + ${customer.phone1}" class="btn btn-small btn-success">Call</a>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+	        </div>
+	    </div>
+	  </div>
+</section>
+</body>
+</html>

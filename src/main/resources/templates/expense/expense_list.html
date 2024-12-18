@@ -30,6 +30,13 @@
 	               </div>
 		          <button type="submit" class="btn btn-primary mb-2">Search</button>
 		        </form>
+		        <div class="col-md-6">
+			        <ul class="list-group list-group-flush">
+	                    <li class="list-group-item d-flex justify-content-between align-items-center">
+	                        <strong>Total Expense:</strong> <span class="text-end text-info ms-2" th:text="${totalExpenseAmount} +'/= SAR'"></span>
+	                    </li>
+	                </ul>
+                </div>
 		    </div>
 		    <table class="table table-striped mt-3">
 		            <thead>

@@ -1,11 +1,15 @@
 package com.ahsan.scrap.controller.web;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -53,6 +57,7 @@ import com.ahsan.scrap.service.ProductService;
 import com.ahsan.scrap.service.SellService;
 import com.ahsan.scrap.service.UserService;
 import com.ahsan.scrap.service.VehicleService;
+import com.ahsan.scrap.util.CustomerOrderSummary;
 import com.ahsan.scrap.util.FileUploadService;
 import com.ahsan.scrap.util.UserUtil;
 
@@ -251,6 +256,64 @@ public class AdminController {
 		List<Customer> customers = customerService.getCustomers();
 		model.addAttribute("customers",customers);
 		return "admin/customer_list";
+	}
+	@GetMapping("/top_customer")
+	public String topCustomerList(@RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+		    @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+	        Model model) {
+
+	    List<Customer> customers = customerService.getCustomers();
+	    List<Order> orders = orderService.getOrders();
+
+	    // Filter orders based on the date range (ignoring the time part of getOrderDate())
+	    List<Order> filteredOrders = orders.stream()
+	            .filter(order -> {
+	                // Convert getOrderDate() (which might be LocalDateTime) to LocalDate
+	                LocalDate orderDate = order.getOrderDate().toLocalDate();  // Assuming getOrderDate() is LocalDateTime
+	                boolean withinFromDate = fromDate == null || !orderDate.isBefore(fromDate);
+	                boolean withinToDate = toDate == null || !orderDate.isAfter(toDate);
+	                return withinFromDate && withinToDate;
+	            })
+	            .collect(Collectors.toList());
+
+	    // Calculate customer-wise total amounts and order counts for filtered orders
+	    Map<Long, CustomerOrderSummary> customerOrderSummaries = filteredOrders.stream()
+	            .collect(Collectors.groupingBy(
+	                    order -> order.getCustomer().getId(),
+	                    Collectors.collectingAndThen(
+	                            Collectors.toList(),
+	                            orderList -> {
+	                                int totalOrders = orderList.size();
+	                                double totalAmount = orderList.stream()
+	                                        .mapToDouble(Order::getOrderAmount)
+	                                        .sum();
+	                                double totalQuantity = orderList.stream()
+	                                        .mapToDouble(Order::getOrderQuantity)
+	                                        .sum();
+	                                totalAmount = new BigDecimal(totalAmount).setScale(1, RoundingMode.HALF_UP).doubleValue();
+	                                totalQuantity = new BigDecimal(totalQuantity).setScale(1, RoundingMode.HALF_UP).doubleValue();
+	                                return new CustomerOrderSummary(totalOrders, totalAmount, totalQuantity);
+	                            }
+	                    )
+	            ));
+
+	    // Sort customers by total order amount in descending order
+	    List<Customer> sortedCustomers = customers.stream()
+	            .sorted((c1, c2) -> {
+	                double totalAmount1 = customerOrderSummaries.getOrDefault(c1.getId(), new CustomerOrderSummary(0, 0.0, 0.0)).getTotalOrderAmount();
+	                double totalAmount2 = customerOrderSummaries.getOrDefault(c2.getId(), new CustomerOrderSummary(0, 0.0, 0.0)).getTotalOrderAmount();
+	                return Double.compare(totalAmount2, totalAmount1); // Descending order
+	            })
+	            .collect(Collectors.toList());
+
+	    // Add the filtered orders and customer summaries to the model
+	    model.addAttribute("fromDate", fromDate);
+	    model.addAttribute("toDate", toDate);
+	    model.addAttribute("customers", sortedCustomers);
+	    model.addAttribute("orders", filteredOrders);
+	    model.addAttribute("customerOrderSummaries", customerOrderSummaries);
+
+	    return "admin/top_customer";
 	}
 	
 	@GetMapping("/user_list")
