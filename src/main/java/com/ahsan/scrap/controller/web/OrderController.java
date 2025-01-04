@@ -173,14 +173,16 @@ public class OrderController {
 	    @GetMapping("/orderEdit/{id}")
 		public String editOrder(@PathVariable("id") Long id, Model model) {
 			Order order = orderRepository.findById(id).orElse(null);
+			List<Customer> customers = customerRepository.findAll();
 			List<Product> products = productRepository.findAll();
 	        model.addAttribute("order", order);
+	        model.addAttribute("customers", customers);
 	        model.addAttribute("products", products);
 	        return "order/edit_order";
 		}
 		@PostMapping("/updateOrder")
-	    public String updateOrder(@ModelAttribute Order order, @RequestParam("customerDue") int customerDue) {
-			orderService.updateOrder(order);
+	    public String updateOrder(@ModelAttribute Order order, @RequestParam("customerId") Long customerId, @RequestParam("customerDue") int customerDue) {
+			orderService.updateOrder(order, customerId);
 			Customer customer = order.getCustomer();
 	        if(customer != null) {
 	        	customer.setCustomerDue(customerDue);

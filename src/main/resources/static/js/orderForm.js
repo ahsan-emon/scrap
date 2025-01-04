@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', function () {
         
         updateTotalAmount();
     }
+	const customerSelect = document.getElementById('customer');
+	    if (customerSelect) {
+	        customerSelect.addEventListener('change', updateDueAmount);
+	    }
 });
 
 function addProduct() {
@@ -64,7 +68,14 @@ function updateDueAmount() {
     const selectedOption = customerSelect.options[customerSelect.selectedIndex];
     const customerDue = selectedOption.getAttribute('data-due');
     const dueInput = document.getElementById('customerDue');
-    dueInput.value = selectedOption.value ? customerDue : '';
+    // dueInput.value = selectedOption.value ? customerDue : '';
+	// Update the value of the hidden input field with the customerDue value
+	 if (dueInput) {
+	     dueInput.value = customerDue || ''; // Empty string if no due value
+	 }
+
+	 // Update the total amount with due (if applicable)
+	 updateTotalAmount();
 }
 
 function updateTotalAmount() {

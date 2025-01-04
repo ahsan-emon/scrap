@@ -20,14 +20,17 @@
 							            <label for="exampleInputName" class="form-label">Order Date: [[${@dateUtils.formatDate(order.orderDate)}]]</label>
 							            <!-- <input type="datetime" th:field="*{orderDate}" class="form-control" id="exampleInputName" readOnly required> -->
 							        </div>
-							        <div class="mb-3">
-							            <label for="exampleInputName" class="form-label">Customer Name: [[*{customer.fullName}]]</label>
-							            <!-- <input type="text" th:field="*{customer.username}" class="form-control" id="exampleInputName" readOnly required> -->
-							        </div>
-							        <div class="mb-3">
-							            <label for="exampleInputShortName" class="form-label">Employee Name: [[*{userDtls.fullName}]]</label>
-							            <!-- <input type="text" th:field="*{userDtls.username}" class="form-control" id="exampleInputShortName" readOnly required> -->
-							        </div>
+							        <div class="mb-2">
+								        <label for="customer" class="form-label">Customer:</label>
+								        <select id="customer" class="form-control" name="customerId" required onchange="updateDueAmount()">
+								            <option value="" selected>Select Employee</option>
+								            <option th:each="customer : ${customers}" 
+								                    th:value="${customer.id}" 
+								                    th:text="${customer.fullName}" 
+								                    th:attr="data-due=${customer.customerDue}"
+								                    th:selected="${customer.id == order.customer.id}"></option>
+								        </select>
+								    </div>
 							        <div class="mb-3">
 									    <label>Customer Due Amount</label>
 									    <input type="number" max="100000" id="customerDue" th:name="customerDue" th:value="${order.customer.customerDue}" class="form-control" required />
