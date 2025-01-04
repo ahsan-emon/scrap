@@ -73,16 +73,21 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
-    public Order updateOrder(Order order) {
+    public Order updateOrder(Order order, Long customerId) {
     	int totalAmount = 0;
     	float totalQuantity = 0f;
     	int numberOfItems = 0;
     	// Calculate total order amount
         Order currentOrder = orderRepository.findById(order.getId()).orElse(null);
+        Customer orderCustomer = customerRepository.findById(customerId).orElse(null);
         if(currentOrder != null) {
             order.getOrderItems().forEach(item -> item.calculateAmount());
         	order.setOrderDate(currentOrder.getOrderDate());
-        	order.setCustomer(currentOrder.getCustomer());
+        	if(orderCustomer != null) {
+        		order.setCustomer(orderCustomer);
+        	}else {
+        		order.setCustomer(currentOrder.getCustomer());
+        	}
         	order.setUserDtls(currentOrder.getUserDtls());
         	// Link orderItems to order
             if (order.getOrderItems() != null) {
