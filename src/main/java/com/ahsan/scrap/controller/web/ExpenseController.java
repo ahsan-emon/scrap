@@ -61,12 +61,12 @@ public class ExpenseController {
 	@GetMapping("/expenseList")
 	public String expenseList(@RequestParam(name = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
 		    @RequestParam(name = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
-		    @RequestParam(name = "userId", required = false) Long userId, Model model, Principal principal) {
+		    @RequestParam(name = "userId", required = false) Long userId, @RequestParam(name = "expenseReason", required = false) String expenseReason, Model model, Principal principal) {
 		String username = principal.getName();
 		UserDtls userDtls = userRepository.findByUsername(username);
 		if(userDtls != null) {
 			if(userDtls.getRole().equals(CommonConstraint.ROLE_ADMIN)) {
-				List<Expense> expenses = expenseService.searchExpenses(fromDate, toDate, userId);
+				List<Expense> expenses = expenseService.searchExpenses(fromDate, toDate, userId, expenseReason);
 				List<UserDtls> userList = userRepository.findAll();
 				int totalExpenseAmount = 0;
 				totalExpenseAmount = expenses.stream()
@@ -77,6 +77,7 @@ public class ExpenseController {
 		        model.addAttribute("userId", userId);
 		        model.addAttribute("userList", userList);
 				model.addAttribute("expenses",expenses);
+				model.addAttribute("expenseReason", expenseReason);
 				model.addAttribute("totalExpenseAmount",totalExpenseAmount);
 			}else {
 				List<Expense> expenses = expenseService.getExpensesByUserUptoPrevExpenseDate(userDtls);
