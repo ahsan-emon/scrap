@@ -13,5 +13,5 @@ public interface ExpenseService {
     public List<Expense> getExpensesWithinCurrentDateTimeRange();
     public List<Expense> getExpensesByUserAndCurrentDateTimeRange(UserDtls userDtls);
     public List<Expense> getExpensesByUserDtls(UserDtls userDtls);
-    public List<Expense> searchExpenses(LocalDate fromDate, LocalDate toDate, Long userId);
+    public List<Expense> searchExpenses(LocalDate fromDate, LocalDate toDate, Long userId, String expenseReason);
 }

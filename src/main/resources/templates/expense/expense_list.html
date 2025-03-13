@@ -28,6 +28,23 @@
 	                               th:selected="${user.id == userId}"></option>
 	                   </select>
 	               </div>
+	               <div class="form-group mx-sm-3 mb-2">
+					    <label for="expenseReason" class="sr-only">Expense Reason</label>
+					    <select id="expenseReason" name="expenseReason" class="form-control">
+					        <option value="">Select Expense Reason</option>
+					        <option value="NASTA" th:selected="${expenseReason == 'NASTA'}">Nasta</option>
+					        <option value="CAR_OIL" th:selected="${expenseReason == 'CAR_OIL'}">Car Oil</option>
+					        <option value="CAR_COST" th:selected="${expenseReason == 'CAR_COST'}">Car Cost</option>
+					        <option value="STORE_COST" th:selected="${expenseReason == 'STORE_COST'}">Store Cost</option>
+					        <option value="CUSTOMER_DUE" th:selected="${expenseReason == 'CUSTOMER_DUE'}">Customer Due</option>
+					        <option value="CUSTOMER_EXTRA" th:selected="${expenseReason == 'CUSTOMER_EXTRA'}">Customer Extra</option>
+					        <option value="PERSONAL_COST" th:selected="${expenseReason == 'PERSONAL_COST'}">Personal Cost</option>
+					        <option value="EMPLOYEE_SALARY" th:selected="${expenseReason == 'EMPLOYEE_SALARY'}">Employee Salary</option>
+					        <option value="COMPANY_COST" th:selected="${expenseReason == 'COMPANY_COST'}">Company Cost</option>
+					        <option value="OTHER" th:selected="${expenseReason == 'OTHER'}">Other</option>
+					    </select>
+					</div>
+
 		          <button type="submit" class="btn btn-primary mb-2">Search</button>
 		        </form>
 		        <div class="col-md-6">

@@ -71,7 +71,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 		return expenseRepository.findByUserDtls(userDtls);
 	}
     @Override
-	public List<Expense> searchExpenses(LocalDate fromDate, LocalDate toDate, Long userId) {
+	public List<Expense> searchExpenses(LocalDate fromDate, LocalDate toDate, Long userId, String expenseReason) {
 	    Specification<Expense> spec = (root, query, criteriaBuilder) -> {
 	        List<Predicate> predicates = new ArrayList<>();
 
@@ -89,6 +89,10 @@ public class ExpenseServiceImpl implements ExpenseService{
 
 	        if (userId != null) {
 	            predicates.add(criteriaBuilder.equal(root.get("userDtls").get("id"), userId));
+	        }
+	        
+	        if (expenseReason != null && !expenseReason.isEmpty()) { // <-- Added condition
+	            predicates.add(criteriaBuilder.equal(root.get("expenseReason"), expenseReason));
 	        }
 
 	        query.orderBy(criteriaBuilder.desc(root.get("expenseDate")));
