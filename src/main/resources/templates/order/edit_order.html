@@ -17,9 +17,12 @@
 							            <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputId" readOnly required>
 							        </div>
 							        <div class="mb-3">
-							            <label for="exampleInputName" class="form-label">Order Date: [[${@dateUtils.formatDate(order.orderDate)}]]</label>
-							            <!-- <input type="datetime" th:field="*{orderDate}" class="form-control" id="exampleInputName" readOnly required> -->
-							        </div>
+									    <label for="orderDate" class="form-label">Order Date:</label>
+									    <input type="datetime-local" id="orderDate" name="orderDate" class="form-control"
+									           th:value="${order.orderDate != null ? #temporals.format(order.orderDate, 'yyyy-MM-dd''T''HH:mm') : ''}" />
+									</div>
+
+																        
 							        <div class="mb-2">
 								        <label for="customer" class="form-label">Customer:</label>
 								        <select id="customer" class="form-control" name="customerId" required onchange="updateDueAmount()">
