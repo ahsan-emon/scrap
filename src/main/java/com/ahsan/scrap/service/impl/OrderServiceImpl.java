@@ -82,7 +82,9 @@ public class OrderServiceImpl implements OrderService {
         Customer orderCustomer = customerRepository.findById(customerId).orElse(null);
         if(currentOrder != null) {
             order.getOrderItems().forEach(item -> item.calculateAmount());
-        	order.setOrderDate(currentOrder.getOrderDate());
+            if (order.getOrderDate() != null) {
+            	order.setOrderDate(order.getOrderDate());
+            }
         	if(orderCustomer != null) {
         		order.setCustomer(orderCustomer);
         	}else {
