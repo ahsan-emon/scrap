@@ -193,6 +193,21 @@ public class AdminController {
 			int totalOrderAmount = orders.stream()
 					.mapToInt(Order::getOrderAmount)
 					.sum();
+			//company due / customer due
+			int totalCustomerDue = 0;
+	        for (Customer c : customers) {
+	            int due = c.getCustomerDue();
+	            if (due > 0) {
+	            	totalCustomerDue += due;
+	            }
+	        }
+	        int totalCompanyDue = 0;
+	        for (Customer c : customers) {
+	            int due = c.getCustomerDue();
+	            if (due < 0) {
+	            	totalCompanyDue += due; // negative
+	            }
+	        }
 			float orderProductQuantity = (float) orders.stream()
 	                .mapToDouble(Order::getOrderQuantity)
 	                .sum();
@@ -245,6 +260,8 @@ public class AdminController {
 			model.addAttribute("totalExpenseAmount",totalExpenseAmount);
 			model.addAttribute("totalCompanyAmount",totalCompanyAmount);
 			model.addAttribute("totalAmountEmployeeHas",totalAmountEmployeeHas);
+			model.addAttribute("totalCompanyDue",totalCompanyDue);
+			model.addAttribute("totalCustomerDue",totalCustomerDue);
 			return "admin/dashboard";
 		}else {
 	    	throw new UserNotAuthenticatedException("User is not authenticated");
