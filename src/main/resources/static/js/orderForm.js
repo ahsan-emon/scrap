@@ -121,7 +121,7 @@ function updateTotalAmount() {
         const quantity = parseFloat(quantityInput.value) || 0;
         const unitPrice = parseFloat(unitPriceInput.value) || 0;
 
-        const productWiseAmount = quantity * unitPrice;
+        const productWiseAmount = Math.floor(quantity * unitPrice);
 
         // update product wise amount for THIS product div
         const productWiseSpan = productDiv.querySelector('.productWiseAmount');
