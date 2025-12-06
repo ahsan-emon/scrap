@@ -52,7 +52,10 @@
 			                                <label>Unit Price</label>
 			                                <input type="number" th:field="*{orderItems[__${iterStat.index}__].unitPrice}" class="form-control" step="0.01" min="0" max="10000" required />
 			                
-			                                <button type="button" onclick="removeProduct(this)" class="btn btn-danger mt-2 mb-0">Remove</button>
+			                                <div class="my-2">
+		                                	<button type="button" onclick="removeProduct(this)" class="btn btn-danger mt-2">Remove</button>
+										        </br><span class="text-bold text-warning fs-5">Amount: </span><span class="productWiseAmount text-bold text-warning fs-5">0</span>
+										    </div>
 			                            </div>
 			                        </div>
 			                        <button type="button" class="btn btn-primary btn-small my-2" onclick="addProduct()">Add Product</button>
