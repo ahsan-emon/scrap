@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	    }
 });
 
-function addProduct() {
+/*function addProduct() {
     if (document.querySelector('.product')) {
         var productDiv = document.querySelector('.product').cloneNode(true);
         var inputs = productDiv.querySelectorAll('input, select');
@@ -36,7 +36,38 @@ function addProduct() {
         document.getElementById('products').appendChild(productDiv);
         updateProductIndexes();
     }
+}*/
+
+function addProduct() {
+    if (document.querySelector('.product')) {
+
+        var productDiv = document.querySelector('.product').cloneNode(true);
+
+        // ✅ RESET product-wise amount HERE
+        var amountSpan = productDiv.querySelector('.productWiseAmount');
+        if (amountSpan) {
+            amountSpan.innerText = 0;
+        }
+
+        var inputs = productDiv.querySelectorAll('input, select');
+        inputs.forEach(function(input) {
+            input.value = '';
+            var name = input.name;
+            var match = name.match(/\[(\d+)\]/);
+            if (match) {
+                var index = parseInt(match[1]) + document.querySelectorAll('.product').length;
+                input.name = name.replace(/\[\d+\]/, '[' + index + ']');
+            }
+            if (input.type === 'number') {
+                input.addEventListener('input', updateTotalAmount);
+            }
+        });
+
+        document.getElementById('products').appendChild(productDiv);
+        updateProductIndexes();
+    }
 }
+
 
 function removeProduct(button) {
     var productDiv = button.parentElement;
@@ -79,30 +110,35 @@ function updateDueAmount() {
 }
 
 function updateTotalAmount() {
-    if (document.querySelector('.product')) {
-        const productDivs = document.querySelectorAll('.product');
-        let totalAmount = 0;
-        
-        productDivs.forEach(function(productDiv) {
-            const quantityInput = productDiv.querySelector('input[name$=".quantity"]');
-            const unitPriceInput = productDiv.querySelector('input[name$=".unitPrice"]');
-            
-            const quantity = parseFloat(quantityInput.value) || 0;
-            const unitPrice = parseFloat(unitPriceInput.value) || 0;
-            
-            totalAmount += Math.floor(quantity * unitPrice);
-        });
-		if(document.getElementById('totalAmountWithDue')){
-			let totalAmountWithDue = 0;
-			const dueInput = document.getElementById('customerDue');
-			const dueValue = parseFloat(dueInput.value) || 0;
-			totalAmountWithDue = totalAmount + dueValue;
-			document.getElementById('totalAmountWithDue').innerText = totalAmountWithDue;
-		}
-		
-		document.getElementById('totalAmount').innerText = totalAmount;
-    }
+    const productDivs = document.querySelectorAll('.product');
+    let totalAmount = 0;
+
+    productDivs.forEach(function(productDiv) {
+
+        const quantityInput = productDiv.querySelector('input[name$=".quantity"]');
+        const unitPriceInput = productDiv.querySelector('input[name$=".unitPrice"]');
+
+        const quantity = parseFloat(quantityInput.value) || 0;
+        const unitPrice = parseFloat(unitPriceInput.value) || 0;
+
+        const productWiseAmount = quantity * unitPrice;
+
+        // update product wise amount for THIS product div
+        const productWiseSpan = productDiv.querySelector('.productWiseAmount');
+        if (productWiseSpan) {
+            productWiseSpan.innerText = productWiseAmount;
+        }
+
+        totalAmount += productWiseAmount;
+    });
+
+    // update totals
+    document.getElementById('totalAmount').innerText = totalAmount;
+
+    const dueValue = parseFloat(document.getElementById('customerDue').value) || 0;
+    document.getElementById('totalAmountWithDue').innerText = totalAmount + dueValue;
 }
+
 
 
 //order list maximum date check
