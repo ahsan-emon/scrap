@@ -17,6 +17,35 @@ document.addEventListener('DOMContentLoaded', function () {
 	    }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+
+    const orderForm = document.querySelector('form[action*="/order/saveOrder"]');
+
+    if (orderForm) {
+
+        orderForm.addEventListener('submit', function (event) {
+
+            const submitButton = document.getElementById('submitOrderBtn');
+
+            // Already submitted - prevent another submission
+            if (orderForm.dataset.submitting === 'true') {
+                event.preventDefault();
+                return;
+            }
+
+            // Mark as submitting
+            orderForm.dataset.submitting = 'true';
+
+            // Disable submit button
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.innerText = 'Saving...';
+            }
+        });
+    }
+
+});
+
 /*function addProduct() {
     if (document.querySelector('.product')) {
         var productDiv = document.querySelector('.product').cloneNode(true);
@@ -38,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }*/
 
-function addProduct() {
+/*function addProduct() {
     if (document.querySelector('.product')) {
 
         var productDiv = document.querySelector('.product').cloneNode(true);
@@ -66,10 +95,52 @@ function addProduct() {
         document.getElementById('products').appendChild(productDiv);
         updateProductIndexes();
     }
+}*/
+
+function addProduct() {
+    const firstProduct = document.querySelector('#products .product');
+
+    if (!firstProduct) {
+        return;
+    }
+
+    const productDiv = firstProduct.cloneNode(true);
+
+    // Clear all input/select values
+    const inputs = productDiv.querySelectorAll('input, select');
+
+    inputs.forEach(function(input) {
+        input.value = '';
+    });
+
+    // Reset product amount
+    const amountSpan = productDiv.querySelector('.productWiseAmount');
+
+    if (amountSpan) {
+        amountSpan.innerText = '0';
+    }
+
+    // Add event listeners to the cloned quantity/price inputs
+    const quantityInput = productDiv.querySelector('input[name$=".quantity"]');
+    const unitPriceInput = productDiv.querySelector('input[name$=".unitPrice"]');
+
+    if (quantityInput) {
+        quantityInput.addEventListener('input', updateTotalAmount);
+    }
+
+    if (unitPriceInput) {
+        unitPriceInput.addEventListener('input', updateTotalAmount);
+    }
+
+    document.getElementById('products').appendChild(productDiv);
+
+    // Rebuild indexes: 0, 1, 2, 3...
+    updateProductIndexes();
+
+    updateTotalAmount();
 }
 
-
-function removeProduct(button) {
+/*function removeProduct(button) {
     var productDiv = button.parentElement;
     if (document.querySelectorAll('.product').length > 1) {
         productDiv.remove();
@@ -78,9 +149,27 @@ function removeProduct(button) {
     } else {
         alert('You must have at least one product.');
     }
+}*/
+
+function removeProduct(button) {
+    const productDivs = document.querySelectorAll('#products .product');
+
+    if (productDivs.length > 1) {
+        const productDiv = button.closest('.product');
+
+        if (productDiv) {
+            productDiv.remove();
+        }
+
+        updateProductIndexes();
+        updateTotalAmount();
+    } else {
+        alert('You must have at least one product.');
+    }
 }
 
-function updateProductIndexes() {
+
+/*function updateProductIndexes() {
     const productDivs = document.querySelectorAll('.product');
     productDivs.forEach(function(productDiv, index) {
         const inputs = productDiv.querySelectorAll('input, select');
@@ -92,7 +181,37 @@ function updateProductIndexes() {
             }
         });
     });
+}*/
+
+function updateProductIndexes() {
+    const productDivs = document.querySelectorAll('#products .product');
+
+    productDivs.forEach(function(productDiv, index) {
+
+        const inputs = productDiv.querySelectorAll('input, select');
+
+        inputs.forEach(function(input) {
+
+            if (!input.name) {
+                return;
+            }
+
+            input.name = input.name.replace(
+                /\[\d+\]/,
+                '[' + index + ']'
+            );
+
+            // Also update id if necessary
+            if (input.id) {
+                input.id = input.id.replace(
+                    /\d+/,
+                    index
+                );
+            }
+        });
+    });
 }
+
 
 function updateDueAmount() {
     const customerSelect = document.getElementById('customer');

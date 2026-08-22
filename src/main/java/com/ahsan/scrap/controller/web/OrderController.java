@@ -149,15 +149,25 @@ public class OrderController {
 	    }
 
 	    @PostMapping("/saveOrder")
-	    public String saveOrder(@ModelAttribute Order order, @RequestParam("customerId") Long customerId, @RequestParam("customerDue") int customerDue) {
+	    public String saveOrder(
+	            @ModelAttribute Order order,
+	            @RequestParam("customerId") Long customerId,
+	            @RequestParam("customerDue") int customerDue) {
+
 	        orderService.saveOrder(order, customerId);
-	        Customer customer = order.getCustomer();
-	        if(customer != null) {
-	        	customer.setCustomerDue(customerDue);
-	        	customerRepository.save(customer);
+
+	        Customer customer = customerRepository
+	                .findById(customerId)
+	                .orElse(null);
+
+	        if (customer != null) {
+	            customer.setCustomerDue(customerDue);
+	            customerRepository.save(customer);
 	        }
+
 	        return "redirect:/order/order_list";
 	    }
+
 	    @GetMapping("/orderView/{id}")
 	   	public String viewOrder(@PathVariable("id") Long id, Model model) {
 	   		Order order = orderRepository.findById(id).orElse(null);
