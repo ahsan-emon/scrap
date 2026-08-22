@@ -38,37 +38,65 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public Order saveOrder(Order order, Long customerId) {
-    	int totalAmount = 0;
-    	float totalQuantity = 0f;
-    	int numberOfItems = 0;
-    	// Calculate total order amount
-        order.getOrderItems().forEach(item -> item.calculateAmount());
-        
-        // Save the order first to get the ID
-        Order savedOrder = orderRepository.save(order);
-        
-        // Link orderItems to order
-        if (savedOrder.getOrderItems() != null) {
-        	numberOfItems = savedOrder.getOrderItems().size();
-            for (OrderItem item : savedOrder.getOrderItems()) {
-                item.setOrder(savedOrder);
-                totalAmount = item.getAmount() + totalAmount;
-                totalQuantity = item.getQuantity() + totalQuantity;
-            }
-        }
-        totalQuantity = Float.parseFloat(String.format("%.2f", totalQuantity));
-        order.setOrderDate(LocalDateTime.now());
+
+        int totalAmount = 0;
+        float totalQuantity = 0f;
+        int numberOfItems = 0;
+
+        // Find customer
+        Customer customer = customerRepository
+                .findById(customerId)
+                .orElse(null);
+
+        // Current user
         String currentUsername = UserUtil.getCurrentUsername();
-        UserDtls userDtls = userRepository.findByUsername(currentUsername);
-        Customer customer = customerRepository.findById(customerId).orElse(null);
-        if(userDtls != null && customer != null) {
+
+        UserDtls userDtls =
+                userRepository.findByUsername(currentUsername);
+
+        // Set order information
+        order.setOrderDate(LocalDateTime.now());
+
+        if (userDtls != null) {
             order.setUserDtls(userDtls);
-            order.setCustomer(customer);
             order.setVehicleId(userDtls.getVehicleId());
         }
+
+        if (customer != null) {
+            order.setCustomer(customer);
+        }
+
+        // Process order items
+        if (order.getOrderItems() != null) {
+
+            numberOfItems = order.getOrderItems().size();
+
+            for (OrderItem item : order.getOrderItems()) {
+
+                // Link item to order
+                item.setOrder(order);
+
+                // Calculate item amount
+                item.calculateAmount();
+
+                // Calculate totals
+                totalAmount += item.getAmount();
+                totalQuantity += item.getQuantity();
+            }
+        }
+
+        // Round quantity
+        totalQuantity =
+                Float.parseFloat(
+                        String.format("%.2f", totalQuantity)
+                );
+
+        // Set order totals
         order.setNumberOfItems(numberOfItems);
         order.setOrderQuantity(totalQuantity);
         order.setOrderAmount(totalAmount);
+
+        // Save ONCE
         return orderRepository.save(order);
     }
     
